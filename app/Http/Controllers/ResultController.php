@@ -12,12 +12,26 @@ class ResultController extends Controller
 {
     public function pending()
     {
-        $results = Result::with(['bookingTest.test.category', 'bookingTest.booking.patient'])
-            ->where('status', 'pending')
+        $user = auth()->user();
+        $labId = $user->lab_id;
+        
+        // Show booking tests that don't have approved results yet
+        $bookingTests = BookingTest::with(['test.category', 'booking.patient', 'result'])
+            ->whereHas('booking', function($q) use ($labId, $user) {
+                $q->where('status', '!=', 'cancelled');
+                // Filter by lab for non-super-admin users
+                if (!$user->isSuperAdmin()) {
+                    $q->where(fn($b) => $b->where('lab_id', $labId)->orWhereNull('lab_id'));
+                }
+            })
+            ->where(function($q) {
+                $q->whereDoesntHave('result')  // No result at all
+                  ->orWhereHas('result', fn($r) => $r->where('status', '!=', 'approved'));  // OR has non-approved result
+            })
             ->latest()
             ->paginate(20);
 
-        return view('results.pending', compact('results'));
+        return view('results.pending', compact('bookingTests'));
     }
 
     public function entry(Result $result)
@@ -92,7 +106,9 @@ class ResultController extends Controller
             'remarks' => $validated['remarks'] ?? null,
             'entered_by' => auth()->id(),
             'entered_at' => now(),
-            'status' => 'entered',
+            'status' => 'approved',  // Auto-approve - skip approval step
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
         ]);
 
         if (!$bookingTest->test->hasParameters() && $validated['numeric_value']) {
@@ -100,13 +116,23 @@ class ResultController extends Controller
             $result->save();
         }
 
-        $bookingTest->update(['status' => 'in_progress']);
+        $bookingTest->update(['status' => 'completed']);  // Mark as completed
         ActivityLog::log('result_entered', $result, [], $validated);
+
+        // Check if all tests in booking are completed
+        $booking = $bookingTest->booking;
+        $allCompleted = $booking->bookingTests()
+            ->whereDoesntHave('result', fn($q) => $q->where('status', 'approved'))
+            ->doesntExist();
+        
+        if ($allCompleted) {
+            $booking->update(['status' => 'completed']);
+        }
 
         // Check for next test to enter
         $nextTest = BookingTest::where('booking_id', $bookingTest->booking_id)
             ->where('id', '>', $bookingTest->id)
-            ->whereHas('result', fn($q) => $q->where('status', 'pending'))
+            ->whereDoesntHave('result', fn($q) => $q->where('status', 'approved'))
             ->first();
 
         if ($nextTest) {
@@ -114,8 +140,9 @@ class ResultController extends Controller
                 ->with('success', 'Results saved! Enter next test results.');
         }
 
+        // All tests completed - redirect to booking with option to generate report
         return redirect()->route('bookings.show', $bookingTest->booking_id)
-            ->with('success', 'All results entered successfully.');
+            ->with('success', 'All results completed! You can now generate the report.');
     }
 
     public function store(Request $request, Result $result)

@@ -205,6 +205,11 @@ class UserController extends Controller
             return;
         }
         
+        // If user has no lab (legacy data), allow access
+        if ($user->lab_id === null) {
+            return;
+        }
+        
         // Others can only access their lab's users
         if ($user->lab_id !== $currentUser->lab_id) {
             abort(403, 'Unauthorized access to user.');

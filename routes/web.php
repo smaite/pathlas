@@ -68,7 +68,13 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
     Route::get('tests/categories', [TestController::class, 'categories'])->name('tests.categories');
     Route::post('tests/categories', [TestController::class, 'storeCategory'])->name('tests.categories.store');
     Route::put('tests/categories/{category}', [TestController::class, 'updateCategory'])->name('tests.categories.update');
-    Route::resource('tests', TestController::class)->except(['show']);
+    Route::resource('tests', TestController::class);
+    
+    // Test Parameters
+    Route::post('tests/{test}/parameters', [\App\Http\Controllers\TestParameterController::class, 'store'])->name('tests.parameters.store');
+    Route::put('tests/{test}/parameters/{parameter}', [\App\Http\Controllers\TestParameterController::class, 'update'])->name('tests.parameters.update');
+    Route::delete('tests/{test}/parameters/{parameter}', [\App\Http\Controllers\TestParameterController::class, 'destroy'])->name('tests.parameters.destroy');
+    Route::post('tests/{test}/parameters/reorder', [\App\Http\Controllers\TestParameterController::class, 'reorder'])->name('tests.parameters.reorder');
 
     // Bookings
     Route::get('bookings/{booking}/invoice', [BookingController::class, 'invoice'])->name('bookings.invoice');

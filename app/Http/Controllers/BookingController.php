@@ -23,7 +23,11 @@ class BookingController extends Controller
             return Booking::query();
         }
         
-        return Booking::where('lab_id', $user->lab_id);
+        // Include bookings for user's lab OR bookings without a lab (legacy data)
+        return Booking::where(function($q) use ($user) {
+            $q->where('lab_id', $user->lab_id)
+              ->orWhereNull('lab_id');
+        });
     }
 
     public function index(Request $request)

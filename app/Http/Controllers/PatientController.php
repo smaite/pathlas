@@ -18,8 +18,11 @@ class PatientController extends Controller
             return Patient::query();
         }
         
-        // Others see only their lab's patients
-        return Patient::where('lab_id', $user->lab_id);
+        // Others see their lab's patients OR patients without a lab (legacy data)
+        return Patient::where(function($q) use ($user) {
+            $q->where('lab_id', $user->lab_id)
+              ->orWhereNull('lab_id');
+        });
     }
 
     public function index(Request $request)
@@ -150,6 +153,11 @@ class PatientController extends Controller
         
         // Super admin can access all
         if ($user->isSuperAdmin()) {
+            return;
+        }
+        
+        // If patient has no lab (legacy data), allow access
+        if ($patient->lab_id === null) {
             return;
         }
         

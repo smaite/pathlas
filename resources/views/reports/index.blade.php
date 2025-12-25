@@ -30,6 +30,10 @@
                 <td class="px-6 py-4">
                     <div class="flex gap-2">
                         <a href="{{ route('reports.show', $report) }}" class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200">View</a>
+                        <form action="{{ route('reports.regenerate', $report) }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" onclick="return confirm('Regenerate this report?')" class="px-3 py-1.5 bg-yellow-100 text-yellow-700 text-sm rounded-lg hover:bg-yellow-200">Regenerate</button>
+                        </form>
                         <a href="{{ route('reports.download', $report) }}" class="px-3 py-1.5 bg-primary-600 text-white text-sm rounded-lg hover:bg-primary-700">Download</a>
                     </div>
                 </td>

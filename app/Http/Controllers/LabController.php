@@ -129,7 +129,6 @@ class LabController extends Controller
             'website' => 'nullable|string|max:255',
             'header_color' => 'nullable|string|max:20',
             'report_notes' => 'nullable|string',
-            'require_approval' => 'boolean',
         ]);
 
         $validated['require_approval'] = $request->has('require_approval');

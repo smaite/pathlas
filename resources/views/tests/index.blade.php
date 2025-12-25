@@ -25,7 +25,7 @@
                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Code</th>
                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Test Name</th>
                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Normal Range</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Parameters</th>
                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Price</th>
                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
             </tr>
@@ -34,12 +34,19 @@
             @forelse($tests as $test)
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 font-mono text-sm">{{ $test->code }}</td>
-                <td class="px-6 py-4 font-medium">{{ $test->name }}</td>
+                <td class="px-6 py-4">
+                    <a href="{{ route('tests.show', $test) }}" class="font-medium text-primary-600 hover:underline">{{ $test->name }}</a>
+                </td>
                 <td class="px-6 py-4 text-sm">{{ $test->category->name ?? '-' }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ $test->normal_range }} {{ $test->unit }}</td>
+                <td class="px-6 py-4 text-sm">
+                    <span class="px-2 py-1 bg-gray-100 rounded-lg">{{ $test->parameters_count ?? 0 }} params</span>
+                </td>
                 <td class="px-6 py-4 font-medium text-primary-600">₹{{ number_format($test->price, 2) }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('tests.edit', $test) }}" class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200">Edit</a>
+                    <div class="flex gap-2">
+                        <a href="{{ route('tests.show', $test) }}" class="px-3 py-1.5 bg-primary-100 text-primary-700 text-sm rounded-lg hover:bg-primary-200">View</a>
+                        <a href="{{ route('tests.edit', $test) }}" class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200">Edit</a>
+                    </div>
                 </td>
             </tr>
             @empty

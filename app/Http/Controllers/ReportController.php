@@ -123,16 +123,23 @@ class ReportController extends Controller
     {
         $booking->load([
             'patient',
+            'lab',
             'bookingTests.test.category',
+            'bookingTests.test.parameters',
             'bookingTests.result.approvedBy',
+            'bookingTests.parameterResults',
             'createdBy'
         ]);
+
+        // Get lab or use default
+        $lab = $booking->lab ?? auth()->user()->lab ?? \App\Models\Lab::first();
 
         // Generate QR code (using SVG - no imagick needed)
         $qrCode = base64_encode(QrCode::format('svg')->size(100)->generate(route('reports.index')));
 
         return view('reports.pdf', [
             'booking' => $booking,
+            'lab' => $lab,
             'qrCode' => $qrCode,
             'preview' => true,
         ]);

@@ -11,7 +11,7 @@ class TestController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Test::with('category')->latest();
+        $query = Test::with('category')->withCount('parameters')->latest();
 
         if ($request->filled('category')) {
             $query->where('category_id', $request->category);
@@ -65,8 +65,15 @@ class TestController extends Controller
 
     public function edit(Test $test)
     {
+        $test->load(['parameters' => fn($q) => $q->ordered()]);
         $categories = TestCategory::active()->get();
         return view('tests.edit', compact('test', 'categories'));
+    }
+
+    public function show(Test $test)
+    {
+        $test->load(['category', 'parameters' => fn($q) => $q->ordered()]);
+        return view('tests.show', compact('test'));
     }
 
     public function update(Request $request, Test $test)

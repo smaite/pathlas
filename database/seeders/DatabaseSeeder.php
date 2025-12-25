@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Roles
+        // Create Roles (use firstOrCreate to avoid duplicates)
         $roles = [
             ['name' => 'superadmin', 'display_name' => 'Super Admin'],
             ['name' => 'admin', 'display_name' => 'Lab Administrator'],
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($roles as $role) {
-            Role::create($role);
+            Role::firstOrCreate(['name' => $role['name']], $role);
         }
 
         // Create Sample Labs for Demo
@@ -77,61 +77,77 @@ class DatabaseSeeder extends Seeder
 
         $firstLab = null;
         foreach ($labs as $labData) {
-            $lab = Lab::create(array_merge($labData, [
-                'is_verified' => true,
-                'verified_at' => now(),
-                'subscription_starts_at' => now(),
-                'subscription_expires_at' => now()->addYear(),
-            ]));
+            $lab = Lab::firstOrCreate(
+                ['code' => $labData['code']],
+                array_merge($labData, [
+                    'is_verified' => true,
+                    'verified_at' => now(),
+                    'subscription_starts_at' => now(),
+                    'subscription_expires_at' => now()->addYear(),
+                ])
+            );
             if (!$firstLab) $firstLab = $lab;
         }
 
         // Create Super Admin (no lab - platform owner)
         $superadminRole = Role::where('name', 'superadmin')->first();
-        User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@pathlas.com',
-            'password' => 'password',
-            'role_id' => $superadminRole->id,
-            'lab_id' => null,
-            'status' => 'active',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'superadmin@pathlas.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => 'password',
+                'role_id' => $superadminRole->id,
+                'lab_id' => null,
+                'status' => 'active',
+            ]
+        );
 
         // Create Lab Admin for first demo lab
         $adminRole = Role::where('name', 'admin')->first();
-        User::create([
-            'name' => 'Lab Admin',
-            'email' => 'admin@pathlas.com',
-            'password' => 'password',
-            'role_id' => $adminRole->id,
-            'lab_id' => $firstLab->id,
-            'status' => 'active',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@pathlas.com'],
+            [
+                'name' => 'Lab Admin',
+                'password' => 'password',
+                'role_id' => $adminRole->id,
+                'lab_id' => $firstLab->id,
+                'status' => 'active',
+            ]
+        );
 
-        // Create Sample Users
-        User::create([
-            'name' => 'Reception Staff',
-            'email' => 'reception@pathlas.com',
-            'password' => 'password',
-            'role_id' => 2,
-            'status' => 'active',
-        ]);
+        // Create Sample Users for first lab
+        User::firstOrCreate(
+            ['email' => 'reception@pathlas.com'],
+            [
+                'name' => 'Reception Staff',
+                'password' => 'password',
+                'role_id' => Role::where('name', 'receptionist')->first()->id,
+                'lab_id' => $firstLab->id,
+                'status' => 'active',
+            ]
+        );
 
-        User::create([
-            'name' => 'Lab Technician',
-            'email' => 'tech@pathlas.com',
-            'password' => 'password',
-            'role_id' => 3,
-            'status' => 'active',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'tech@pathlas.com'],
+            [
+                'name' => 'Lab Technician',
+                'password' => 'password',
+                'role_id' => Role::where('name', 'technician')->first()->id,
+                'lab_id' => $firstLab->id,
+                'status' => 'active',
+            ]
+        );
 
-        User::create([
-            'name' => 'Dr. Pathologist',
-            'email' => 'doctor@pathlas.com',
-            'password' => 'password',
-            'role_id' => 4,
-            'status' => 'active',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'doctor@pathlas.com'],
+            [
+                'name' => 'Dr. Pathologist',
+                'password' => 'password',
+                'role_id' => Role::where('name', 'pathologist')->first()->id,
+                'lab_id' => $firstLab->id,
+                'status' => 'active',
+            ]
+        );
 
         // Create Test Categories
         $categories = [
@@ -146,7 +162,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($categories as $cat) {
-            TestCategory::create($cat);
+            TestCategory::firstOrCreate(['code' => $cat['code']], $cat);
         }
 
         // Create Sample Tests
@@ -193,7 +209,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($tests as $test) {
-            Test::create($test);
+            Test::firstOrCreate(['code' => $test['code']], $test);
         }
 
         // Add CBC Parameters (sub-tests)
@@ -226,7 +242,10 @@ class DatabaseSeeder extends Seeder
             ];
 
             foreach ($cbcParams as $param) {
-                TestParameter::create(array_merge($param, ['test_id' => $cbcTest->id]));
+                TestParameter::firstOrCreate(
+                    ['test_id' => $cbcTest->id, 'code' => $param['code']],
+                    array_merge($param, ['test_id' => $cbcTest->id])
+                );
             }
         }
 
@@ -243,7 +262,10 @@ class DatabaseSeeder extends Seeder
             ];
 
             foreach ($lipidParams as $param) {
-                TestParameter::create(array_merge($param, ['test_id' => $lipidTest->id]));
+                TestParameter::firstOrCreate(
+                    ['test_id' => $lipidTest->id, 'code' => $param['code']],
+                    array_merge($param, ['test_id' => $lipidTest->id])
+                );
             }
         }
 
@@ -265,7 +287,10 @@ class DatabaseSeeder extends Seeder
             ];
 
             foreach ($lftParams as $param) {
-                TestParameter::create(array_merge($param, ['test_id' => $lftTest->id]));
+                TestParameter::firstOrCreate(
+                    ['test_id' => $lftTest->id, 'code' => $param['code']],
+                    array_merge($param, ['test_id' => $lftTest->id])
+                );
             }
         }
 
@@ -286,7 +311,10 @@ class DatabaseSeeder extends Seeder
             ];
 
             foreach ($kftParams as $param) {
-                TestParameter::create(array_merge($param, ['test_id' => $kftTest->id]));
+                TestParameter::firstOrCreate(
+                    ['test_id' => $kftTest->id, 'code' => $param['code']],
+                    array_merge($param, ['test_id' => $kftTest->id])
+                );
             }
         }
 
@@ -302,7 +330,10 @@ class DatabaseSeeder extends Seeder
             ];
 
             foreach ($thyroidParams as $param) {
-                TestParameter::create(array_merge($param, ['test_id' => $thyroidTest->id]));
+                TestParameter::firstOrCreate(
+                    ['test_id' => $thyroidTest->id, 'code' => $param['code']],
+                    array_merge($param, ['test_id' => $thyroidTest->id])
+                );
             }
         }
 
@@ -331,7 +362,10 @@ class DatabaseSeeder extends Seeder
             ];
 
             foreach ($urineParams as $param) {
-                TestParameter::create(array_merge($param, ['test_id' => $urineTest->id]));
+                TestParameter::firstOrCreate(
+                    ['test_id' => $urineTest->id, 'code' => $param['code']],
+                    array_merge($param, ['test_id' => $urineTest->id])
+                );
             }
         }
 

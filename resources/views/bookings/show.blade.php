@@ -71,7 +71,12 @@
             </table>
         </div>
 
-        @if($booking->status === 'completed' && $booking->report)
+        @php
+            $allResultsApproved = $booking->bookingTests->count() > 0 && 
+                $booking->bookingTests->every(fn($bt) => $bt->result && $bt->result->status === 'approved');
+        @endphp
+
+        @if($booking->report)
         <div class="bg-green-50 border border-green-200 rounded-2xl p-6">
             <div class="flex justify-between items-center">
                 <div>
@@ -81,9 +86,9 @@
                 <a href="{{ route('reports.download', $booking->report) }}" class="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700">Download PDF</a>
             </div>
         </div>
-        @elseif($booking->status === 'completed')
+        @elseif($booking->status === 'completed' || $allResultsApproved)
         <a href="{{ route('reports.generate', $booking) }}" class="block bg-primary-50 border border-primary-200 rounded-2xl p-6 text-center hover:bg-primary-100">
-            <p class="font-semibold text-primary-700">Generate Report</p>
+            <p class="font-semibold text-primary-700">✅ All Results Complete - Generate Report</p>
         </a>
         @endif
     </div>

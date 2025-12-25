@@ -39,7 +39,9 @@ class DashboardController extends Controller
         if ($user->isSuperAdmin()) {
             return Patient::query();
         }
-        return Patient::where('lab_id', $user->lab_id);
+        return Patient::where(function($q) use ($user) {
+            $q->where('lab_id', $user->lab_id)->orWhereNull('lab_id');
+        });
     }
 
     // Get lab-scoped booking query
@@ -49,7 +51,9 @@ class DashboardController extends Controller
         if ($user->isSuperAdmin()) {
             return Booking::query();
         }
-        return Booking::where('lab_id', $user->lab_id);
+        return Booking::where(function($q) use ($user) {
+            $q->where('lab_id', $user->lab_id)->orWhereNull('lab_id');
+        });
     }
 
     // Get lab-scoped payment query (via bookings)

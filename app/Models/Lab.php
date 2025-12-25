@@ -113,7 +113,7 @@ class Lab extends Model
             return 'expired';
         }
 
-        if ($this->subscription_expires_at->diffInDays(now()) <= 7) {
+        if ($this->subscription_expires_at->diffInDays(now()) <= 30) {
             return 'expiring_soon';
         }
 

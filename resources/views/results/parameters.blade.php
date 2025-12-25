@@ -68,7 +68,13 @@
                 @endforeach
             </div>
             @else
-            <!-- Simple test without parameters -->
+            <!-- Simple test OR test with no parameters added yet -->
+            @if($bookingTest->test->parameters()->count() == 0)
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+                <p class="text-yellow-800 font-medium">⚠️ No parameters defined for this test</p>
+                <p class="text-yellow-700 text-sm mt-1">Add parameters in <a href="{{ route('tests.show', $bookingTest->test) }}" class="underline">Test Catalogue</a> or enter a single result below.</p>
+            </div>
+            @endif
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Result Value *</label>
