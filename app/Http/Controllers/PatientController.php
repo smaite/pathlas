@@ -51,16 +51,21 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'age' => 'required|integer|min:0|max:150',
-            'gender' => 'required|in:male,female,other',
-            'phone' => 'required|string|max:20',
+            'name' => 'nullable|string|max:255',
+            'age' => 'nullable|integer|min:0|max:150',
+            'gender' => 'nullable|in:male,female,other',
+            'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string',
             'date_of_birth' => 'nullable|date',
             'blood_group' => 'nullable|string|max:5',
             'medical_history' => 'nullable|string',
         ]);
+
+        // Set default name if not provided
+        if (empty($validated['name'])) {
+            $validated['name'] = 'Walk-in Patient';
+        }
 
         $validated['created_by'] = auth()->id();
         $validated['lab_id'] = auth()->user()->lab_id;
@@ -93,10 +98,10 @@ class PatientController extends Controller
         $this->authorizeLabAccess($patient);
         
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'age' => 'required|integer|min:0|max:150',
-            'gender' => 'required|in:male,female,other',
-            'phone' => 'required|string|max:20',
+            'name' => 'nullable|string|max:255',
+            'age' => 'nullable|integer|min:0|max:150',
+            'gender' => 'nullable|in:male,female,other',
+            'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string',
             'date_of_birth' => 'nullable|date',

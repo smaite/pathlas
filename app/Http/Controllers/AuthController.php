@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\LoginActivity;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -34,9 +36,17 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
             
+            // Log login activity
+            LoginActivity::logLogin($user, $request, 'login');
             \App\Models\ActivityLog::log('user_login', $user);
 
             return redirect()->intended(route('dashboard'));
+        }
+
+        // Log failed login attempt
+        $user = User::where('email', $credentials['email'])->first();
+        if ($user) {
+            LoginActivity::logLogin($user, $request, 'failed_login');
         }
 
         return back()->withErrors([
@@ -46,7 +56,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        \App\Models\ActivityLog::log('user_logout', Auth::user());
+        $user = Auth::user();
+        
+        // Log logout activity
+        LoginActivity::logLogin($user, $request, 'logout');
+        \App\Models\ActivityLog::log('user_logout', $user);
 
         Auth::logout();
         $request->session()->invalidate();

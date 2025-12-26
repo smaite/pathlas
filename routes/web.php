@@ -128,4 +128,8 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
         Route::get('settings', [\App\Http\Controllers\LabController::class, 'settings'])->name('lab.settings');
         Route::put('settings', [\App\Http\Controllers\LabController::class, 'updateSettings'])->name('lab.settings.update');
     });
+
+    // Profile - Login Activity (all users)
+    Route::get('profile/login-activity', [\App\Http\Controllers\LoginActivityController::class, 'index'])->name('profile.login-activity');
+    Route::delete('profile/login-activity', [\App\Http\Controllers\LoginActivityController::class, 'clearAll'])->name('profile.login-activity.clear');
 });
