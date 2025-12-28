@@ -32,17 +32,17 @@
                     $regNo = $report->booking->booking_id;
                     $reportLink = route('reports.download', ['report' => $report, 'header' => 'yes']);
                     
-                    $message = "🏥 *{$labName}*\n\n";
+                    $message = "*{$labName}*\n\n";
                     $message .= "Dear Sir/Ma'am,\n\n";
-                    $message .= "✅ Your lab test report is now ready!\n\n";
-                    $message .= "📋 *Patient Details*\n";
-                    $message .= "• Name: {$patientName}\n";
-                    $message .= "• Age/Gender: {$patientAge} / {$patientGender}\n";
-                    $message .= "• Reg No: {$regNo}\n\n";
-                    $message .= "📄 *Download Report*\n{$reportLink}\n\n";
+                    $message .= "Your lab test report is now ready!\n\n";
+                    $message .= "*Patient Details*\n";
+                    $message .= "- Name: {$patientName}\n";
+                    $message .= "- Age/Gender: {$patientAge} / {$patientGender}\n";
+                    $message .= "- Reg No: {$regNo}\n\n";
+                    $message .= "*Download Report:*\n{$reportLink}\n\n";
                     $message .= "_Save this number to view the link if not visible_\n\n";
                     $message .= "For any queries, feel free to contact us.\n\n";
-                    $message .= "Thank you for choosing {$labName}! 🙏";
+                    $message .= "Thank you for choosing {$labName}!";
                     
                     $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
                 @endphp
