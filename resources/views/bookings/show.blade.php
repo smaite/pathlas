@@ -104,7 +104,7 @@
                         $patientAge = $booking->patient->age;
                         $patientGender = ucfirst(substr($booking->patient->gender ?? '', 0, 1));
                         $regNo = $booking->booking_id;
-                        $reportLink = route('reports.download', ['report' => $booking->report, 'header' => 'yes']);
+                        $reportLink = url('/report-pdf/' . $booking->report->report_id);
                         
                         $message = "*{$labName}*\n\n";
                         $message .= "Dear Sir/Ma'am,\n\n";
