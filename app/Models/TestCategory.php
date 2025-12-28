@@ -14,6 +14,7 @@ class TestCategory extends Model
         'name',
         'code',
         'description',
+        'sort_order',
         'is_active',
     ];
 
@@ -29,5 +30,10 @@ class TestCategory extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order')->orderBy('name');
     }
 }

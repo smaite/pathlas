@@ -44,6 +44,7 @@
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Result</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Normal Range</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
@@ -59,12 +60,22 @@
                             @if($bt->result->flag && $bt->result->flag !== 'normal')
                             <span class="ml-2 px-2 py-0.5 rounded text-xs font-bold {{ $bt->result->flag_badge }}">{{ $bt->result->flag_label }}</span>
                             @endif
+                            @if($bt->result->edited_at)
+                            <span class="ml-1 text-xs text-amber-600" title="Edited: {{ $bt->result->edited_at->format('d M Y') }}">✎</span>
+                            @endif
                             @else
                             <span class="text-gray-400">Pending</span>
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $bt->test->normal_range }}</td>
                         <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs {{ $bt->status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">{{ ucfirst($bt->status) }}</span></td>
+                        <td class="px-6 py-4">
+                            @if($bt->result && $bt->result->status === 'approved')
+                            <a href="{{ route('results.edit', $bt) }}" class="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded hover:bg-amber-200">✎ Edit</a>
+                            @elseif(!$bt->result || $bt->result->status !== 'approved')
+                            <a href="{{ route('results.parameters', $bt) }}" class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">Enter</a>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -124,6 +135,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h3 class="font-semibold mb-4">Actions</h3>
             <div class="space-y-2">
+                <a href="{{ route('bookings.receipt', $booking) }}" target="_blank" class="block w-full px-4 py-2 bg-primary-600 text-white rounded-xl text-center hover:bg-primary-700">🧾 Print Receipt (with QR)</a>
                 <a href="{{ route('bookings.invoice', $booking) }}" class="block w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-center hover:bg-gray-200">View Invoice</a>
                 <a href="{{ route('bookings.invoice.pdf', $booking) }}" class="block w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-center hover:bg-gray-200">Download Invoice PDF</a>
             </div>

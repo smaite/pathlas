@@ -238,4 +238,84 @@ class ResultController extends Controller
             $booking->update(['status' => 'in_progress']);
         }
     }
+
+    /**
+     * Show edit form for a completed result
+     */
+    public function edit(BookingTest $bookingTest)
+    {
+        $bookingTest->load([
+            'test.parameters',
+            'test.category',
+            'booking.patient',
+            'parameterResults',
+            'result.editedBy'
+        ]);
+
+        return view('results.edit', compact('bookingTest'));
+    }
+
+    /**
+     * Update an existing result with edit tracking
+     */
+    public function updateEdit(Request $request, BookingTest $bookingTest)
+    {
+        $result = $bookingTest->result;
+        
+        if (!$result) {
+            return back()->with('error', 'No result found to edit.');
+        }
+
+        $validated = $request->validate([
+            'value' => 'nullable|string',
+            'edit_reason' => 'required|string|max:255',
+            'parameters' => 'nullable|array',
+        ]);
+
+        // Track previous value
+        $previousValue = $result->value;
+
+        // Update main result if simple test
+        if (!$bookingTest->test->hasParameters()) {
+            $result->update([
+                'previous_value' => $previousValue,
+                'value' => $validated['value'],
+                'edited_at' => now(),
+                'edited_by' => auth()->id(),
+                'edit_reason' => $validated['edit_reason'],
+            ]);
+        }
+
+        // Update parameter results if test has parameters
+        if (!empty($validated['parameters'])) {
+            foreach ($validated['parameters'] as $paramId => $data) {
+                $paramResult = ParameterResult::where('booking_test_id', $bookingTest->id)
+                    ->where('test_parameter_id', $paramId)
+                    ->first();
+                
+                if ($paramResult && isset($data['value'])) {
+                    $paramResult->update([
+                        'value' => $data['value'],
+                        'numeric_value' => is_numeric($data['value']) ? (float)$data['value'] : null,
+                    ]);
+                }
+            }
+            
+            // Track edit on main result
+            $result->update([
+                'previous_value' => 'Parameters edited',
+                'edited_at' => now(),
+                'edited_by' => auth()->id(),
+                'edit_reason' => $validated['edit_reason'],
+            ]);
+        }
+
+        ActivityLog::log('result_edited', $result, [
+            'edit_reason' => $validated['edit_reason'],
+            'previous_value' => $previousValue,
+        ]);
+
+        return redirect()->route('bookings.show', $bookingTest->booking)
+            ->with('success', 'Result updated successfully.');
+    }
 }

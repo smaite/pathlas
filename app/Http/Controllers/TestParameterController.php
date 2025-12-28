@@ -22,9 +22,13 @@ class TestParameterController extends Controller
             'normal_max_female' => 'nullable|numeric',
             'critical_low' => 'nullable|numeric',
             'critical_high' => 'nullable|numeric',
+            'formula' => 'nullable|string|max:255',
             'group_name' => 'nullable|string|max:100',
             'sort_order' => 'nullable|integer',
         ]);
+
+        // If formula is provided, mark as calculated
+        $validated['is_calculated'] = !empty($validated['formula']);
 
         $validated['test_id'] = $test->id;
         $validated['is_active'] = true;
@@ -53,9 +57,13 @@ class TestParameterController extends Controller
             'normal_max_female' => 'nullable|numeric',
             'critical_low' => 'nullable|numeric',
             'critical_high' => 'nullable|numeric',
+            'formula' => 'nullable|string|max:255',
             'group_name' => 'nullable|string|max:100',
             'sort_order' => 'nullable|integer',
         ]);
+
+        // If formula is provided, mark as calculated
+        $validated['is_calculated'] = !empty($validated['formula']);
 
         $validated['is_active'] = $request->has('is_active');
 

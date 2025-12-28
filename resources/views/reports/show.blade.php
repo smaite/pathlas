@@ -19,12 +19,25 @@
                         Regenerate
                     </button>
                 </form>
-                <a href="{{ route('reports.download', $report) }}" class="px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Download PDF
-                </a>
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" class="px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Download PDF
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border z-10">
+                        <a href="{{ route('reports.download', ['report' => $report, 'header' => 'yes']) }}" class="block px-4 py-3 hover:bg-gray-50 rounded-t-xl">
+                            <span class="font-medium text-gray-800">📄 With Header/Footer</span>
+                            <p class="text-xs text-gray-500 mt-0.5">Full letterhead report</p>
+                        </a>
+                        <a href="{{ route('reports.download', ['report' => $report, 'header' => 'no']) }}" class="block px-4 py-3 hover:bg-gray-50 rounded-b-xl border-t">
+                            <span class="font-medium text-gray-800">📋 Without Header/Footer</span>
+                            <p class="text-xs text-gray-500 mt-0.5">For pre-printed paper</p>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 

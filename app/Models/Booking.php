@@ -17,6 +17,7 @@ class Booking extends Model
         'patient_id',
         'created_by',
         'referring_doctor',
+        'received_by',
         'subtotal',
         'discount',
         'tax',

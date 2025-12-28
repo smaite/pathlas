@@ -69,7 +69,12 @@ class BookingController extends Controller
         }
 
         $tests = Test::active()->with('category')->get()->groupBy('category.name');
-        return view('bookings.create', compact('patient', 'tests'));
+        $packages = \App\Models\TestPackage::where('lab_id', auth()->user()->lab_id)
+            ->active()
+            ->with('tests')
+            ->ordered()
+            ->get();
+        return view('bookings.create', compact('patient', 'tests', 'packages'));
     }
 
     public function store(Request $request)
@@ -238,4 +243,19 @@ class BookingController extends Controller
         return redirect()->route('bookings.index')
             ->with('success', 'Booking deleted successfully.');
     }
+
+    /**
+     * Generate receipt PDF
+     */
+    public function receipt(Booking $booking)
+    {
+        $booking->load(['patient', 'bookingTests.test', 'payments', 'report']);
+        $lab = auth()->user()->lab ?? $booking->lab ?? new \App\Models\Lab(['name' => 'PathLAS Lab']);
+
+        $pdf = Pdf::loadView('receipts.pdf', compact('booking', 'lab'));
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('receipt-' . $booking->booking_id . '.pdf');
+    }
 }
+

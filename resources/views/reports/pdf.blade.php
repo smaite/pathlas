@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <title>Lab Report - {{ $booking->booking_id }}</title>
     <style>
+        /* Conditional margins: if no header, add space for pre-printed paper */
+        @if($showHeader ?? true)
         @page { margin: 0; size: A4; }
+        @else
+        @php
+            $marginTop = $lab->headerless_margin_top ?? 40;
+            $marginBottom = $lab->headerless_margin_bottom ?? 30;
+        @endphp
+        @page { margin: {{ $marginTop }}mm 15mm {{ $marginBottom }}mm 15mm; size: A4; }
+        @endif
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; font-size: 10px; color: #333; line-height: 1.3; }
         
-        .page { page-break-after: always; min-height: 297mm; position: relative; }
+        .page { page-break-after: always; min-height: {{ ($showHeader ?? true) ? '297mm' : 'auto' }}; position: relative; }
         .page:last-child { page-break-after: auto; }
         
         /* Header */
@@ -109,13 +118,30 @@
             $logoBase64 = 'data:' . $logoMime . ';base64,' . base64_encode($logoData);
         }
     }
+    
+    // Generate QR code using endroid/qr-code
+    $qrBase64 = null;
+    try {
+        $reportId = $booking->report?->report_id ?? $booking->booking_id;
+        $qrUrl = url('/report-pdf/' . $reportId);
+        
+        $qrCode = new \Endroid\QrCode\QrCode($qrUrl);
+        $qrCode->setSize(120);
+        $qrCode->setMargin(5);
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $result = $writer->write($qrCode);
+        $qrBase64 = 'data:image/png;base64,' . base64_encode($result->getString());
+    } catch (\Exception $e) {
+        $qrBase64 = null;
+    }
 @endphp
 
 @foreach($booking->bookingTests as $bookingTest)
 @php $pageNum++; @endphp
 @if(($bookingTest->test->hasParameters() && $bookingTest->parameterResults->where('value', '!=', null)->count() > 0) || ($bookingTest->result && $bookingTest->result->value && $bookingTest->result->status === 'approved'))
 <div class="page">
-    <!-- Header -->
+    <!-- Header (conditional based on showHeader) -->
+    @if($showHeader ?? true)
     <div class="header">
         <table class="header-table">
             <tr>
@@ -144,9 +170,18 @@
                     <div class="contact-item"><strong>Web:</strong> {{ $lab->website }}</div>
                     @endif
                 </td>
+                <td style="width: 80px; vertical-align: middle; text-align: right;">
+                    @if($qrBase64)
+                    <div style="text-align: center;">
+                        <img src="{{ $qrBase64 }}" style="width: 60px; height: 60px;" alt="QR">
+                        <div style="font-size: 7px; color: #666; margin-top: 2px;">Scan for Report</div>
+                    </div>
+                    @endif
+                </td>
             </tr>
         </table>
     </div>
+    @endif {{-- end of showHeader conditional --}}
 
     <!-- Patient Section -->
     <div class="patient-section">
@@ -160,14 +195,14 @@
                         @if($booking->patient->phone)
                         <tr><td class="patient-label">Phone No.</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->patient->phone }}</td></tr>
                         @endif
-                    </table>
+                </table>
                 </td>
                 <td class="patient-col">
                     <table style="width: 100%">
                         <tr><td class="patient-label">Patient ID</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->patient->patient_id }}</td></tr>
-                        <tr><td class="patient-label">Report ID</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->booking_id }}</td></tr>
-                        <tr><td class="patient-label">Collection Date</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->collection_date ? $booking->collection_date->format('d/m/Y h:i A') : now()->format('d/m/Y h:i A') }}</td></tr>
-                        <tr><td class="patient-label">Report Date</td><td class="patient-value">:</td><td class="patient-value">{{ now()->format('d/m/Y h:i A') }}</td></tr>
+                        <tr><td class="patient-label">Reg No.</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->booking_id }}</td></tr>
+                        <tr><td class="patient-label">Collection Date</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->collection_date ? $booking->collection_date->format('d/m/Y') : now()->format('d/m/Y') }}</td></tr>
+                        <tr><td class="patient-label">Report Date</td><td class="patient-value">:</td><td class="patient-value">{{ now()->format('d/m/Y') }}</td></tr>
                     </table>
                 </td>
             </tr>
@@ -196,6 +231,13 @@
                     $currentGroup = null;
                 @endphp
                 @foreach($params as $param)
+                    @php
+                        $paramResult = $paramResults->get($param->id);
+                        $value = $paramResult?->value;
+                    @endphp
+                    @if(empty($value) && $value !== '0' && $value !== 0)
+                        @continue
+                    @endif
                     @if($param->group_name && $param->group_name !== $currentGroup)
                         @php $currentGroup = $param->group_name; @endphp
                         <tr class="group-row">
@@ -203,8 +245,6 @@
                         </tr>
                     @endif
                     @php
-                        $paramResult = $paramResults->get($param->id);
-                        $value = $paramResult?->value;
                         $flag = $paramResult?->flag ?? $param->checkFlag($value, $booking->patient->gender);
                         $flagClass = match($flag) {
                             'low' => 'value-low',
@@ -218,7 +258,7 @@
                             <span class="param-name">{{ $param->name }}</span>
                             @if($param->method)<br><span class="param-subtext">{{ $param->method }}</span>@endif
                         </td>
-                        <td class="{{ $flagClass }}">{{ $value ?? '-' }}</td>
+                        <td class="{{ $flagClass }}">{{ $value }}</td>
                         <td class="ref-range">{{ $param->getNormalRange($booking->patient->gender) }}</td>
                         <td>{{ $param->unit }}</td>
                     </tr>
@@ -252,32 +292,45 @@
     <div class="footer">
         <div class="footer-top">
             <div class="end-report">****End of Report****</div>
-            <div class="signatures">
-                <div class="signature-box">
-                    <div class="signature-line"></div>
-                    <div class="signature-name">Medical Lab Technician</div>
-                    <div class="signature-title">(DMLT, BMLT)</div>
-                </div>
-                <div class="signature-box">
-                    @if(isset($qrCode))
-                    <img src="data:image/svg+xml;base64,{{ $qrCode }}" alt="QR Code" style="width: 50px; height: 50px;">
+            
+            <!-- Two Signature Fields -->
+            <div class="signatures" style="margin-top: 40px;">
+                <div class="signature-box" style="text-align: center; width: 45%; display: inline-block;">
+                    @if($lab->signature_image)
+                    @php
+                        $sigPath = storage_path('app/public/' . $lab->signature_image);
+                        $sigBase64 = file_exists($sigPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($sigPath)) : null;
+                    @endphp
+                    @if($sigBase64)
+                    <div style="margin-bottom: 5px;"><img src="{{ $sigBase64 }}" style="height: 35px;" alt="Signature"></div>
                     @endif
+                    @else
+                    <div style="border-bottom: 1px solid #333; width: 120px; margin: 0 auto 5px;">&nbsp;</div>
+                    @endif
+                    <div style="font-weight: bold; font-size: 10px;">{{ $lab->signature_name ?? 'Authorized Signatory' }}</div>
+                    <div style="font-size: 9px; color: #666;">{{ $lab->signature_designation ?? '' }}</div>
                 </div>
-                <div class="signature-box">
-                    <div class="signature-line"></div>
-                    <div class="signature-name">{{ $bookingTest->result?->approvedBy?->name ?? 'Dr. Pathologist' }}</div>
-                    <div class="signature-title">(MD, Pathologist)</div>
+                <div class="signature-box" style="text-align: center; width: 45%; display: inline-block; float: right;">
+                    @if($lab->signature_image_2)
+                    @php
+                        $sig2Path = storage_path('app/public/' . $lab->signature_image_2);
+                        $sig2Base64 = file_exists($sig2Path) ? 'data:image/png;base64,' . base64_encode(file_get_contents($sig2Path)) : null;
+                    @endphp
+                    @if($sig2Base64)
+                    <div style="margin-bottom: 5px;"><img src="{{ $sig2Base64 }}" style="height: 35px;" alt="Signature"></div>
+                    @endif
+                    @else
+                    <div style="border-bottom: 1px solid #333; width: 120px; margin: 0 auto 5px;">&nbsp;</div>
+                    @endif
+                    <div style="font-weight: bold; font-size: 10px;">{{ $lab->signature_name_2 ?? 'Pathologist' }}</div>
+                    <div style="font-size: 9px; color: #666;">{{ $lab->signature_designation_2 ?? '' }}</div>
                 </div>
             </div>
-        </div>
-        <div class="footer-bar">
-            <table class="footer-bar-table">
-                <tr>
-                    <td class="footer-left">{{ $lab->website ?? 'www.pathlas.com' }}</td>
-                    <td class="footer-center">Generated on: {{ now()->format('d M, Y h:i A') }}</td>
-                    <td class="footer-right">Page {{ $pageNum }} of {{ $totalPages }}</td>
-                </tr>
-            </table>
+            
+            <!-- Page number -->
+            <div style="text-align: center; font-size: 9px; color: #666; margin-top: 20px;">
+                Page {{ $pageNum }} of {{ $totalPages }}
+            </div>
         </div>
     </div>
 </div>

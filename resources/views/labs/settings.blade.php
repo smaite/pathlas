@@ -59,6 +59,10 @@
                             <input type="email" name="email" value="{{ old('email', $lab->email) }}" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">PAN Number</label>
+                            <input type="text" name="pan_number" value="{{ old('pan_number', $lab->pan_number) }}" placeholder="e.g. 123456789" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Website</label>
                             <input type="text" name="website" value="{{ old('website', $lab->website) }}" placeholder="www.yourlab.com" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                         </div>
@@ -115,16 +119,29 @@
                     </div>
                 </div>
 
-                <!-- Workflow Settings -->
+                <!-- Signature Settings -->
                 <div class="bg-gray-50 rounded-xl p-6">
-                    <h3 class="font-medium text-gray-800 mb-4">Workflow Settings</h3>
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" name="require_approval" value="1" {{ $lab->require_approval ? 'checked' : '' }} class="w-5 h-5 text-primary-600 rounded">
-                        <div>
-                            <span class="font-medium">Require Pathologist Approval</span>
-                            <p class="text-sm text-gray-500">If enabled, results must be approved by pathologist before generating reports</p>
+                    <h3 class="font-medium text-gray-800 mb-4">Signature (for Reports)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Signature Image</label>
+                            <input type="file" name="signature_image" accept="image/*" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                            @if($lab->signature_image)
+                            <div class="mt-2 flex items-center gap-2">
+                                <img src="{{ asset('storage/'.$lab->signature_image) }}" class="h-12 border rounded" alt="Signature">
+                                <span class="text-sm text-gray-500">Current signature</span>
+                            </div>
+                            @endif
                         </div>
-                    </label>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Signatory Name</label>
+                            <input type="text" name="signature_name" value="{{ old('signature_name', $lab->signature_name) }}" placeholder="e.g. Dr. John Doe" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                            <input type="text" name="signature_designation" value="{{ old('signature_designation', $lab->signature_designation) }}" placeholder="e.g. Pathologist, MD" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex gap-4">

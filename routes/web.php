@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function() {
 // Public report verification
 Route::get('verify', [ReportController::class, 'verify'])->name('reports.verify');
 Route::get('verify/{report}', [ReportController::class, 'verify']);
+Route::get('report-pdf/{report}', [ReportController::class, 'publicDownload'])->name('reports.public-download');
 
 // Super Admin Routes (No subscription check)
 Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(function() {
@@ -70,6 +71,10 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
     Route::put('tests/categories/{category}', [TestController::class, 'updateCategory'])->name('tests.categories.update');
     Route::resource('tests', TestController::class);
     
+    // Test Packages
+    Route::resource('packages', \App\Http\Controllers\TestPackageController::class);
+    Route::post('packages/{package}/toggle-status', [\App\Http\Controllers\TestPackageController::class, 'toggleStatus'])->name('packages.toggle-status');
+    
     // Test Parameters
     Route::post('tests/{test}/parameters', [\App\Http\Controllers\TestParameterController::class, 'store'])->name('tests.parameters.store');
     Route::put('tests/{test}/parameters/{parameter}', [\App\Http\Controllers\TestParameterController::class, 'update'])->name('tests.parameters.update');
@@ -79,6 +84,7 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
     // Bookings
     Route::get('bookings/{booking}/invoice', [BookingController::class, 'invoice'])->name('bookings.invoice');
     Route::get('bookings/{booking}/invoice/pdf', [BookingController::class, 'invoicePdf'])->name('bookings.invoice.pdf');
+    Route::get('bookings/{booking}/receipt', [BookingController::class, 'receipt'])->name('bookings.receipt');
     Route::post('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.status');
     Route::post('bookings/{booking}/payment', [BookingController::class, 'addPayment'])->name('bookings.payment');
     Route::resource('bookings', BookingController::class);
@@ -93,6 +99,9 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
         // Parameter-based result entry
         Route::get('results/parameters/{bookingTest}', [ResultController::class, 'parameters'])->name('results.parameters');
         Route::post('results/parameters/{bookingTest}', [ResultController::class, 'storeParameters'])->name('results.store-parameters');
+        // Edit completed results
+        Route::get('results/{bookingTest}/edit', [ResultController::class, 'edit'])->name('results.edit');
+        Route::post('results/{bookingTest}/edit', [ResultController::class, 'updateEdit'])->name('results.update-edit');
     });
 
     // Approvals (Pathologist) - Only if lab requires approval
@@ -128,6 +137,11 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
         Route::get('settings', [\App\Http\Controllers\LabController::class, 'settings'])->name('lab.settings');
         Route::put('settings', [\App\Http\Controllers\LabController::class, 'updateSettings'])->name('lab.settings.update');
     });
+
+    // Report Customization (all lab users can access)
+    Route::get('report-customization', [\App\Http\Controllers\LabController::class, 'reportCustomization'])->name('lab.report-customization');
+    Route::put('report-customization', [\App\Http\Controllers\LabController::class, 'updateReportCustomization'])->name('lab.report-customization.update');
+    Route::get('report-preview', [\App\Http\Controllers\LabController::class, 'previewReport'])->name('lab.report-preview');
 
     // Profile - Login Activity (all users)
     Route::get('profile/login-activity', [\App\Http\Controllers\LoginActivityController::class, 'index'])->name('profile.login-activity');

@@ -126,9 +126,12 @@ class LabController extends Controller
             'phone' => 'nullable|string|max:20',
             'phone2' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
+            'pan_number' => 'nullable|string|max:50',
             'website' => 'nullable|string|max:255',
             'header_color' => 'nullable|string|max:20',
             'report_notes' => 'nullable|string',
+            'signature_name' => 'nullable|string|max:100',
+            'signature_designation' => 'nullable|string|max:100',
         ]);
 
         $validated['require_approval'] = $request->has('require_approval');
@@ -139,9 +142,100 @@ class LabController extends Controller
             $validated['logo'] = $logoPath;
         }
 
+        // Handle signature image upload
+        if ($request->hasFile('signature_image')) {
+            $signaturePath = $request->file('signature_image')->store('labs/' . $lab->id . '/signatures', 'public');
+            $validated['signature_image'] = $signaturePath;
+        }
+
         $lab->update($validated);
         ActivityLog::log('lab_settings_updated', $lab);
 
         return back()->with('success', 'Lab settings updated successfully.');
     }
+
+    // Report Customization Page
+    public function reportCustomization()
+    {
+        $lab = auth()->user()->lab;
+        
+        if (!$lab) {
+            return redirect()->route('dashboard')->with('error', 'No lab associated with your account.');
+        }
+
+        return view('labs.report-customization', compact('lab'));
+    }
+
+    public function updateReportCustomization(Request $request)
+    {
+        $lab = auth()->user()->lab;
+        
+        if (!$lab) {
+            return back()->with('error', 'No lab associated with your account.');
+        }
+
+        $validated = $request->validate([
+            'header_color' => 'nullable|string|max:20',
+            'logo_width' => 'nullable|integer|min:30|max:200',
+            'logo_height' => 'nullable|integer|min:30|max:150',
+            'signature_name' => 'nullable|string|max:100',
+            'signature_designation' => 'nullable|string|max:100',
+            'signature_width' => 'nullable|integer|min:50|max:200',
+            'signature_height' => 'nullable|integer|min:20|max:80',
+            'signature_name_2' => 'nullable|string|max:100',
+            'signature_designation_2' => 'nullable|string|max:100',
+            'signature_width_2' => 'nullable|integer|min:50|max:200',
+            'signature_height_2' => 'nullable|integer|min:20|max:80',
+            'report_notes' => 'nullable|string',
+            'headerless_margin_top' => 'nullable|integer|min:10|max:100',
+            'headerless_margin_bottom' => 'nullable|integer|min:10|max:80',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('labs/' . $lab->id, 'public');
+            $validated['logo'] = $logoPath;
+        }
+
+        if ($request->hasFile('signature_image')) {
+            $sigPath = $request->file('signature_image')->store('labs/' . $lab->id . '/signatures', 'public');
+            $validated['signature_image'] = $sigPath;
+        }
+
+        if ($request->hasFile('signature_image_2')) {
+            $sig2Path = $request->file('signature_image_2')->store('labs/' . $lab->id . '/signatures', 'public');
+            $validated['signature_image_2'] = $sig2Path;
+        }
+
+        $lab->update($validated);
+        ActivityLog::log('report_customization_updated', $lab);
+
+        return back()->with('success', 'Report customization saved successfully.');
+    }
+
+    // Live preview endpoint for report customization
+    public function previewReport(Request $request)
+    {
+        $lab = auth()->user()->lab;
+        
+        if (!$lab) {
+            return response('No lab found', 404);
+        }
+
+        // Apply temporary settings from request for preview
+        $previewLab = clone $lab;
+        if ($request->has('header_color')) $previewLab->header_color = $request->header_color;
+        if ($request->has('logo_width')) $previewLab->logo_width = $request->logo_width;
+        if ($request->has('logo_height')) $previewLab->logo_height = $request->logo_height;
+        if ($request->has('signature_name')) $previewLab->signature_name = $request->signature_name;
+        if ($request->has('signature_designation')) $previewLab->signature_designation = $request->signature_designation;
+        if ($request->has('signature_name_2')) $previewLab->signature_name_2 = $request->signature_name_2;
+        if ($request->has('signature_designation_2')) $previewLab->signature_designation_2 = $request->signature_designation_2;
+        if ($request->has('report_notes')) $previewLab->report_notes = $request->report_notes;
+
+        return view('labs.report-preview', [
+            'lab' => $previewLab,
+        ]);
+    }
 }
+

@@ -23,6 +23,11 @@ class Result extends Model
         'approved_by',
         'approved_at',
         'status',
+        // Edit tracking
+        'edited_at',
+        'edited_by',
+        'edit_reason',
+        'previous_value',
     ];
 
     protected $casts = [
@@ -30,6 +35,7 @@ class Result extends Model
         'entered_at' => 'datetime',
         'verified_at' => 'datetime',
         'approved_at' => 'datetime',
+        'edited_at' => 'datetime',
     ];
 
     public function bookingTest(): BelongsTo
@@ -50,6 +56,11 @@ class Result extends Model
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function editedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'edited_by');
     }
 
     public function calculateFlag(): void

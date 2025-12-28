@@ -108,8 +108,13 @@ class ReportController extends Controller
         return view('reports.show', compact('report'));
     }
 
-    public function download(Report $report)
+    public function download(Report $report, Request $request)
     {
+        // Check if custom generation is requested
+        if ($request->has('header')) {
+            return $this->downloadCustom($report, $request->get('header', 'yes'));
+        }
+
         if (!$report->pdf_path || !Storage::disk('public')->exists($report->pdf_path)) {
             return back()->with('error', 'Report file not found.');
         }
@@ -117,6 +122,39 @@ class ReportController extends Controller
         ActivityLog::log('report_downloaded', $report);
 
         return Storage::disk('public')->download($report->pdf_path, "report-{$report->report_id}.pdf");
+    }
+
+    /**
+     * Download report with/without header/footer option
+     */
+    public function downloadCustom(Report $report, string $headerOption = 'yes')
+    {
+        $report->load([
+            'booking.patient',
+            'booking.lab',
+            'booking.bookingTests.test.category',
+            'booking.bookingTests.test.parameters',
+            'booking.bookingTests.result.approvedBy',
+            'booking.bookingTests.parameterResults',
+            'booking.createdBy'
+        ]);
+
+        $booking = $report->booking;
+        $lab = $booking->lab ?? auth()->user()->lab ?? \App\Models\Lab::first();
+
+        // Generate QR code
+        $qrCode = base64_encode(QrCode::format('svg')->size(100)->generate(route('reports.verify', $report->report_id)));
+
+        $pdf = Pdf::loadView('reports.pdf', [
+            'booking' => $booking,
+            'lab' => $lab,
+            'qrCode' => $qrCode,
+            'showHeader' => $headerOption === 'yes',
+        ]);
+
+        ActivityLog::log('report_downloaded', $report);
+
+        return $pdf->download("report-{$report->report_id}.pdf");
     }
 
     public function preview(Booking $booking)
@@ -165,8 +203,37 @@ class ReportController extends Controller
         ]);
     }
 
+    /**
+     * Public PDF download via QR code (no auth required)
+     */
+    public function publicDownload(string $reportId)
+    {
+        $report = Report::where('report_id', $reportId)->first();
+
+        if (!$report) {
+            abort(404, 'Report not found');
+        }
+
+        $report->load(['booking.patient', 'booking.bookingTests.test.category', 'booking.bookingTests.test.parameters', 'booking.bookingTests.parameterResults', 'booking.bookingTests.result']);
+        
+        $booking = $report->booking;
+        $lab = $booking->lab ?? new \App\Models\Lab(['name' => 'PathLAS Lab']);
+        
+        // Generate PDF using the existing pdf view
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.pdf', [
+            'booking' => $booking,
+            'lab' => $lab,
+            'showHeader' => true,
+        ]);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('report-' . $report->report_id . '.pdf');
+    }
+
     public function regenerate(Report $report)
     {
         return $this->generate($report->booking);
     }
 }
+

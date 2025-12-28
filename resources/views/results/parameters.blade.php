@@ -40,17 +40,23 @@
                             @if($param->method)
                             <p class="text-xs text-gray-400">{{ $param->method }}</p>
                             @endif
+                            @if($param->is_calculated)
+                            <p class="text-xs text-green-600">⚡ Auto-calculated</p>
+                            @endif
                         </div>
                         <div class="col-span-3">
                             <input type="text" 
                                 name="parameters[{{ $param->id }}][value]" 
                                 value="{{ old('parameters.' . $param->id . '.value', $existingResult?->value) }}"
-                                placeholder="Enter value"
-                                class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 param-input"
+                                placeholder="{{ $param->is_calculated ? 'Calculated' : 'Enter value' }}"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 param-input {{ $param->is_calculated ? 'bg-green-50 border-green-200' : 'border-gray-200' }}"
                                 data-param-id="{{ $param->id }}"
+                                data-code="{{ $param->code }}"
+                                data-formula="{{ $param->formula }}"
                                 data-min="{{ $param->normal_min }}"
                                 data-max="{{ $param->normal_max }}"
-                                data-gender="{{ $bookingTest->booking->patient->gender }}">
+                                data-gender="{{ $bookingTest->booking->patient->gender }}"
+                                {{ $param->is_calculated ? 'readonly' : '' }}>
                             <input type="hidden" name="parameters[{{ $param->id }}][numeric_value]" class="numeric-value">
                         </div>
                         <div class="col-span-2 text-center">
@@ -109,17 +115,116 @@
 
 @push('scripts')
 <script>
-document.querySelectorAll('.param-input').forEach(input => {
-    input.addEventListener('blur', function() {
-        const val = parseFloat(this.value);
-        const numericInput = this.parentElement.querySelector('.numeric-value');
-        const flagIndicator = document.querySelector(`.flag-indicator[data-param-id="${this.dataset.paramId}"]`);
+document.addEventListener('DOMContentLoaded', function() {
+    const paramInputs = document.querySelectorAll('.param-input');
+    
+    // Collect all parameter codes and their input elements
+    const paramMap = {};
+    paramInputs.forEach(input => {
+        const code = input.dataset.code;
+        if (code) {
+            paramMap[code] = input;
+        }
+    });
+
+    // Function to evaluate formula
+    function evaluateFormula(formula, values) {
+        if (!formula) return null;
         
-        if (!isNaN(val)) {
-            numericInput.value = val;
+        let expression = formula;
+        // Replace {CODE} with actual values
+        const matches = formula.match(/\{([^}]+)\}/g);
+        if (matches) {
+            for (const match of matches) {
+                const code = match.slice(1, -1); // Remove { and }
+                const val = values[code];
+                if (val === null || val === undefined || isNaN(val)) {
+                    return null; // Can't calculate if any dependency is missing
+                }
+                expression = expression.replace(match, val);
+            }
+        }
+        
+        try {
+            // Safe eval for simple math expressions
+            const result = Function('"use strict"; return (' + expression + ')')();
+            return isFinite(result) ? result : null;
+        } catch (e) {
+            console.error('Formula eval error:', e);
+            return null;
+        }
+    }
+
+    // Function to update calculated fields
+    function updateCalculatedFields() {
+        // Collect current values by code
+        const values = {};
+        paramInputs.forEach(input => {
+            const code = input.dataset.code;
+            const val = parseFloat(input.value);
+            if (code && !isNaN(val)) {
+                values[code] = val;
+            }
+        });
+
+        console.log('Current values:', values);
+
+        // Find and update all fields with formulas
+        paramInputs.forEach(input => {
+            const formula = input.dataset.formula;
+            // Only process if formula exists and is not empty
+            if (formula && formula.trim() !== '') {
+                console.log('Processing formula:', formula);
+                const result = evaluateFormula(formula, values);
+                console.log('Result:', result);
+                if (result !== null) {
+                    input.value = result.toFixed(2);
+                    // Update the hidden numeric value
+                    const numericInput = input.parentElement.querySelector('.numeric-value');
+                    if (numericInput) {
+                        numericInput.value = result;
+                    }
+                    // Update flag
+                    updateFlag(input);
+                }
+            }
+        });
+    }
+
+    // Listen for changes on all param inputs
+    paramInputs.forEach(input => {
+        // On input change, update calculated fields
+        input.addEventListener('input', function() {
+            // Update numeric value hidden field
+            const numericInput = this.parentElement.querySelector('.numeric-value');
+            const val = parseFloat(this.value);
+            if (!isNaN(val) && numericInput) {
+                numericInput.value = val;
+            }
             
-            const min = parseFloat(this.dataset.min);
-            const max = parseFloat(this.dataset.max);
+            // Update flag indicator
+            updateFlag(this);
+            
+            // Recalculate dependent formulas only for non-calculated fields
+            const formula = this.dataset.formula;
+            if (!formula || formula.trim() === '') {
+                setTimeout(updateCalculatedFields, 10);
+            }
+        });
+        
+        // On blur for calculated fields
+        input.addEventListener('blur', function() {
+            updateFlag(this);
+        });
+    });
+
+    function updateFlag(input) {
+        const val = parseFloat(input.value);
+        const flagIndicator = document.querySelector(`.flag-indicator[data-param-id="${input.dataset.paramId}"]`);
+        
+        if (!isNaN(val) && flagIndicator) {
+            const min = parseFloat(input.dataset.min);
+            const max = parseFloat(input.dataset.max);
             
             let flag = 'Normal';
             let flagClass = 'text-green-600';
@@ -134,7 +239,10 @@ document.querySelectorAll('.param-input').forEach(input => {
             
             flagIndicator.innerHTML = `<span class="${flagClass} font-medium">${flag}</span>`;
         }
-    });
+    }
+
+    // Initial calculation on page load (for pre-filled values)
+    setTimeout(updateCalculatedFields, 100);
 });
 </script>
 @endpush

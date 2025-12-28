@@ -196,6 +196,40 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Normal Max (Female)</label>
                     <input type="number" step="0.01" name="normal_max_female" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                 </div>
+                
+                <!-- Visual Formula Builder -->
+                <div class="col-span-2 bg-green-50 p-4 rounded-lg">
+                    <label class="block text-sm font-medium text-green-800 mb-2">⚡ Auto-Calculate Formula</label>
+                    <div class="flex flex-wrap items-center gap-2 mb-3" id="formula-builder">
+                        <select id="formula-param1" class="px-3 py-2 border border-green-300 rounded-lg bg-white text-sm">
+                            <option value="">Select Parameter</option>
+                            @foreach($test->parameters->where('code', '!=', null) as $p)
+                            <option value="{{ $p->code }}">{{ $p->name }} ({{ $p->code }})</option>
+                            @endforeach
+                        </select>
+                        <select id="formula-operator" class="px-3 py-2 border border-green-300 rounded-lg bg-white text-sm font-bold">
+                            <option value="">Op</option>
+                            <option value="+">+</option>
+                            <option value="-">−</option>
+                            <option value="*">×</option>
+                            <option value="/">/</option>
+                        </select>
+                        <select id="formula-param2" class="px-3 py-2 border border-green-300 rounded-lg bg-white text-sm">
+                            <option value="">Select Parameter</option>
+                            @foreach($test->parameters->where('code', '!=', null) as $p)
+                            <option value="{{ $p->code }}">{{ $p->name }} ({{ $p->code }})</option>
+                            @endforeach
+                        </select>
+                        <button type="button" onclick="buildFormula()" class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
+                            Build
+                        </button>
+                        <button type="button" onclick="clearFormula()" class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">
+                            Clear
+                        </button>
+                    </div>
+                    <input type="text" name="formula" id="formula-input" class="w-full px-4 py-2 border border-green-200 rounded-lg bg-white" placeholder="Formula will appear here..." readonly>
+                    <p class="text-xs text-green-600 mt-1">Select parameters and operator, then click Build. Or type manually: {T.Prot} - {Alb}</p>
+                </div>
             </div>
             <div class="flex gap-4 pt-4">
                 <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-xl">Add Parameter</button>
@@ -246,6 +280,42 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Normal Max (Female)</label>
                     <input type="number" step="0.01" name="normal_max_female" id="edit-normal_max_female" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                 </div>
+                
+                
+                <!-- Visual Formula Builder (Edit) -->
+                <div class="col-span-2 bg-green-50 p-4 rounded-lg">
+                    <label class="block text-sm font-medium text-green-800 mb-2">⚡ Auto-Calculate Formula</label>
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <select id="edit-formula-param1" class="px-3 py-2 border border-green-300 rounded-lg bg-white text-sm">
+                            <option value="">Select Parameter</option>
+                            @foreach($test->parameters->where('code', '!=', null) as $p)
+                            <option value="{{ $p->code }}">{{ $p->name }} ({{ $p->code }})</option>
+                            @endforeach
+                        </select>
+                        <select id="edit-formula-operator" class="px-3 py-2 border border-green-300 rounded-lg bg-white text-sm font-bold">
+                            <option value="">Op</option>
+                            <option value="+">+</option>
+                            <option value="-">−</option>
+                            <option value="*">×</option>
+                            <option value="/">/</option>
+                        </select>
+                        <select id="edit-formula-param2" class="px-3 py-2 border border-green-300 rounded-lg bg-white text-sm">
+                            <option value="">Select Parameter</option>
+                            @foreach($test->parameters->where('code', '!=', null) as $p)
+                            <option value="{{ $p->code }}">{{ $p->name }} ({{ $p->code }})</option>
+                            @endforeach
+                        </select>
+                        <button type="button" onclick="buildEditFormula()" class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
+                            Build
+                        </button>
+                        <button type="button" onclick="clearEditFormula()" class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">
+                            Clear
+                        </button>
+                    </div>
+                    <input type="text" name="formula" id="edit-formula" class="w-full px-4 py-2 border border-green-200 rounded-lg bg-white" placeholder="Formula will appear here...">
+                    <p class="text-xs text-green-600 mt-1">Select params and operator, click Build. Or type: {Param1} + {Param2}</p>
+                </div>
+                
                 <div class="col-span-2">
                     <label class="flex items-center gap-2">
                         <input type="checkbox" name="is_active" id="edit-is_active" value="1" class="w-5 h-5 text-primary-600 rounded">
@@ -340,6 +410,7 @@ function editParam(param) {
     document.getElementById('edit-normal_max_male').value = param.normal_max_male || '';
     document.getElementById('edit-normal_min_female').value = param.normal_min_female || '';
     document.getElementById('edit-normal_max_female').value = param.normal_max_female || '';
+    document.getElementById('edit-formula').value = param.formula || '';
     document.getElementById('edit-is_active').checked = param.is_active;
     document.getElementById('edit-param-modal').classList.remove('hidden');
 }
@@ -367,9 +438,52 @@ document.querySelector('#add-param-modal form').addEventListener('submit', funct
             hidden.type = 'hidden';
             hidden.name = 'group_name';
             hidden.value = newName;
-            this.appendChild(hidden);
         }
     }
 });
+
+// Formula Builder Functions (Add Modal)
+function buildFormula() {
+    const param1 = document.getElementById('formula-param1').value;
+    const operator = document.getElementById('formula-operator').value;
+    const param2 = document.getElementById('formula-param2').value;
+    const input = document.getElementById('formula-input');
+    
+    if (param1 && operator && param2) {
+        input.value = `{${param1}} ${operator} {${param2}}`;
+        input.removeAttribute('readonly');
+    } else if (param1 && !operator && !param2) {
+        input.value = `{${param1}}`;
+        input.removeAttribute('readonly');
+    }
+}
+
+function clearFormula() {
+    document.getElementById('formula-param1').value = '';
+    document.getElementById('formula-operator').value = '';
+    document.getElementById('formula-param2').value = '';
+    document.getElementById('formula-input').value = '';
+}
+
+// Formula Builder Functions (Edit Modal)
+function buildEditFormula() {
+    const param1 = document.getElementById('edit-formula-param1').value;
+    const operator = document.getElementById('edit-formula-operator').value;
+    const param2 = document.getElementById('edit-formula-param2').value;
+    const input = document.getElementById('edit-formula');
+    
+    if (param1 && operator && param2) {
+        input.value = `{${param1}} ${operator} {${param2}}`;
+    } else if (param1 && !operator && !param2) {
+        input.value = `{${param1}}`;
+    }
+}
+
+function clearEditFormula() {
+    document.getElementById('edit-formula-param1').value = '';
+    document.getElementById('edit-formula-operator').value = '';
+    document.getElementById('edit-formula-param2').value = '';
+    document.getElementById('edit-formula').value = '';
+}
 </script>
 @endsection

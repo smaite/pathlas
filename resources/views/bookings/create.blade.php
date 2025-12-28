@@ -47,10 +47,14 @@
                 </div>
                 @endif
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Ref. By Dr.</label>
                         <input type="text" name="referring_doctor" placeholder="Doctor name" class="w-full px-4 py-2 border border-gray-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Received By</label>
+                        <input type="text" name="received_by" value="{{ auth()->user()->name }}" placeholder="Staff name" class="w-full px-4 py-2 border border-gray-200 rounded-xl">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Patient Type</label>
@@ -78,10 +82,48 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sample Collected At</label>
-                        <input type="text" name="sample_collected_at" placeholder="Address" class="w-full px-4 py-2 border border-gray-200 rounded-xl">
+                        <input type="text" name="sample_collected_at_address" placeholder="Address" class="w-full px-4 py-2 border border-gray-200 rounded-xl">
                     </div>
                 </div>
             </div>
+
+            <!-- Package Selection -->
+            @if(isset($packages) && $packages->count() > 0)
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h3 class="font-semibold mb-4">📦 Quick Packages</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    @foreach($packages as $package)
+                    <label class="package-item flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-300 cursor-pointer transition" 
+                           data-tests="{{ $package->tests->pluck('id')->join(',') }}"
+                           data-price="{{ $package->price }}">
+                        <input type="checkbox" class="package-checkbox mt-1 rounded text-primary-600" data-package-id="{{ $package->id }}">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ $package->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $package->tests->count() }} tests included</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-primary-600 font-bold">₹{{ number_format($package->price, 0) }}</p>
+                                    @if($package->mrp && $package->mrp > $package->price)
+                                    <p class="text-xs text-gray-400 line-through">₹{{ number_format($package->mrp, 0) }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1 mt-2">
+                                @foreach($package->tests->take(4) as $test)
+                                <span class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{{ $test->name }}</span>
+                                @endforeach
+                                @if($package->tests->count() > 4)
+                                <span class="text-xs text-gray-400">+{{ $package->tests->count() - 4 }} more</span>
+                                @endif
+                            </div>
+                        </div>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
             <!-- Test Selection -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -238,6 +280,30 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.test-item').forEach(item => {
             const show = item.dataset.search.includes(query);
             item.style.display = show ? '' : 'none';
+        });
+    });
+
+    // Package selection - auto-select tests
+    document.querySelectorAll('.package-checkbox').forEach(pkgBox => {
+        pkgBox.addEventListener('change', function() {
+            const pkgItem = this.closest('.package-item');
+            const testIds = pkgItem.dataset.tests.split(',').filter(id => id);
+            
+            testIds.forEach(testId => {
+                const testCheckbox = document.querySelector(`input[name="tests[]"][value="${testId}"]`);
+                if (testCheckbox) {
+                    testCheckbox.checked = this.checked;
+                }
+            });
+            
+            // Visual feedback
+            if (this.checked) {
+                pkgItem.classList.add('border-primary-500', 'bg-primary-50');
+            } else {
+                pkgItem.classList.remove('border-primary-500', 'bg-primary-50');
+            }
+            
+            updateSummary();
         });
     });
 

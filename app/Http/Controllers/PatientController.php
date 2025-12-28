@@ -67,6 +67,11 @@ class PatientController extends Controller
             $validated['name'] = 'Walk-in Patient';
         }
 
+        // Calculate age from DOB if DOB provided but age is not
+        if (!empty($validated['date_of_birth']) && empty($validated['age'])) {
+            $validated['age'] = \Carbon\Carbon::parse($validated['date_of_birth'])->age;
+        }
+
         $validated['created_by'] = auth()->id();
         $validated['lab_id'] = auth()->user()->lab_id;
         
@@ -131,22 +136,31 @@ class PatientController extends Controller
 
     public function search(Request $request)
     {
-        $search = $request->get('q', '');
+        $search = trim($request->get('q', ''));
         $user = auth()->user();
+        
+        if (empty($search)) {
+            return response()->json([]);
+        }
         
         $query = Patient::query();
         
-        // Lab-scoped search
+        // Lab-scoped search - include patients with null lab_id too
         if (!$user->isSuperAdmin() && $user->lab_id) {
-            $query->where('lab_id', $user->lab_id);
+            $query->where(function($q) use ($user) {
+                $q->where('lab_id', $user->lab_id)
+                  ->orWhereNull('lab_id');
+            });
         }
         
-        $patients = $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('patient_id', 'like', "%{$search}%")
+        $searchLower = strtolower($search);
+        $patients = $query->where(function($q) use ($search, $searchLower) {
+                $q->whereRaw('LOWER(name) LIKE ?', ["%{$searchLower}%"])
+                  ->orWhereRaw('LOWER(patient_id) LIKE ?', ["%{$searchLower}%"])
                   ->orWhere('phone', 'like', "%{$search}%");
             })
-            ->take(10)
+            ->orderBy('name')
+            ->take(15)
             ->get(['id', 'patient_id', 'name', 'age', 'gender', 'phone']);
 
         return response()->json($patients);

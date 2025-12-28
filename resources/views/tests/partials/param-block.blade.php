@@ -14,6 +14,9 @@
             @if($param->code)
             <span class="text-xs text-gray-400 ml-1">({{ $param->code }})</span>
             @endif
+            @if($param->is_calculated)
+            <span class="text-xs text-green-600 ml-1" title="Formula: {{ $param->formula }}">⚡ Auto</span>
+            @endif
         </div>
         <div class="text-sm text-gray-600">{{ $param->unit ?: '-' }}</div>
         <div class="text-sm text-gray-600">
