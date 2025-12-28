@@ -232,9 +232,15 @@ class LabController extends Controller
         if ($request->has('signature_name_2')) $previewLab->signature_name_2 = $request->signature_name_2;
         if ($request->has('signature_designation_2')) $previewLab->signature_designation_2 = $request->signature_designation_2;
         if ($request->has('report_notes')) $previewLab->report_notes = $request->report_notes;
+        if ($request->has('headerless_margin_top')) $previewLab->headerless_margin_top = $request->headerless_margin_top;
+        if ($request->has('headerless_margin_bottom')) $previewLab->headerless_margin_bottom = $request->headerless_margin_bottom;
+
+        // Determine if header should be shown (default true)
+        $showHeader = $request->get('showHeader', 1) != 0;
 
         return view('labs.report-preview', [
             'lab' => $previewLab,
+            'showHeader' => $showHeader,
         ]);
     }
 }

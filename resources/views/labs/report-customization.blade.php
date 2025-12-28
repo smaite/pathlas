@@ -228,7 +228,7 @@
             </form>
         </div>
 
-        <!-- Right: Live Preview -->
+        <!-- Right: Live Preview with Tabs -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold">Live Preview</h2>
@@ -237,8 +237,25 @@
                 </button>
             </div>
             
-            <div class="border border-gray-200 rounded-xl overflow-hidden bg-gray-50" style="height: 650px;">
-                <iframe id="preview-frame" src="{{ route('lab.report-preview') }}" 
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-4 border-b border-gray-200">
+                <button type="button" class="preview-tab px-4 py-2 text-sm font-medium border-b-2 border-primary-600 text-primary-600" data-tab="with-header">
+                    📄 With Header
+                </button>
+                <button type="button" class="preview-tab px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-tab="without-header">
+                    📋 Without Header
+                </button>
+            </div>
+            
+            <!-- Preview Container for With Header -->
+            <div id="preview-with-header" class="preview-content border border-gray-200 rounded-xl overflow-hidden bg-gray-50" style="height: 600px;">
+                <iframe id="preview-frame-header" src="{{ route('lab.report-preview') }}" 
+                    class="w-full h-full" style="transform: scale(0.65); transform-origin: top left; width: 154%; height: 154%;"></iframe>
+            </div>
+            
+            <!-- Preview Container for Without Header -->
+            <div id="preview-without-header" class="preview-content hidden border border-gray-200 rounded-xl overflow-hidden bg-gray-50" style="height: 600px;">
+                <iframe id="preview-frame-headerless" src="{{ route('lab.report-preview') }}?showHeader=0" 
                     class="w-full h-full" style="transform: scale(0.65); transform-origin: top left; width: 154%; height: 154%;"></iframe>
             </div>
             
@@ -299,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'header_color', 'logo_width', 'logo_height',
         'signature_name', 'signature_designation', 'signature_width', 'signature_height',
         'signature_name_2', 'signature_designation_2', 'signature_width_2', 'signature_height_2',
-        'report_notes'
+        'report_notes', 'headerless_margin_top', 'headerless_margin_bottom'
     ];
     
     watchFields.forEach(fieldId => {
@@ -307,6 +324,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if (field) {
             field.addEventListener('input', debounce(updatePreview, 500));
         }
+    });
+    
+    // Tab switching
+    document.querySelectorAll('.preview-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            
+            // Update tab styles
+            document.querySelectorAll('.preview-tab').forEach(t => {
+                t.classList.remove('border-primary-600', 'text-primary-600');
+                t.classList.add('border-transparent', 'text-gray-500');
+            });
+            this.classList.remove('border-transparent', 'text-gray-500');
+            this.classList.add('border-primary-600', 'text-primary-600');
+            
+            // Show/hide preview content
+            document.querySelectorAll('.preview-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`preview-${targetTab}`).classList.remove('hidden');
+        });
     });
     
     // Refresh button
@@ -322,7 +360,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        previewFrame.src = basePreviewUrl + '?' + params.toString();
+        // Update both preview iframes
+        const previewFrameHeader = document.getElementById('preview-frame-header');
+        const previewFrameHeaderless = document.getElementById('preview-frame-headerless');
+        
+        previewFrameHeader.src = basePreviewUrl + '?' + params.toString();
+        previewFrameHeaderless.src = basePreviewUrl + '?showHeader=0&' + params.toString();
     }
     
     function debounce(func, wait) {

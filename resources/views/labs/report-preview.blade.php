@@ -5,7 +5,13 @@
     <title>Report Preview</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; font-size: 10px; color: #333; padding: 20px; background: #fff; }
+        body { 
+            font-family: Arial, sans-serif; 
+            font-size: 10px; 
+            color: #333; 
+            padding: {{ ($showHeader ?? true) ? '20px' : ($lab->headerless_margin_top ?? 40) . 'px 20px' }}; 
+            background: #fff; 
+        }
         
         .header { 
             border-bottom: 3px solid {{ $lab->header_color ?? '#0066cc' }}; 
@@ -81,9 +87,20 @@
         .qr-box { text-align: center; }
         .qr-box img { width: 50px; height: 50px; }
         .qr-label { font-size: 7px; color: #666; }
+        
+        .headerless-notice {
+            background: #fef3c7;
+            border: 1px dashed #f59e0b;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: #92400e;
+        }
     </style>
 </head>
 <body>
+    @if($showHeader ?? true)
     <!-- Header -->
     <div class="header">
         <table class="header-table">
@@ -127,6 +144,12 @@
             </tr>
         </table>
     </div>
+    @else
+    <!-- Headerless Notice -->
+    <div class="headerless-notice">
+        📋 <strong>Headerless Report Preview</strong> - Top margin: {{ $lab->headerless_margin_top ?? 40 }}mm | Bottom margin: {{ $lab->headerless_margin_bottom ?? 30 }}mm
+    </div>
+    @endif
 
     <!-- Patient Section (Sample) -->
     <div class="patient-section">
