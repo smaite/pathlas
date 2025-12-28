@@ -214,15 +214,29 @@ class ReportController extends Controller
             abort(404, 'Report not found');
         }
 
-        $report->load(['booking.patient', 'booking.bookingTests.test.category', 'booking.bookingTests.test.parameters', 'booking.bookingTests.parameterResults', 'booking.bookingTests.result']);
+        $report->load([
+            'booking.patient',
+            'booking.lab',
+            'booking.bookingTests.test.category',
+            'booking.bookingTests.test.parameters',
+            'booking.bookingTests.parameterResults',
+            'booking.bookingTests.result.approvedBy',
+            'booking.createdBy'
+        ]);
         
         $booking = $report->booking;
-        $lab = $booking->lab ?? new \App\Models\Lab(['name' => 'PathLAS Lab']);
+        
+        // Get the lab - try booking's lab first, then fallback
+        $lab = $booking->lab ?? Lab::first() ?? new Lab(['name' => 'PathLAS Lab']);
+        
+        // Generate QR code for verification
+        $qrCode = base64_encode(QrCode::format('svg')->size(100)->generate(route('reports.verify', $report->report_id)));
         
         // Generate PDF using the existing pdf view
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.pdf', [
+        $pdf = Pdf::loadView('reports.pdf', [
             'booking' => $booking,
             'lab' => $lab,
+            'qrCode' => $qrCode,
             'showHeader' => true,
         ]);
 
