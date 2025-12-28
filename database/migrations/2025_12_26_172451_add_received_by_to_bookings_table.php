@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             if (!Schema::hasColumn('bookings', 'received_by')) {
-                $table->string('received_by', 100)->nullable()->after('referred_by');
+                $table->string('received_by', 100)->nullable();
             }
         });
     }
