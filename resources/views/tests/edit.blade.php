@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Edit Test')
 @section('content')
-<div class="max-w-2xl mx-auto">
+<div class="max-w-3xl mx-auto">
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
         <h2 class="text-xl font-semibold mb-6">Edit: {{ $test->name }}</h2>
-        <form action="{{ route('tests.update', $test) }}" method="POST" class="space-y-6">
+        <form id="testForm" action="{{ route('tests.update', $test) }}" method="POST" class="space-y-6">
             @csrf @method('PUT')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="md:col-span-2">
@@ -54,6 +54,20 @@
                     </label>
                 </div>
             </div>
+
+            {{-- Clinical Notes / Interpretation Section --}}
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Clinical Notes / Interpretation
+                    <span class="text-xs text-gray-500 ml-2">(Appears on report below test results - supports tables!)</span>
+                </label>
+                <div id="editor"></div>
+                <input type="hidden" id="interpretation" name="interpretation">
+                <p class="text-xs text-gray-500 mt-2">
+                    💡 Tip: Click the table icon to insert diagnostic range tables like Glucose levels.
+                </p>
+            </div>
+
             <div class="flex gap-4">
                 <button type="submit" class="px-6 py-3 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700">Update Test</button>
                 <a href="{{ route('tests.index') }}" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl">Cancel</a>
@@ -61,4 +75,36 @@
         </form>
     </div>
 </div>
+
+{{-- CKEditor 5 with Table Support (Free for Open Source) --}}
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<style>
+    .ck-editor__editable { min-height: 250px; }
+    .ck-content table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+    .ck-content table td, .ck-content table th { border: 1px solid #ddd; padding: 8px; }
+    .ck-content table th { background: #f5f5f5; font-weight: bold; }
+</style>
+<script>
+    let editor;
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'bulletedList', 'numberedList', '|', 'insertTable', '|', 'undo', 'redo'],
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            }
+        })
+        .then(newEditor => {
+            editor = newEditor;
+            // Load existing content
+            @if($test->interpretation)
+            editor.setData(@json($test->interpretation));
+            @endif
+        })
+        .catch(error => console.error(error));
+    
+    // Sync editor content to hidden field on submit
+    document.getElementById('testForm').addEventListener('submit', function(e) {
+        document.getElementById('interpretation').value = editor.getData();
+    });
+</script>
 @endsection

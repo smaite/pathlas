@@ -8,24 +8,24 @@
             @csrf @method('PUT')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
-                    <input type="text" name="name" value="{{ old('name', $patient->name) }}" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name </label>
+                    <input type="text" name="name" value="{{ old('name', $patient->name) }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Age *</label>
-                    <input type="number" name="age" value="{{ old('age', $patient->age) }}" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Age </label>
+                    <input type="number" name="age" value="{{ old('age', $patient->age) }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
-                    <select name="gender" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gender </label>
+                    <select name="gender" class="w-full px-4 py-3 border border-gray-200 rounded-xl">
                         <option value="male" {{ $patient->gender == 'male' ? 'selected' : '' }}>Male</option>
                         <option value="female" {{ $patient->gender == 'female' ? 'selected' : '' }}>Female</option>
                         <option value="other" {{ $patient->gender == 'other' ? 'selected' : '' }}>Other</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
-                    <input type="tel" name="phone" value="{{ old('phone', $patient->phone) }}" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone </label>
+                    <input type="tel" name="phone" value="{{ old('phone', $patient->phone) }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>

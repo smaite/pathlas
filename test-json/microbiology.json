@@ -1,0 +1,425 @@
+{
+    "tests": {
+        "acid_fast_bacilli_afb": {
+            "sample_type": {
+                "value": "Sputum",
+                "unit": "",
+                "reference": ""
+            },
+            "result": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "culture_and_sensitivity_blood": {
+            "organism_isolated": {
+                "value": "E.coli",
+                "unit": "",
+                "reference": ""
+            },
+            "colony_count": {
+                "value": 100,
+                "unit": "CFU/ml",
+                "reference": ""
+            },
+            "sensitivity": {
+                "amoxycillin_clavulanic_acid_amc": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "amikacin_ak": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "ampicillin_amp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_sulbactam_as": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "azithromycin_azm": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "aztreonam_at": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "bacitracin_b": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefaclor_cfr": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefadroxil_cz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefixime_cfx": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefoperazone_cpz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ceftazidime_caz": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cefixime_cxm": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cephalothin_cep": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "chloramphenicol_c": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "ciprofloxacin_cip": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "clindamycin_cd": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "co_trimoxazole_cot": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "doxycycline_hydrochloride_do": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ertapenem_etp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "erythromycin_e": {
+                    "value": "Resistant",
+                    "unit": ""
+                }
+            }
+        },
+        "gram_stain_csf": {
+            "sample_type": {
+                "value": "CSF Fluid",
+                "unit": "",
+                "reference": ""
+            },
+            "result": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "culture_and_sensitivity_pus": {
+            "organism_isolated": {
+                "value": "E.coli",
+                "unit": "",
+                "reference": ""
+            },
+            "colony_count": {
+                "value": 100,
+                "unit": "CFU/ml",
+                "reference": ""
+            },
+            "sensitivity": {
+                "amoxycillin_clavulanic_acid_amc": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "amikacin_ak": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_amp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_sulbactam_as": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "azithromycin_azm": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "aztreonam_at": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "bacitracin_b": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefaclor_cfr": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefadroxil_cz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefixime_cfx": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefoperazone_cpz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ceftazidime_caz": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cefixime_cxm": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cephalothin_cep": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "chloramphenicol_c": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "ciprofloxacin_cip": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "clindamycin_cd": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "co_trimoxazole_cot": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "doxycycline_hydrochloride_do": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ertapenem_etp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "erythromycin_e": {
+                    "value": "Resistant",
+                    "unit": ""
+                }
+            }
+        },
+        "culture_and_sensitivity_sputum": {
+            "organism_isolated": {
+                "value": "E.coli",
+                "unit": "",
+                "reference": ""
+            },
+            "colony_count": {
+                "value": 100,
+                "unit": "CFU/ml",
+                "reference": ""
+            },
+            "sensitivity": {
+                "amoxycillin_clavulanic_acid_amc": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "amikacin_ak": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_amp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_sulbactam_as": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "azithromycin_azm": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "aztreonam_at": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "bacitracin_b": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefaclor_cfr": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefadroxil_cz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefixime_cfx": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefoperazone_cpz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ceftazidime_caz": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cefixime_cxm": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cephalothin_cep": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "chloramphenicol_c": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "ciprofloxacin_cip": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "clindamycin_cd": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "co_trimoxazole_cot": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "doxycycline_hydrochloride_do": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ertapenem_etp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "erythromycin_e": {
+                    "value": "Resistant",
+                    "unit": ""
+                }
+            }
+        },
+        "culture_and_sensitivity_stool": {
+            "organism_isolated": {
+                "value": "E.coli",
+                "unit": "",
+                "reference": ""
+            },
+            "colony_count": {
+                "value": 100,
+                "unit": "CFU/ml",
+                "reference": ""
+            },
+            "sensitivity": {
+                "amoxycillin_clavulanic_acid_amc": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "amikacin_ak": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_amp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ampicillin_sulbactam_as": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "azithromycin_azm": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "aztreonam_at": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "bacitracin_b": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefaclor_cfr": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefadroxil_cz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefixime_cfx": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "cefoperazone_cpz": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ceftazidime_caz": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cefixime_cxm": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "cephalothin_cep": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "chloramphenicol_c": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "ciprofloxacin_cip": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "clindamycin_cd": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "co_trimoxazole_cot": {
+                    "value": "Sensitive",
+                    "unit": ""
+                },
+                "doxycycline_hydrochloride_do": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "ertapenem_etp": {
+                    "value": "Resistant",
+                    "unit": ""
+                },
+                "erythromycin_e": {
+                    "value": "Resistant",
+                    "unit": ""
+                }
+            }
+        }
+    },
+    "interpretations": {
+        "acid_fast_bacilli_afb": "A positive Acid-Fast Bacillus (AFB) smear provides an initial indication of Mycobacterial infection. Conversely, a negative AFB under the microscope indicates the absence of Mycobacterial infection or that the Mycobacteria are present in insufficient numbers to be detected. Does not differentiate between viable and non-viable organisms, nor distinguish between different Mycobacterial species. Usage: Employed to detect acid-fast bacteria, primarily Mycobacterium tuberculosis, for the purposes of diagnosing and monitoring tuberculosis.",
+        "culture_and_sensitivity": "Sterile after 48 hours incubation at 37°C. Indicates no bacterial growth in culture, or sensitivity/resistance profile for isolated organism (E.coli in this case).",
+        "gram_stain_csf": "Negative Gram stain in CSF fluid indicates absence of visible Gram-positive or Gram-negative bacteria in the sample."
+    }
+}

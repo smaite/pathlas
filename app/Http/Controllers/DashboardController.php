@@ -32,28 +32,24 @@ class DashboardController extends Controller
         return $this->receptionDashboard();
     }
 
-    // Get lab-scoped patient query
+    // Get lab-scoped patient query (strict isolation)
     private function patientQuery()
     {
         $user = auth()->user();
         if ($user->isSuperAdmin()) {
             return Patient::query();
         }
-        return Patient::where(function($q) use ($user) {
-            $q->where('lab_id', $user->lab_id)->orWhereNull('lab_id');
-        });
+        return Patient::where('lab_id', $user->lab_id);
     }
 
-    // Get lab-scoped booking query
+    // Get lab-scoped booking query (strict isolation)
     private function bookingQuery()
     {
         $user = auth()->user();
         if ($user->isSuperAdmin()) {
             return Booking::query();
         }
-        return Booking::where(function($q) use ($user) {
-            $q->where('lab_id', $user->lab_id)->orWhereNull('lab_id');
-        });
+        return Booking::where('lab_id', $user->lab_id);
     }
 
     // Get lab-scoped payment query (via bookings)

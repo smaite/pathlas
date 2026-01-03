@@ -11,10 +11,15 @@ class TestPackageController extends Controller
 {
     public function index()
     {
-        $packages = TestPackage::where('lab_id', auth()->user()->lab_id)
-            ->with('tests')
-            ->ordered()
-            ->get();
+        $user = auth()->user();
+        
+        // Strict lab isolation
+        $query = TestPackage::with('tests');
+        if (!$user->isSuperAdmin()) {
+            $query->where('lab_id', $user->lab_id);
+        }
+        
+        $packages = $query->ordered()->get();
             
         return view('packages.index', compact('packages'));
     }

@@ -36,7 +36,7 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4">
                         <p class="font-medium">{{ $result->bookingTest->booking->patient->name }}</p>
-                        <p class="text-sm text-gray-500">{{ $result->bookingTest->booking->patient->age }}{{ $result->bookingTest->booking->patient->gender[0] }}</p>
+                        <p class="text-sm text-gray-500">{{ $result->bookingTest->booking->patient->age }}{{ $result->bookingTest->booking->patient->gender ? substr($result->bookingTest->booking->patient->gender, 0, 1) : '' }}</p>
                     </td>
                     <td class="px-6 py-4">
                         <p class="font-medium">{{ $result->bookingTest->test->name }}</p>

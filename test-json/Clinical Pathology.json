@@ -1,0 +1,206 @@
+{
+    "tests": {
+        "albumin_creatinine_ratio_urine": {
+            "microalbumin": {
+                "value": 32,
+                "unit": "mg/L",
+                "reference": ""
+            },
+            "urinary_creatinine": {
+                "value": 23,
+                "unit": "mg/dL",
+                "reference": ""
+            },
+            "albumin_creatinine_ratio": {
+                "value": 139.13,
+                "unit": "mg/g",
+                "reference": ""
+            }
+        },
+        "semen_examination": {
+            "quantity": {
+                "value": 3,
+                "unit": "ml",
+                "reference": "2 - 5"
+            },
+            "colour": {
+                "value": "Whitish",
+                "unit": "",
+                "reference": ""
+            },
+            "ph": {
+                "value": 8,
+                "unit": "",
+                "reference": ""
+            },
+            "liquefaction_time": {
+                "value": 30,
+                "unit": "min",
+                "reference": ""
+            },
+            "total_sperm_count": {
+                "value": 160,
+                "unit": "million/cumm",
+                "reference": "60 - 200"
+            },
+            "rapid_progressive": {
+                "value": 50,
+                "unit": "%",
+                "reference": ""
+            },
+            "sluggish_progressive": {
+                "value": 23,
+                "unit": "%",
+                "reference": ""
+            },
+            "non_progressive": {
+                "value": 44,
+                "unit": "%",
+                "reference": ""
+            },
+            "immotile": {
+                "value": 17,
+                "unit": "%",
+                "reference": ""
+            },
+            "abnormal_forms": {
+                "value": 44,
+                "unit": "%",
+                "reference": ""
+            },
+            "epithelial_cells": {
+                "value": "Few",
+                "unit": "/HPF",
+                "reference": ""
+            },
+            "rbc": {
+                "value": "Nil",
+                "unit": "/HPF",
+                "reference": ""
+            },
+            "pus_cell": {
+                "value": "2-3",
+                "unit": "/HPF",
+                "reference": ""
+            }
+        },
+        "urine_cortisol": {
+            "urine_cortisol": {
+                "value": 11,
+                "unit": "µg/24 hrs",
+                "reference": ""
+            }
+        },
+        "urine_pregnancy_test": {
+            "urine_pregnancy_test": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "urine_routine_examination": {
+            "quantity": {
+                "value": 20,
+                "unit": "ml",
+                "reference": ""
+            },
+            "colour": {
+                "value": "Pale Yellow",
+                "unit": "",
+                "reference": "Pale Yellow"
+            },
+            "transparency": {
+                "value": "Clear",
+                "unit": "",
+                "reference": "Clear"
+            },
+            "specific_gravity": {
+                "value": 1.025,
+                "unit": "",
+                "reference": "1.005 - 1.03"
+            },
+            "ph": {
+                "value": 5.5,
+                "unit": "",
+                "reference": "5 - 7"
+            },
+            "leukocytes": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "blood": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "protein_albumin": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "sugar_glucose": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "ketone_bodies": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "bilirubin": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "nitrite": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            },
+            "rbc": {
+                "value": "Absent",
+                "unit": "/HPF",
+                "reference": "Absent"
+            },
+            "pus_cells": {
+                "value": "Absent",
+                "unit": "/HPF",
+                "reference": ""
+            },
+            "epithelial_cells": {
+                "value": "Absent",
+                "unit": "/HPF",
+                "reference": ""
+            },
+            "casts": {
+                "value": "Absent",
+                "unit": "",
+                "reference": ""
+            },
+            "crystals": {
+                "value": "Absent",
+                "unit": "",
+                "reference": ""
+            },
+            "bacteria": {
+                "value": "Absent",
+                "unit": "",
+                "reference": ""
+            },
+            "others": {
+                "value": "Absent",
+                "unit": "",
+                "reference": ""
+            }
+        }
+    },
+    "interpretations": {
+        "albumin_creatinine_ratio_urine": "The normal urinary albumin excretion is less than 30 mg/24 hr. On random spot urine collection, the albumin-to-creatinine ratio (ACR, mg/g) should be less than 30. Categories: Normal <30, Microalbuminuria 30-300, Clinical albuminuria >300. Increased in: Diabetes mellitus, diabetic nephropathy.",
+        "semen_examination": "Conventional semen analysis includes the determination of sperm count, semen volume, sperm motility (qualitative and quantitative), and sperm morphology. In addition to sperm count, sperm morphology and motility may have the most predictive utility. Infertility can be associated with low counts or with sperm of abnormal morphology or decreased motility. Decreased in: Primary or secondary testicular failure, cryptorchidism, following vasectomy, drugs.",
+        "urine_cortisol": "Urinary free cortisol measurement is useful in the initial evaluation of suspected Cushing syndrome. Increased in: Cushing syndrome, acute illness, stress. Not increased in: Obesity.",
+        "urine_pregnancy_test": "If the pregnancy test is taken too early one may get a false negative result very dilute urine specimen may not contain a representative level of hCG, resulting in a negative test too. A negative result that is weakly positive should be confirmed by retesting with a first-morning urine specimen collected 48 hours later. A number of conditions other than pregnancy, including trophoblastic disease and non-trophoblastic neoplasm cause elevated levels of hCG resulting in a false positive test.",
+        "urine_routine_examination": "Protein: Elevated urinary protein levels can signal early kidney disease but may also rise due to strenuous exercise, orthostatic proteinuria, dehydration, urinary tract infections, or acute illness. Glucose and Ketones: Uncontrolled diabetes mellitus can lead to the presence of glucose in urine. Other causes include pregnancy, starvation, and high-protein diets. Blood and Leukocytes: Occult blood can occur in urine as intact erythrocytes or hemoglobin, which can occur in various urological, nephrological, and bleeding disorders. An increase in leukocytes is an indication of inflammation or infection in the urinary tract or kidney."
+    }
+}

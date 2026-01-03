@@ -19,9 +19,9 @@ class ResultController extends Controller
         $bookingTests = BookingTest::with(['test.category', 'booking.patient', 'result'])
             ->whereHas('booking', function($q) use ($labId, $user) {
                 $q->where('status', '!=', 'cancelled');
-                // Filter by lab for non-super-admin users
+                // Strict lab isolation for non-super-admin users
                 if (!$user->isSuperAdmin()) {
-                    $q->where(fn($b) => $b->where('lab_id', $labId)->orWhereNull('lab_id'));
+                    $q->where('lab_id', $labId);
                 }
             })
             ->where(function($q) {
@@ -135,6 +135,9 @@ class ResultController extends Controller
             ->whereDoesntHave('result', fn($q) => $q->where('status', 'approved'))
             ->first();
 
+        // Auto-generate/regenerate report
+        $this->autoRegenerateReport($booking);
+
         if ($nextTest) {
             return redirect()->route('results.parameters', $nextTest)
                 ->with('success', 'Results saved! Enter next test results.');
@@ -142,7 +145,7 @@ class ResultController extends Controller
 
         // All tests completed - redirect to booking with option to generate report
         return redirect()->route('bookings.show', $bookingTest->booking_id)
-            ->with('success', 'All results completed! You can now generate the report.');
+            ->with('success', 'All results completed! Report has been auto-generated.');
     }
 
     public function store(Request $request, Result $result)
@@ -315,7 +318,64 @@ class ResultController extends Controller
             'previous_value' => $previousValue,
         ]);
 
+        // Auto-regenerate report
+        $this->autoRegenerateReport($bookingTest->booking);
+
         return redirect()->route('bookings.show', $bookingTest->booking)
-            ->with('success', 'Result updated successfully.');
+            ->with('success', 'Result updated and report regenerated.');
+    }
+
+    /**
+     * Auto-generate or regenerate report when results are entered/edited
+     */
+    private function autoRegenerateReport($booking)
+    {
+        // Check if booking has any results
+        $hasAnyResults = $booking->bookingTests()->whereHas('result')->exists();
+        
+        if (!$hasAnyResults) {
+            return;
+        }
+
+        $booking->load([
+            'patient',
+            'lab',
+            'bookingTests.test.category',
+            'bookingTests.test.parameters',
+            'bookingTests.result.approvedBy',
+            'bookingTests.parameterResults',
+            'createdBy'
+        ]);
+
+        $lab = $booking->lab ?? \App\Models\Lab::first();
+
+        // Generate QR code
+        $qrCode = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate(
+            route('reports.verify', ['report' => $booking->report?->report_id ?? 'temp'])
+        ));
+
+        // Generate PDF
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.pdf', [
+            'booking' => $booking,
+            'lab' => $lab,
+            'qrCode' => $qrCode,
+        ]);
+
+        $filename = "reports/report-{$booking->booking_id}-" . now()->timestamp . ".pdf";
+        \Illuminate\Support\Facades\Storage::disk('public')->put($filename, $pdf->output());
+
+        // Create or update report
+        $report = \App\Models\Report::updateOrCreate(
+            ['booking_id' => $booking->id],
+            [
+                'pdf_path' => $filename,
+                'qr_code' => route('reports.verify', ['report' => $booking->report?->report_id ?? 'new']),
+                'generated_by' => auth()->id(),
+                'generated_at' => now(),
+                'is_final' => true,
+            ]
+        );
+
+        \App\Models\ActivityLog::log('report_auto_generated', $report);
     }
 }

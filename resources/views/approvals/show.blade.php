@@ -6,7 +6,7 @@
         <div class="flex justify-between items-start mb-6">
             <div>
                 <h2 class="text-xl font-bold">{{ $booking->patient->name }}</h2>
-                <p class="text-gray-500">{{ $booking->booking_id }} • {{ $booking->patient->age }}{{ $booking->patient->gender[0] }}</p>
+                <p class="text-gray-500">{{ $booking->booking_id }} • {{ $booking->patient->age }}{{ $booking->patient->gender ? substr($booking->patient->gender, 0, 1) : '' }}</p>
             </div>
             @if($hasEnteredResults)
             <form action="{{ route('approvals.approve-booking', $booking) }}" method="POST">

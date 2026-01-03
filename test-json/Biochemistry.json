@@ -1,0 +1,367 @@
+{
+    "tests": {
+        "serum_albumin": {
+            "serum_albumin": {
+                "value": 4.4,
+                "unit": "g/dl",
+                "reference": "3.5 - 5.2"
+            }
+        },
+        "serum_alkaline_phosphatase": {
+            "serum_alkaline_phosphatase": {
+                "value": 89,
+                "unit": "U/l",
+                "reference": ""
+            }
+        },
+        "serum_amylase": {
+            "serum_amylase": {
+                "value": 89,
+                "unit": "IU/L",
+                "reference": "0 - 120"
+            }
+        },
+        "anti_cyclic_citrullinated_peptide": {
+            "anti_cyclic_citrullinated_peptide": {
+                "value": 2.7,
+                "unit": "U/mL",
+                "reference": "< 5 U/mL"
+            }
+        },
+        "anti_tpo": {
+            "anti_tpo": {
+                "value": 18.6,
+                "unit": "IU/mL",
+                "reference": "< 30 IU/mL"
+            }
+        },
+        "blood_sugar_pp": {
+            "blood_sugar_pp": {
+                "value": 132,
+                "unit": "mg/dl",
+                "reference": "< 140 mg/dl"
+            }
+        },
+        "bun": {
+            "bun": {
+                "value": 16.4,
+                "unit": "mg/dl",
+                "reference": "7.9 - 20"
+            }
+        },
+        "calcitonin": {
+            "calcitonin": {
+                "value": 11,
+                "unit": "pg/mL",
+                "reference": "< 18 pg/mL"
+            }
+        },
+        "serum_calcium": {
+            "serum_calcium": {
+                "value": 8.9,
+                "unit": "mg/dl",
+                "reference": "8.8 - 10.6"
+            }
+        },
+        "serum_chloride": {
+            "serum_chloride": {
+                "value": 101,
+                "unit": "mmol/l",
+                "reference": "98 - 107"
+            }
+        },
+        "total_cholesterol": {
+            "total_cholesterol": {
+                "value": 180,
+                "unit": "mg/dl",
+                "reference": "125 - 200"
+            }
+        },
+        "cmv_antibody": {
+            "cmv_igg": {
+                "value": 1.1,
+                "unit": "AU/mL",
+                "reference": "< 2"
+            },
+            "cmv_igm": {
+                "value": 3.2,
+                "unit": "AU/mL",
+                "reference": "Grey Zone 2 - 4.2 AU/mL, Pos > 4.2 AU/mL"
+            }
+        },
+        "cpk_mb": {
+            "cpk_mb": {
+                "value": 4.2,
+                "unit": "ng/mL",
+                "reference": "< 5 ng/mL"
+            }
+        },
+        "d_dimer": {
+            "d_dimer": {
+                "value": 0.44,
+                "unit": "µg FEU/mL",
+                "reference": "< 0.5 µg FEU/mL"
+            }
+        },
+        "dhea": {
+            "dhea": {
+                "value": 11,
+                "unit": "µg/dl",
+                "reference": ""
+            }
+        },
+        "fasting_blood_sugar": {
+            "fasting_blood_sugar": {
+                "value": 80,
+                "unit": "mg/dl",
+                "reference": "70 - 100"
+            }
+        },
+        "ferritin": {
+            "ferritin": {
+                "value": 231,
+                "unit": "ng/mL",
+                "reference": "22 - 332"
+            }
+        },
+        "gamma_glutamyl_transferase_ggt": {
+            "ggt": {
+                "value": 48,
+                "unit": "IU/L",
+                "reference": "9 - 52"
+            }
+        },
+        "glucose_tolerance_test": {
+            "fasting": {
+                "value": 89,
+                "unit": "mg/dl",
+                "reference": "< 100"
+            },
+            "1_hour": {
+                "value": 168,
+                "unit": "mg/dl",
+                "reference": "< 180"
+            },
+            "2_hour": {
+                "value": 151,
+                "unit": "mg/dl",
+                "reference": "< 153"
+            },
+            "3_hour": {
+                "value": 142,
+                "unit": "mg/dl",
+                "reference": "< 145"
+            }
+        },
+        "hba1c": {
+            "hba1c": {
+                "value": 6,
+                "unit": "%",
+                "reference": ""
+            },
+            "estimated_average_glucose": {
+                "value": 126.50,
+                "unit": "mg/dl",
+                "reference": ""
+            }
+        },
+        "indirect_coombs_test": {
+            "indirect_coombs_test": {
+                "value": "NEGATIVE",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "iron": {
+            "iron": {
+                "value": 142,
+                "unit": "µg/dl",
+                "reference": "65 - 175"
+            }
+        },
+        "lipase": {
+            "lipase": {
+                "value": 54,
+                "unit": "U/l",
+                "reference": "0 - 67"
+            }
+        },
+        "serum_potassium": {
+            "serum_potassium": {
+                "value": 4.2,
+                "unit": "mmol/L",
+                "reference": "3.5 - 5.1"
+            }
+        },
+        "serum_protein": {
+            "serum_protein": {
+                "value": 7.2,
+                "unit": "g/dl",
+                "reference": "6.4 - 8.3"
+            }
+        },
+        "random_blood_sugar": {
+            "random_blood_sugar": {
+                "value": 82,
+                "unit": "mg/dl",
+                "reference": "70 - 140"
+            }
+        },
+        "serum_bilirubin_total": {
+            "serum_bilirubin_total": {
+                "value": 0.9,
+                "unit": "mg/dl",
+                "reference": "0.2 - 1.2"
+            }
+        },
+        "serum_creatinine": {
+            "serum_creatinine": {
+                "value": 1.11,
+                "unit": "mg/dl",
+                "reference": "0.72 - 1.18"
+            }
+        },
+        "serum_ige": {
+            "serum_ige": {
+                "value": 82,
+                "unit": "IU/mL",
+                "reference": "1 - 190"
+            }
+        },
+        "serum_phosphorus": {
+            "serum_phosphorus": {
+                "value": 3.3,
+                "unit": "mg/dl",
+                "reference": "2.5 - 4.5"
+            }
+        },
+        "serum_urea": {
+            "serum_urea": {
+                "value": 35,
+                "unit": "mg/dl",
+                "reference": "19 - 45"
+            }
+        },
+        "serum_uric_acid": {
+            "serum_uric_acid": {
+                "value": 5.6,
+                "unit": "mg/dl",
+                "reference": "3.5 - 7.2"
+            }
+        },
+        "sgot_ast": {
+            "sgot_ast": {
+                "value": 35,
+                "unit": "U/l",
+                "reference": "0 - 37"
+            }
+        },
+        "sgpt_alt": {
+            "sgpt_alt": {
+                "value": 26,
+                "unit": "U/l",
+                "reference": "13 - 40"
+            }
+        },
+        "serum_sodium": {
+            "serum_sodium": {
+                "value": 137,
+                "unit": "mmol/l",
+                "reference": "136 - 146"
+            }
+        },
+        "thyroglobulin_tg": {
+            "thyroglobulin_tg": {
+                "value": 39,
+                "unit": "ng/mL",
+                "reference": "< 55 ng/mL"
+            }
+        },
+        "thyroglobulin_antibody_tgab": {
+            "thyroglobulin_antibody_tgab": {
+                "value": 87.4,
+                "unit": "IU/mL",
+                "reference": "< 95 IU/mL"
+            }
+        },
+        "total_iron_binding_capacity_tibc": {
+            "total_iron_binding_capacity_tibc": {
+                "value": 260,
+                "unit": "µg/dl",
+                "reference": "240 - 450"
+            }
+        },
+        "triglycerides": {
+            "triglycerides": {
+                "value": 170,
+                "unit": "mg/dl",
+                "reference": "25 - 200"
+            }
+        },
+        "troponin_i": {
+            "troponin_i": {
+                "value": 0.04,
+                "unit": "ng/mL",
+                "reference": "< 0.1 ng/mL"
+            }
+        },
+        "vitamin_b12": {
+            "vitamin_b12": {
+                "value": 668,
+                "unit": "pg/mL",
+                "reference": "211 - 911"
+            }
+        },
+        "25_hydroxy_vitamin_d": {
+            "25_hydroxy_vitamin_d": {
+                "value": 45,
+                "unit": "ng/mL",
+                "reference": "30 - 100"
+            }
+        }
+    },
+    "interpretations": {
+        "serum_albumin": "Major components of plasma proteins are influenced by nutritional state, hepatic function, renal function, and various diseases. Increased in: Dehydration, shock, hemoconcentration. Decreased in: Decreased hepatic synthesis (chronic liver disease, malnutrition, malabsorption, malignancy, congenital analbuminemia), Increased losses (nephrotic syndrome, burns, trauma, hemorrhage with fluid replacement, fistulas, enteropathy, acute or chronic glomerulonephritis), Hemodilution (pregnancy, CHF), Drugs: estrogens.",
+        "serum_alkaline_phosphatase": "Alkaline phosphatases are primarily found in liver, bone, intestines, kidney, and placenta. Increased in: Obstructive hepatobiliary disease, bone disease, physiologic bone growth, Paget disease, osteomalacia, osteogenic sarcoma, bone metastases, hyperparathyroidism, rickets, benign familial hyperphosphatasemia, pregnancy (third trimester), GI disease. Decreased in: Hypophosphatasia.",
+        "serum_amylase": "Amylase hydrolyzes complex carbohydrates. Increased in: Acute pancreatitis (70-95%), pancreatic pseudocyst, pancreatic duct obstruction, cholangitis, choledocholithiasis, pancreatic carcinoma, mumps, diabetic keto-acidosis, penetrating peptic ulcer, peritonitis, ruptured ectopic pregnancy, macroamylasemia. Decreased in: Pancreatic insufficiency, cystic fibrosis.",
+        "anti_cyclic_citrullinated_peptide": "Antibodies to citrullinated proteins (particularly filaggrin) are frequently elevated in rheumatoid arthritis (RA). Sensitivity 70-80%. Specificity of anti-CCP (90-95%) for RA is higher than that of rheumatoid factor.",
+        "anti_tpo": "TPO is the major antigen involved in thyroid autoimmunity. Increased in: Hashimoto thyroiditis (>99%), idiopathic myxedema (>99%), Graves disease (75-85%), Addison disease (50%), Riedel thyroiditis. Low titers are present in approximately 10% of normal individuals and patients with non-immune thyroid disease.",
+        "blood_sugar_pp": "Elevated glucose levels may occur with pancreatic neoplasms, hyperthyroidism, and adrenocortical dysfunction. Decreased glucose levels may result from endogenous or exogenous insulin excess, prolonged starvation, or liver disease.",
+        "bun": "BUN is a less useful measure of glomerular filtration rate than the serum/plasma creatinine (Cr). High levels causes: Kidney dysfunction, dehydration, urinary tract obstruction, high protein intake. Low levels causes: Liver disease, malnutrition, overhydration, pregnancy.",
+        "calcitonin": "Increased in: Medullary thyroid carcinoma, Zollinger-Ellison syndrome, pernicious anemia, pregnancy (at term), newborns, carcinoma (breast, lung, pancreas), leukemia, myeloproliferative disorders, chronic renal failure.",
+        "serum_calcium": "Common causes of Hypocalcemia: Chronic renal failure, Hypomagnesemia, Hypoparathyroidism. Causes of Hypercalcemia: Increased intestinal absorption (vitamin D intoxication), Increased skeletal resorption, Primary hyperparathyroidism.",
+        "serum_chloride": "Increased in: Renal failure, nephrotic syndrome, renal tubular acidosis, dehydration, overtreatment with saline, hyperparathyroidism, diabetes insipidus. Decreased in: Vomiting, diarrhea, gastrointestinal suction, renal failure combined with salt deprivation, over-treatment with diuretics, water intoxication, expansion of extracellular fluid volume, adrenal insufficiency, hyperaldosteronism, metabolic alkalosis.",
+        "total_cholesterol": "Increased in: Primary disorders: polygenic hypercholesterolemia, familial hypercholesterolemia. Secondary disorders: hypothyroidism, uncontrolled diabetes mellitus, nephrotic syndrome, liver disease, Cushing syndrome, acute intermittent porphyria. Decreased in: Severe liver disease, acute hepatitis, cirrhosis, malignancy, hyperthyroidism.",
+        "cmv_antibody": "Increased in: Previous or active CMV infection.",
+        "cpk_mb": "Increased in: Myocardial infarction, cardiac trauma, certain muscular dystrophies, and polymyositis.",
+        "d_dimer": "Increased in: Deep vein thrombosis (DVT), venous thrombo-embolism (VTE), pulmonary embolism (PE), disseminated intravascular coagulation (DIC), arterial thromboembolism, pregnancy, malignancy, surgery, hemolytic anemia.",
+        "dhea": "Increased in: Adrenal hyperplasia, adrenal cancer, congenital adrenal hyperplasia, polycystic ovarian syndrome. Decreased in: Adrenal insufficiency, hypopituitarism, rheumatoid arthritis (females), insulin, and corticosteroids.",
+        "fasting_blood_sugar": "Elevated glucose levels may occur with pancreatic neoplasms, hyperthyroidism, and adrenocortical dysfunction. Decreased glucose levels may result from endogenous or exogenous insulin excess, prolonged starvation, or liver disease.",
+        "ferritin": "Elevated levels: Hemochromatosis, Porphyria, Rheumatoid arthritis, Leukemia, Hodgkin's lymphoma, Liver disease, Multiple blood transfusion, Acute phase reactant.",
+        "gamma_glutamyl_transferase_ggt": "Abnormal test results: Raised GGT, history of excessive alcohol intake, raised ALT and raised MCV suggest liver cell damage. Very high GGT (10 times normal upper limit) occurs in biliary obstruction and hepatic malignancies.",
+        "glucose_tolerance_test": "A level of 126 mg/dL or above, confirmed by repeating the test on another day, means a person has diabetes. A 2-hour post meal level of 200 mg/dL or above, confirmed by repeating the test on another day, means a person has diabetes.",
+        "hba1c": "Clinical significance reflects mean glucose concentration over the previous period (approximately 8-12 weeks).",
+        "indirect_coombs_test": "Positive in: Presence of alloantibody or autoantibody. Drugs: methyldopa.",
+        "iron": "Increased in: Hemochromatosis, multiple transfusions, excess iron administration, acute Fe poisoning, hemolytic anemia, aplastic or hypoplastic anemia, viral hepatitis, lead poisoning, thalassemia, hemochromatosis. Decreased in: Iron deficiency anemia, nephrotic syndrome, chronic infections.",
+        "lipase": "Increased in: Acute pancreatitis, pancreatic pseudocyst, pancreatic malignancy, peritonitis, biliary disease, hepatic disease, diabetes mellitus, intestinal perforation or obstruction, gastric malignancy or perforation, cystic fibrosis, inflammatory bowel disease.",
+        "serum_potassium": "Increased in: Massive hemolysis, severe tissue damage, rhabdomyolysis, acidosis, dehydration, acute or chronic renal failure, Addison's disease. Decreased in: Low potassium intake, prolonged vomiting or diarrhea, renal tubular acidosis, hyperaldosteronism, Cushing syndrome.",
+        "serum_protein": "Increased in: Polyclonal or monoclonal gammopathies, marked dehydration. Decreased in: Protein-losing enteropathies, acute burns, nephrotic syndrome, severe dietary protein deficiency, chronic liver disease, malabsorption syndrome, agammaglobulinemia, cancer cachexia.",
+        "random_blood_sugar": "The reference values for a Normal Random Glucose test in an average adult are 70-140 mg/dL.",
+        "serum_bilirubin_total": "Increased in: Acute or chronic hepatitis, cirrhosis, biliary tract obstruction, toxic hepatitis, neonatal jaundice, congenital liver enzyme abnormalities, fasting, hemolytic disorders, Hepatotoxic drugs.",
+        "serum_creatinine": "Higher than normal level may be due to: Blocked urinary tract, Kidney problems, Reduced blood flow to the kidneys, Dehydration, Muscle problems, Increased protein breakdown.",
+        "serum_ige": "Increased levels: Atopic/non-atopic allergy, Hyper IgE syndrome, Parasitic infections, IgE myeloma, Pulmonary Aspergillosis, Immunodeficiency states & Autoimmune diseases.",
+        "serum_phosphorus": "Increased in: Renal failure, Massive blood transfusion, Hypoparathyroidism, Acromegaly, Vitamin D intoxication. Decreased in: Hyperparathyroidism, Severe diarrhea, Acute pancreatitis, Malabsorption, Refeeding syndrome.",
+        "serum_urea": "Increased in: High-protein diet, Gastrointestinal bleeding, Dehydration, Kidney dysfunction. Decreased in: Low protein intake, Liver disease, Overhydration, Pregnancy.",
+        "serum_uric_acid": "Increased in: Renal failure, gout, myeloproliferative disorders, leukemia, lymphoma, myeloma, polycythemia vera, psoriasis, glycogen storage disease, Lesch-Nyhan syndrome, lead nephropathy, hyperparathyroidism, preeclampsia and eclampsia.",
+        "sgot_ast": "Increased in: Acute viral hepatitis (ALT > AST), biliary tract obstruction, alcoholic hepatitis and cirrhosis (AST > ALT), liver abscess, metastatic or primary liver cancer, right heart failure, ischemic or hypoxic injury to liver.",
+        "sgpt_alt": "Increased in: Acute viral hepatitis (ALT > AST), biliary tract obstruction, alcoholic hepatitis, primary liver cancer, nonalcoholic steatohepatitis, right heart failure, ischemia or hypoxic injury to liver.",
+        "serum_sodium": "Increased in: Dehydration (excessive sweating, severe vomiting, or diarrhea), polyuria (diabetes mellitus, diabetes insipidus), hyperaldosteronism. Decreased in: CHF, cirrhosis, vomiting, diarrhea, exercise, excessive sweating with replacement of water but not salt, SIADH.",
+        "thyroglobulin_tg": "Increased in: Hyperthyroidism, subacute thyroiditis, untreated thyroid carcinoma (except medullary carcinoma), follicular cancer (sensitivity 72%, specificity 81%), Hurthle cell cancer (sensitivity 56%, specificity 84%).",
+        "thyroglobulin_antibody_tgab": "Increased in: Hashimoto thyroiditis (~90%), thyroid carcinoma (45%), thyrotoxicosis, pernicious anemia (50%), SLE (20%), subacute thyroiditis, Graves disease.",
+        "total_iron_binding_capacity_tibc": "Increased in: Iron deficiency anemia, late pregnancy, acute parasites. Decreased in: Hypoproteinemic states (eg, nephrotic syndrome, starvation, malnutrition, cancer), hemochromatosis, thalassemia, hyperthyroidism, chronic infections.",
+        "triglycerides": "Increased in: Hypothyroidism, diabetes mellitus, nephrotic syndrome, chronic alcoholism, liver disease, biliary tract obstruction, stress, familial lipoprotein lipase deficiency, familial dysbetalipoproteinemia, familial combined hyperlipidemia, obesity, metabolic syndrome, nervous, dietary excess, pancreatitis.",
+        "troponin_i": "Increased levels: Initial is highly cardiac specific, though it may be elevated in nonischemic forms of cardiac injury including cardiac contusion, myocarditis, CHF, cardiomyopathy. Non-cardiac causes: renal failure, pulmonary embolism, sepsis, shock, and renal insufficiency.",
+        "vitamin_b12": "Increased in: Pernicious anemia, gastric surgery, gastric carcinoma, malabsorption, pregnancy, dietary deficiency, HIV infection, chronic high-flux hemodialysis, Alzheimer disease.",
+        "25_hydroxy_vitamin_d": "Increased in: Heavy milk drinkers (up to 64 ng/mL), vitamin D intoxication, sun exposure. Decreased in: Dietary deficiency, malabsorption, rickets, osteomalacia, biliary and portal cirrhosis, nephrotic syndrome, renal failure, inadequate sun exposure, advanced age (>70), primary hyperparathyroidism."
+    }
+}

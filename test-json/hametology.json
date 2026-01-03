@@ -1,0 +1,154 @@
+{
+  "tests": {
+    "absolute_eosinophil_count": {
+      "absolute_eosinophil_count": {
+        "value": 267,
+        "unit": "cumm",
+        "reference": "0 - 440"
+      }
+    },
+    "activated_partial_thromboplastin_time_aptt": {
+      "patient_value": {
+        "value": 28,
+        "unit": "seconds",
+        "reference": "22 - 39"
+      },
+      "control_value": {
+        "value": 21,
+        "unit": "seconds",
+        "reference": ""
+      }
+    },
+    "differential_leucocyte_count": {
+      "neutrophils": {
+        "value": 64,
+        "unit": "%",
+        "reference": "40 - 80"
+      },
+      "lymphocytes": {
+        "value": 25,
+        "unit": "%",
+        "reference": "20 - 40"
+      },
+      "eosinophils": {
+        "value": 4,
+        "unit": "%",
+        "reference": "1 - 6"
+      },
+      "monocytes": {
+        "value": 6,
+        "unit": "%",
+        "reference": "2 - 10"
+      },
+      "basophils": {
+        "value": 1,
+        "unit": "%",
+        "reference": "< 2"
+      }
+    },
+    "erythrocyte_sedimentation_rate_westergren": {
+      "esr": {
+        "value": 7,
+        "unit": "mm for 1st hour",
+        "reference": "0 - 10"
+      }
+    },
+    "erythrocyte_sedimentation_rate_wintrobe": {
+      "esr": {
+        "value": 8,
+        "unit": "mm for 1st hour",
+        "reference": "0 - 9"
+      }
+    },
+    "filarial_parasite_card_test": {
+      "filarial_parasite": {
+        "value": "NEGATIVE",
+        "unit": "",
+        "reference": ""
+      }
+    },
+    "glucose_6_phosphate_dehydrogenase_g6pd": {
+      "g6pd": {
+        "value": 16.7,
+        "unit": "U/g Hb",
+        "reference": "5.5 - 20.5"
+      }
+    },
+    "hemoglobin": {
+      "hemoglobin": {
+        "value": 14,
+        "unit": "g/dl",
+        "reference": "13 - 17"
+      }
+    },
+    "malaria_parasite_card_test": {
+      "plasmodium_falciparum_pf": {
+        "value": "POSITIVE",
+        "unit": "",
+        "reference": ""
+      },
+      "plasmodium_vivax_pv": {
+        "value": "POSITIVE",
+        "unit": "",
+        "reference": ""
+      }
+    },
+    "platelet_count": {
+      "platelet_count": {
+        "value": 3.7,
+        "unit": "lakhs/cumm",
+        "reference": "1.5 - 4.1"
+      }
+    },
+    "prothrombin_time_pt_inr": {
+      "patient_value": {
+        "value": 14,
+        "unit": "seconds",
+        "reference": "10 - 16"
+      },
+      "control_value": {
+        "value": 9,
+        "unit": "seconds",
+        "reference": ""
+      },
+      "isi": {
+        "value": 1,
+        "unit": "",
+        "reference": ""
+      },
+      "inr": {
+        "value": 1.56,
+        "unit": "",
+        "reference": ""
+      }
+    },
+    "reticulocyte_count": {
+      "reticulocyte_count": {
+        "value": 2.1,
+        "unit": "%",
+        "reference": "0.5 - 2.5"
+      }
+    },
+    "total_leucocyte_count": {
+      "total_leucocyte_count": {
+        "value": 7200,
+        "unit": "cumm",
+        "reference": "4,800 - 10,800"
+      }
+    }
+  },
+  "interpretations": {
+    "absolute_eosinophil_count": "The Absolute Eosinophil Count (AEC) is calculated by multiplying the percentage of eosinophils in the total white blood cell count. Elevated AEC: Allergic Reactions, Parasitic Infections, Autoimmune Diseases, Eosinophilia. Low AEC: Acute Infections, Adrenal Insufficiency.",
+    "aptt": "APTT evaluates the intrinsic and common coagulation pathways. Increased in: Deficiency of any individual coagulation factor except Factors XIII and VII, presence of nonspecific inhibitor (eg, lupus anticoagulant), specific factor inhibitor (von Willebrand disease, heparin, direct thrombin inhibitor, hemophilia A and B, DIC). Decreased in: Hypercoagulable states.",
+    "differential_leucocyte_count": "Increased/Decreased causes listed for each cell type: Neutrophils, Lymphocytes, Monocytes, Eosinophils, Basophils.",
+    "esr": "Raised ESR in: Connective tissue disorders, Infections (e.g., TB, acute hepatitis), Hematological disease, Chronic disease, Malignancy, Pregnancy, Oral contraceptive pill users, Obesity. Low ESR in: Heart failure, Cachexia, PRV or secondary conditions with abnormal blood cells, Microcytosis, Hypofibrinogenemia, Massive hepatic necrosis.",
+    "filarial_parasite": "Negative: Indicates absence of circulating Wuchereria bancrofti antigen. Positive results are seen in parasitic disease of the human lymph system caused by Wuchereria bancrofti leading to conditions like lymphadenopathy, hydrocele and disfiguring elephantiasis.",
+    "g6pd": "G6PD is an enzyme in the hexose monophosphate shunt essential in generating reduced glutathione and NADPH, which protect hemoglobin from oxidative denaturation. Inherited G6PD deficiency causes neonatal hyperbilirubinemia and chronic hemolytic anemia on exposure to certain drugs or infection. Increased in: Young erythrocytes (reticulocytosis). Decreased in: G6PD deficiency.",
+    "hemoglobin": "Increased in: Hemoconcentration (dehydration, burns, vomiting), Polycythemia (erythrocytosis), Extreme physical exercise. Decreased in: Macrocytic anemia, Normocytic anemia, acute hemorrhage, bone marrow infiltration, Microcytic anemia (iron deficiency, thalassemia).",
+    "malaria_parasite": "The current test is a qualitative test for detection of P. falciparum specific histidine rich protein-2 (Pf. HRP-2) and P. vivax specific lactate dehydrogenase (pLDH). Positive indicates presence of Plasmodium falciparum and/or vivax.",
+    "platelet_count": "Increased in: Myeloproliferative disorders, some myelodysplastic disorders, acute blood loss, post-splenectomy, etc. Decreased in: Bone marrow suppression, myelodysplasia, chemotherapy, drugs, alcohol, infection, HIV, congenital marrow failure, etc.",
+    "pt_inr": "PT evaluates the extrinsic and common coagulation pathways. Increased in: Warfarin, liver disease, DIC, vitamin K deficiency, hereditary deficiency in factors VII, X, V and II, fibrinogen abnormality, circulating anticoagulant. Decreased in: Recombinant factor F VII treatment.",
+    "reticulocyte_count": "Increased in: Hemolytic anemia, blood loss, recovery from iron/B12 or folate deficiency, drug-induced anemia. Decreased in: Iron deficiency anemia, aplastic anemia, anemia of chronic disease, megaloblastic anemia, sideroblastic anemia, pure red cell aplasia, renal disease, bone marrow suppression.",
+    "total_leucocyte_count": "Increased in: Acute infections, inflammatory disorders, acute and chronic leukemias, myeloproliferative disorders, hypersensitivity reactions, stress, smoking. Decreased in: Infections, constitutional and acquired myeloid hypoplasia, myelosuppression (eg, chemotherapy, radiation), myelodysplasia, collagen vascular diseases, hypersplenism, cyclic neutropenia, autoimmune neutropenia, alcoholism."
+  }
+}

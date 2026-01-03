@@ -89,16 +89,22 @@ class TestController extends Controller
             'normal_min' => 'nullable|numeric',
             'normal_max' => 'nullable|numeric',
             'price' => 'required|numeric|min:0',
-            'sample_type' => 'required|in:blood,urine,stool,swab,other',
+            'sample_type' => 'nullable|in:blood,urine,stool,swab,other',
             'method' => 'nullable|string',
             'instructions' => 'nullable|string',
-            'turnaround_time' => 'integer|min:1',
+            'interpretation' => 'nullable|string',
+            'turnaround_time' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
         ]);
 
         $oldValues = $test->toArray();
         $test->update($validated);
         ActivityLog::log('test_updated', $test, $oldValues, $validated);
+
+        // Return JSON for AJAX requests
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Test updated']);
+        }
 
         return redirect()->route('tests.index')
             ->with('success', 'Test updated successfully.');

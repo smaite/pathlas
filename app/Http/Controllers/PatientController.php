@@ -12,16 +12,16 @@ class PatientController extends Controller
     private function labQuery()
     {
         $user = auth()->user();
-        
+
         // Super admin sees all
         if ($user->isSuperAdmin()) {
             return Patient::query();
         }
-        
+
         // Others see their lab's patients OR patients without a lab (legacy data)
-        return Patient::where(function($q) use ($user) {
+        return Patient::where(function ($q) use ($user) {
             $q->where('lab_id', $user->lab_id)
-              ->orWhereNull('lab_id');
+                ->orWhereNull('lab_id');
         });
     }
 
@@ -31,11 +31,11 @@ class PatientController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('patient_id', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('patient_id', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -73,8 +73,8 @@ class PatientController extends Controller
         }
 
         $validated['created_by'] = auth()->id();
-        $validated['lab_id'] = auth()->user()->lab_id;
-        
+        $validated['lab_id'] = auth()->user()->lab_id ?? 1;
+
         $patient = Patient::create($validated);
 
         ActivityLog::log('patient_created', $patient, [], $validated);
@@ -87,7 +87,7 @@ class PatientController extends Controller
     {
         // Check lab access
         $this->authorizeLabAccess($patient);
-        
+
         $patient->load(['bookings.bookingTests.test', 'bookings.payments']);
         return view('patients.show', compact('patient'));
     }
@@ -101,7 +101,7 @@ class PatientController extends Controller
     public function update(Request $request, Patient $patient)
     {
         $this->authorizeLabAccess($patient);
-        
+
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
             'age' => 'nullable|integer|min:0|max:150',
@@ -126,7 +126,7 @@ class PatientController extends Controller
     public function destroy(Patient $patient)
     {
         $this->authorizeLabAccess($patient);
-        
+
         ActivityLog::log('patient_deleted', $patient, $patient->toArray());
         $patient->delete();
 
@@ -138,27 +138,27 @@ class PatientController extends Controller
     {
         $search = trim($request->get('q', ''));
         $user = auth()->user();
-        
+
         if (empty($search)) {
             return response()->json([]);
         }
-        
+
         $query = Patient::query();
-        
+
         // Lab-scoped search - include patients with null lab_id too
         if (!$user->isSuperAdmin() && $user->lab_id) {
-            $query->where(function($q) use ($user) {
+            $query->where(function ($q) use ($user) {
                 $q->where('lab_id', $user->lab_id)
-                  ->orWhereNull('lab_id');
+                    ->orWhereNull('lab_id');
             });
         }
-        
+
         $searchLower = strtolower($search);
-        $patients = $query->where(function($q) use ($search, $searchLower) {
-                $q->whereRaw('LOWER(name) LIKE ?', ["%{$searchLower}%"])
-                  ->orWhereRaw('LOWER(patient_id) LIKE ?', ["%{$searchLower}%"])
-                  ->orWhere('phone', 'like', "%{$search}%");
-            })
+        $patients = $query->where(function ($q) use ($search, $searchLower) {
+            $q->whereRaw('LOWER(name) LIKE ?', ["%{$searchLower}%"])
+                ->orWhereRaw('LOWER(patient_id) LIKE ?', ["%{$searchLower}%"])
+                ->orWhere('phone', 'like', "%{$search}%");
+        })
             ->orderBy('name')
             ->take(15)
             ->get(['id', 'patient_id', 'name', 'age', 'gender', 'phone']);
@@ -169,17 +169,17 @@ class PatientController extends Controller
     private function authorizeLabAccess($patient)
     {
         $user = auth()->user();
-        
+
         // Super admin can access all
         if ($user->isSuperAdmin()) {
             return;
         }
-        
+
         // If patient has no lab (legacy data), allow access
         if ($patient->lab_id === null) {
             return;
         }
-        
+
         // Others can only access their lab's patients
         if ($patient->lab_id !== $user->lab_id) {
             abort(403, 'Unauthorized access to patient.');

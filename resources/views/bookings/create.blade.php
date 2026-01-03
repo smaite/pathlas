@@ -93,9 +93,9 @@
                 <h3 class="font-semibold mb-4">📦 Quick Packages</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     @foreach($packages as $package)
-                    <label class="package-item flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-300 cursor-pointer transition" 
-                           data-tests="{{ $package->tests->pluck('id')->join(',') }}"
-                           data-price="{{ $package->price }}">
+                    <label class="package-item flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-300 cursor-pointer transition"
+                        data-tests="{{ $package->tests->pluck('id')->join(',') }}"
+                        data-price="{{ $package->price }}">
                         <input type="checkbox" class="package-checkbox mt-1 rounded text-primary-600" data-package-id="{{ $package->id }}">
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
@@ -169,7 +169,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-6">
                 <h3 class="text-lg font-semibold mb-4">Selected Tests</h3>
                 <div id="selectedTests" class="space-y-2 mb-4 max-h-48 overflow-y-auto border-b pb-4"></div>
-                
+
                 <div class="space-y-3 mb-4">
                     <div class="flex justify-between"><span class="text-gray-600">Subtotal</span><span id="subtotal" class="font-medium">₹0.00</span></div>
                     <div class="flex items-center justify-between">
@@ -222,118 +222,206 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const testItems = document.querySelectorAll('.test-checkbox');
-    const selectedTestsDiv = document.getElementById('selectedTests');
-    const subtotalEl = document.getElementById('subtotal');
-    const discountPercentEl = document.getElementById('discountPercent');
-    const discountAmountEl = document.getElementById('discountAmount');
-    const discountValueEl = document.getElementById('discountValue');
-    const totalEl = document.getElementById('totalAmount');
-    const paidEl = document.getElementById('paidAmount');
-    const dueEl = document.getElementById('dueAmount');
-    const submitBtn = document.getElementById('submitBtn');
-    const testSearch = document.getElementById('testSearch');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Data from server
+        const initialPatient = @json($patient ? true : false);
 
-    let subtotal = 0;
+        // DOM Elements
+        const testItems = document.querySelectorAll('.test-checkbox');
+        const selectedTestsDiv = document.getElementById('selectedTests');
+        const subtotalEl = document.getElementById('subtotal');
+        const discountPercentEl = document.getElementById('discountPercent');
+        const discountAmountEl = document.getElementById('discountAmount');
+        const discountValueEl = document.getElementById('discountValue');
+        const totalEl = document.getElementById('totalAmount');
+        const paidEl = document.getElementById('paidAmount');
+        const dueEl = document.getElementById('dueAmount');
+        const submitBtn = document.getElementById('submitBtn');
+        const testSearch = document.getElementById('testSearch');
+        const searchInput = document.getElementById('patientSearch');
+        const resultsDiv = document.getElementById('patientResults');
+        const selectedDiv = document.getElementById('selectedPatient');
+        const patientIdInput = document.getElementById('selectedPatientId');
 
-    function updateSummary() {
-        subtotal = 0;
-        let selectedHtml = '';
-        let count = 0;
+        // State
+        let subtotal = 0;
+        let searchTimeout;
+        let currentSearchResults = []; // Store patient data to avoid passing in HTML
 
-        testItems.forEach(item => {
-            if (item.checked) {
-                const parent = item.closest('.test-item');
-                const price = parseFloat(parent.dataset.price);
-                const name = parent.dataset.name;
-                subtotal += price;
-                count++;
-                selectedHtml += `<div class="flex justify-between text-sm p-2 bg-blue-50 rounded"><span class="text-blue-800">${name}</span><span class="font-medium">₹${price.toFixed(2)}</span></div>`;
-            }
-        });
+        function updateSummary() {
+            subtotal = 0;
+            let selectedHtml = '';
+            let count = 0;
 
-        const discountPct = parseFloat(discountPercentEl.value) || 0;
-        const discountAmt = (subtotal * discountPct / 100);
-        const total = Math.max(0, subtotal - discountAmt);
-        const paid = parseFloat(paidEl.value) || 0;
-        const due = Math.max(0, total - paid);
-
-        selectedTestsDiv.innerHTML = selectedHtml || '<p class="text-gray-400 text-sm text-center py-4">No tests selected</p>';
-        subtotalEl.textContent = '₹' + subtotal.toFixed(2);
-        discountAmountEl.textContent = '-₹' + discountAmt.toFixed(2);
-        discountValueEl.value = discountAmt.toFixed(2);
-        totalEl.textContent = '₹' + total.toFixed(2);
-        dueEl.value = '₹' + due.toFixed(2);
-
-        const hasPatient = document.getElementById('selectedPatientId')?.value || {{ $patient ? 'true' : 'false' }};
-        submitBtn.disabled = count === 0 || !hasPatient;
-    }
-
-    testItems.forEach(item => item.addEventListener('change', updateSummary));
-    discountPercentEl.addEventListener('input', updateSummary);
-    paidEl.addEventListener('input', updateSummary);
-
-    // Test search
-    testSearch.addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        document.querySelectorAll('.test-item').forEach(item => {
-            const show = item.dataset.search.includes(query);
-            item.style.display = show ? '' : 'none';
-        });
-    });
-
-    // Package selection - auto-select tests
-    document.querySelectorAll('.package-checkbox').forEach(pkgBox => {
-        pkgBox.addEventListener('change', function() {
-            const pkgItem = this.closest('.package-item');
-            const testIds = pkgItem.dataset.tests.split(',').filter(id => id);
-            
-            testIds.forEach(testId => {
-                const testCheckbox = document.querySelector(`input[name="tests[]"][value="${testId}"]`);
-                if (testCheckbox) {
-                    testCheckbox.checked = this.checked;
+            testItems.forEach(item => {
+                if (item.checked) {
+                    const parent = item.closest('.test-item');
+                    const price = parseFloat(parent.dataset.price) || 0;
+                    const name = parent.dataset.name;
+                    subtotal += price;
+                    count++;
+                    selectedHtml += `<div class="flex justify-between text-sm p-2 bg-blue-50 rounded"><span class="text-blue-800">${name}</span><span class="font-medium">₹${price.toFixed(2)}</span></div>`;
                 }
             });
-            
-            // Visual feedback
-            if (this.checked) {
-                pkgItem.classList.add('border-primary-500', 'bg-primary-50');
-            } else {
-                pkgItem.classList.remove('border-primary-500', 'bg-primary-50');
+
+            const discountPct = parseFloat(discountPercentEl.value) || 0;
+            const discountAmt = (subtotal * discountPct / 100);
+            const total = Math.max(0, subtotal - discountAmt);
+            const paid = parseFloat(paidEl.value) || 0;
+            const due = Math.max(0, total - paid);
+
+            selectedTestsDiv.innerHTML = selectedHtml || '<p class="text-gray-400 text-sm text-center py-4">No tests selected</p>';
+            subtotalEl.textContent = '₹' + subtotal.toFixed(2);
+            discountAmountEl.textContent = '-₹' + discountAmt.toFixed(2);
+            discountValueEl.value = discountAmt.toFixed(2);
+            totalEl.textContent = '₹' + total.toFixed(2);
+            dueEl.value = '₹' + due.toFixed(2);
+
+            // Check if patient is selected (either from initial load or JS selection)
+            const hasPatient = patientIdInput?.value || initialPatient;
+            if (submitBtn) {
+                submitBtn.disabled = count === 0 || !hasPatient;
             }
-            
+        }
+
+        // Event Listeners
+        testItems.forEach(item => item.addEventListener('change', updateSummary));
+        if (discountPercentEl) discountPercentEl.addEventListener('input', updateSummary);
+        if (paidEl) paidEl.addEventListener('input', updateSummary);
+
+        // Test search
+        if (testSearch) {
+            testSearch.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                document.querySelectorAll('.test-item').forEach(item => {
+                    const searchData = item.dataset.search || '';
+                    const show = searchData.includes(query);
+                    item.style.display = show ? '' : 'none';
+
+                    // Show/Hide category headers
+                    const categoryGroup = item.closest('.category-group');
+                    if (categoryGroup) {
+                        const visibleItems = categoryGroup.querySelectorAll('.test-item:not([style*="display: none"])');
+                        categoryGroup.style.display = visibleItems.length > 0 ? '' : 'none';
+                    }
+                });
+            });
+        }
+
+        // Package selection - auto-select tests
+        document.querySelectorAll('.package-checkbox').forEach(pkgBox => {
+            pkgBox.addEventListener('change', function() {
+                const pkgItem = this.closest('.package-item');
+                const testIds = pkgItem.dataset.tests.split(',').filter(id => id);
+
+                testIds.forEach(testId => {
+                    const testCheckbox = document.querySelector(`input[name="tests[]"][value="${testId}"]`);
+                    if (testCheckbox) {
+                        testCheckbox.checked = this.checked;
+                    }
+                });
+
+                // Visual feedback
+                if (this.checked) {
+                    pkgItem.classList.add('border-primary-500', 'bg-primary-50');
+                } else {
+                    pkgItem.classList.remove('border-primary-500', 'bg-primary-50');
+                }
+
+                updateSummary();
+            });
+        });
+
+        // Patient Search Logic
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const query = this.value;
+                clearTimeout(searchTimeout);
+
+                if (query.length < 2) {
+                    resultsDiv.classList.add('hidden');
+                    return;
+                }
+
+                searchTimeout = setTimeout(async () => {
+                    try {
+                        const resp = await fetch(`{{ route('patients.search') }}?q=${encodeURIComponent(query)}`);
+                        if (!resp.ok) throw new Error('Network response was not ok');
+                        const patients = await resp.json();
+                        currentSearchResults = patients; // Update global store
+
+                        if (patients.length > 0) {
+                            resultsDiv.innerHTML = patients.map((p, index) =>
+                                `<div class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b patient-result-item" data-index="${index}">
+                                    <div class="font-medium text-gray-800">${p.name}</div>
+                                    <div class="text-xs text-gray-500">${p.patient_id} • ${p.phone}</div>
+                                </div>`
+                            ).join('');
+                            resultsDiv.classList.remove('hidden');
+                        } else {
+                            resultsDiv.innerHTML = '<p class="px-4 py-3 text-gray-500">No patients found</p>';
+                            resultsDiv.classList.remove('hidden');
+                        }
+                    } catch (e) {
+                        console.error('Search failed', e);
+                        resultsDiv.innerHTML = '<p class="px-4 py-3 text-red-500">Search error</p>';
+                        resultsDiv.classList.remove('hidden');
+                    }
+                }, 300);
+            });
+
+            // Event delegation for patient selection
+            resultsDiv.addEventListener('click', function(e) {
+                const item = e.target.closest('.patient-result-item');
+                if (!item) return;
+
+                const index = item.dataset.index;
+                const p = currentSearchResults[index];
+
+                if (p) {
+                    selectPatient(p);
+                }
+            });
+        }
+
+        function selectPatient(p) {
+            if (!patientIdInput || !selectedDiv || !resultsDiv || !searchInput) return;
+
+            patientIdInput.value = p.id;
+
+            // Safe gender access
+            const genderDisplay = p.gender ? p.gender.charAt(0).toUpperCase() : '?';
+
+            selectedDiv.innerHTML = `
+                <p class="font-semibold text-primary-800">${p.name}</p>
+                <p class="text-sm text-primary-600">${p.patient_id} • ${p.age}${genderDisplay} • ${p.phone}</p>
+                <button type="button" class="text-xs text-red-600 mt-2 hover:underline" onclick="resetPatient()">Change Patient</button>
+            `;
+
+            selectedDiv.classList.remove('hidden');
+            resultsDiv.classList.add('hidden');
+            searchInput.parentElement.classList.add('hidden'); // Hide search box
+            searchInput.value = '';
+
             updateSummary();
-        });
-    });
+        }
 
-    // Patient search
-    const searchInput = document.getElementById('patientSearch');
-    const resultsDiv = document.getElementById('patientResults');
-    const selectedDiv = document.getElementById('selectedPatient');
-    const patientIdInput = document.getElementById('selectedPatientId');
+        // Expose reset function to window for the onclick handler
+        window.resetPatient = function() {
+            if (!patientIdInput || !selectedDiv || !searchInput) return;
 
-    if (searchInput) {
-        searchInput.addEventListener('input', async function() {
-            if (this.value.length < 2) { resultsDiv.classList.add('hidden'); return; }
-            const resp = await fetch(`{{ route('patients.search') }}?q=${encodeURIComponent(this.value)}`);
-            const patients = await resp.json();
-            resultsDiv.innerHTML = patients.map(p => 
-                `<div class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b" onclick="selectPatient(${p.id}, '${p.name}', '${p.patient_id}', ${p.age}, '${p.gender}', '${p.phone}')">${p.name} - ${p.patient_id} - ${p.phone}</div>`
-            ).join('') || '<p class="px-4 py-3 text-gray-500">No patients found</p>';
-            resultsDiv.classList.remove('hidden');
-        });
-    }
+            patientIdInput.value = '';
+            selectedDiv.classList.add('hidden');
+            selectedDiv.innerHTML = '';
+            searchInput.parentElement.classList.remove('hidden');
+            searchInput.focus();
 
-    window.selectPatient = function(id, name, patientId, age, gender, phone) {
-        patientIdInput.value = id;
-        selectedDiv.innerHTML = `<p class="font-semibold text-primary-800">${name}</p><p class="text-sm text-primary-600">${patientId} • ${age}${gender[0].toUpperCase()} • ${phone}</p>`;
-        selectedDiv.classList.remove('hidden');
-        resultsDiv.classList.add('hidden');
-        searchInput.value = '';
+            updateSummary();
+        };
+
+        // Initial summary update
         updateSummary();
-    };
-});
+    });
 </script>
 @endpush
 @endsection

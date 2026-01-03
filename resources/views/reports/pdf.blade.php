@@ -262,6 +262,13 @@
                         <td class="ref-range">{{ $param->getNormalRange($booking->patient->gender) }}</td>
                         <td>{{ $param->unit }}</td>
                     </tr>
+                    @if($param->interpretation)
+                    <tr>
+                        <td colspan="4" style="padding: 4px 12px 8px; background: #fffbeb; border-left: 3px solid #f59e0b; font-size: 9px; color: #666;">
+                            <em>{{ $param->interpretation }}</em>
+                        </td>
+                    </tr>
+                    @endif
                 @endforeach
             @else
                 <tr>
@@ -274,6 +281,15 @@
             </tbody>
         </table>
 
+        {{-- Clinical Notes / Interpretation (from test) - Renders HTML --}}
+        @if($bookingTest->test->interpretation)
+        <div style="margin: 15px 0; padding: 12px 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">
+            <div style="font-weight: bold; color: #333; margin-bottom: 8px; font-size: 11px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Clinical Notes</div>
+            <div style="font-size: 10px; color: #444; line-height: 1.5;">{!! $bookingTest->test->interpretation !!}</div>
+        </div>
+        @endif
+
+        {{-- Custom interpretation from result entry --}}
         @if($bookingTest->result?->notes)
         <div class="interpretation">
             <div class="interpretation-title">Interpretation:</div>

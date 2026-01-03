@@ -15,7 +15,16 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         $query = Report::with(['booking.patient', 'generatedBy'])->latest();
+
+        // Lab isolation - filter by booking's lab_id
+        if (!$user->isSuperAdmin()) {
+            $query->whereHas('booking', function($q) use ($user) {
+                $q->where('lab_id', $user->lab_id)
+                  ->orWhereNull('lab_id');
+            });
+        }
 
         if ($request->filled('date')) {
             $query->whereDate('generated_at', $request->date);
@@ -40,15 +49,13 @@ class ReportController extends Controller
 
     public function generate(Booking $booking)
     {
-        // Check if all results are approved
-        $unapproved = $booking->bookingTests()
-            ->whereDoesntHave('result', function($q) {
-                $q->where('status', 'approved');
-            })
-            ->count();
+        // Allow partial results - just check if at least one test has a result
+        $hasAnyResults = $booking->bookingTests()
+            ->whereHas('result')
+            ->exists();
 
-        if ($unapproved > 0) {
-            return back()->with('error', 'All results must be approved before generating report.');
+        if (!$hasAnyResults) {
+            return back()->with('error', 'Please enter at least one test result before generating report.');
         }
 
         $booking->load([
@@ -111,8 +118,8 @@ class ReportController extends Controller
 
     public function download(Report $report, Request $request)
     {
-        // Check if custom generation is requested
-        if ($request->has('header')) {
+        // Check if custom generation is requested via header option OR template selection
+        if ($request->has('header') || ($request->has('template') && $request->template !== 'default')) {
             return $this->downloadCustom($report, $request->get('header', 'yes'));
         }
 
@@ -121,6 +128,13 @@ class ReportController extends Controller
         }
 
         ActivityLog::log('report_downloaded', $report);
+
+        if ($request->has('stream')) {
+            return response()->file(storage_path('app/public/' . $report->pdf_path), [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="report-' . $report->report_id . '.pdf"'
+            ]);
+        }
 
         return Storage::disk('public')->download($report->pdf_path, "report-{$report->report_id}.pdf");
     }
@@ -146,7 +160,14 @@ class ReportController extends Controller
         // Generate QR code
         $qrCode = base64_encode(QrCode::format('svg')->size(100)->generate(route('reports.verify', $report->report_id)));
 
-        $pdf = Pdf::loadView('reports.pdf', [
+        $template = request('template', 'default');
+        $view = match($template) {
+            'modern1' => 'reports.pdf_modern1',
+            'modern2' => 'reports.pdf_modern2',
+            default => 'reports.pdf'
+        };
+
+        $pdf = Pdf::loadView($view, [
             'booking' => $booking,
             'lab' => $lab,
             'qrCode' => $qrCode,
@@ -154,6 +175,10 @@ class ReportController extends Controller
         ]);
 
         ActivityLog::log('report_downloaded', $report);
+
+        if (request('stream')) {
+            return $pdf->stream("report-{$report->report_id}.pdf");
+        }
 
         return $pdf->download("report-{$report->report_id}.pdf");
     }
@@ -176,7 +201,14 @@ class ReportController extends Controller
         // Generate QR code (using SVG - no imagick needed)
         $qrCode = base64_encode(QrCode::format('svg')->size(100)->generate(route('reports.index')));
 
-        return view('reports.pdf', [
+        $template = request('template', 'default');
+        $view = match($template) {
+            'modern1' => 'reports.pdf_modern1',
+            'modern2' => 'reports.pdf_modern2',
+            default => 'reports.pdf'
+        };
+
+        return view($view, [
             'booking' => $booking,
             'lab' => $lab,
             'qrCode' => $qrCode,
@@ -224,17 +256,24 @@ class ReportController extends Controller
             'booking.bookingTests.result.approvedBy',
             'booking.createdBy'
         ]);
-        
+
         $booking = $report->booking;
-        
+
         // Get the lab - try booking's lab first, then fallback
         $lab = $booking->lab ?? Lab::first() ?? new Lab(['name' => 'PathLAS Lab']);
-        
+
         // Generate QR code for verification
         $qrCode = base64_encode(QrCode::format('svg')->size(100)->generate(route('reports.verify', $report->report_id)));
-        
+
+        $template = request('template', 'default');
+        $view = match($template) {
+            'modern1' => 'reports.pdf_modern1',
+            'modern2' => 'reports.pdf_modern2',
+            default => 'reports.pdf'
+        };
+
         // Generate PDF using the existing pdf view
-        $pdf = Pdf::loadView('reports.pdf', [
+        $pdf = Pdf::loadView($view, [
             'booking' => $booking,
             'lab' => $lab,
             'qrCode' => $qrCode,

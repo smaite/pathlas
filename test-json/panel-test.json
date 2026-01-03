@@ -1,0 +1,371 @@
+{
+    "tests": {
+        "bilirubin_total_direct_indirect": {
+            "serum_bilirubin_total": {
+                "value": 1.1,
+                "unit": "mg/dl",
+                "reference": "0.2 - 1.2"
+            },
+            "serum_bilirubin_direct": {
+                "value": 0.2,
+                "unit": "mg/dl",
+                "reference": "0 - 0.3"
+            },
+            "serum_bilirubin_indirect": {
+                "value": 0.90,
+                "unit": "mg/dl",
+                "reference": "0.2 - 1"
+            }
+        },
+        "blood_sugar_fasting_pp": {
+            "fasting_blood_sugar": {
+                "value": 82,
+                "unit": "mg/dl",
+                "reference": "70 - 100"
+            },
+            "blood_sugar_pp": {
+                "value": 132,
+                "unit": "mg/dl",
+                "reference": "< 140"
+            }
+        },
+        "bt_ct": {
+            "bleeding_time": {
+                "value": 5,
+                "unit": "min",
+                "reference": "2 - 7"
+            },
+            "clotting_time": {
+                "value": 9,
+                "unit": "min",
+                "reference": "4 - 9"
+            }
+        },
+        "complete_blood_count": {
+            "hemoglobin": {
+                "value": 15,
+                "unit": "g/dl",
+                "reference": "13 - 17"
+            },
+            "total_leucocyte_count": {
+                "value": 5100,
+                "unit": "cumm",
+                "reference": "4,800 - 10,800"
+            },
+            "differential_leucocyte_count": {
+                "neutrophils": {
+                    "value": 79,
+                    "unit": "%",
+                    "reference": "40 - 80"
+                },
+                "lymphocytes": {
+                    "value": 18,
+                    "unit": "%",
+                    "reference": "20 - 40",
+                    "flag": "L"
+                },
+                "eosinophils": {
+                    "value": 1,
+                    "unit": "%",
+                    "reference": "1 - 6"
+                },
+                "monocytes": {
+                    "value": 1,
+                    "unit": "%",
+                    "reference": "2 - 10",
+                    "flag": "L"
+                },
+                "basophils": {
+                    "value": 1,
+                    "unit": "%",
+                    "reference": "< 2"
+                }
+            },
+            "platelet_count": {
+                "value": 3.5,
+                "unit": "lakhs/cumm",
+                "reference": "1.5 - 4.1"
+            },
+            "total_rbc_count": {
+                "value": 5,
+                "unit": "million/cumm",
+                "reference": "4.5 - 5.5"
+            },
+            "hematocrit": {
+                "value": 42,
+                "unit": "%",
+                "reference": "40 - 50"
+            },
+            "mcv": {
+                "value": 84.0,
+                "unit": "fL",
+                "reference": "83 - 101"
+            },
+            "mch": {
+                "value": 30.0,
+                "unit": "Pg",
+                "reference": "27 - 32"
+            },
+            "mchc": {
+                "value": 35.7,
+                "unit": "%",
+                "reference": "31.5 - 34.5"
+            }
+        },
+        "free_thyroid_function_test_ft3": {
+            "free_triiodothyronine_ft3": {
+                "value": 3.1,
+                "unit": "pg/mL",
+                "reference": "2 - 4.2"
+            },
+            "free_thyroxine_ft4": {
+                "value": 16.2,
+                "unit": "pg/mL",
+                "reference": "8.9 - 17.2"
+            },
+            "thyroid_stimulating_hormone_tsh": {
+                "value": 3.2,
+                "unit": "µIU/mL",
+                "reference": "0.3 - 4.5"
+            }
+        },
+        "iron_studies": {
+            "iron": {
+                "value": 167,
+                "unit": "µg/dl",
+                "reference": "65 - 175"
+            },
+            "uibc": {
+                "value": 109.00,
+                "unit": "µg/dl",
+                "reference": "155 - 355",
+                "flag": "L"
+            },
+            "total_iron_binding_capacity_tibc": {
+                "value": 276,
+                "unit": "µg/dl",
+                "reference": "240 - 450"
+            },
+            "transferrin_saturation": {
+                "value": 60.51,
+                "unit": "%",
+                "reference": "20 - 55",
+                "flag": "H"
+            }
+        },
+        "kidney_function_test": {
+            "bun": {
+                "value": 10.27,
+                "unit": "mg/dl",
+                "reference": "7.9 - 20"
+            },
+            "serum_urea": {
+                "value": 22,
+                "unit": "mg/dl",
+                "reference": "21 - 43"
+            },
+            "serum_creatinine": {
+                "value": 1.01,
+                "unit": "mg/dl",
+                "reference": "0.55 - 1.02"
+            },
+            "egfr": {
+                "value": 50.32,
+                "unit": "ml/min/1.73m²",
+                "reference": "> 90",
+                "flag": "L"
+            },
+            "egfr_category": {
+                "value": "G3a",
+                "unit": "",
+                "reference": ""
+            },
+            "serum_calcium": {
+                "value": 9.2,
+                "unit": "mg/dl",
+                "reference": "8.8 - 10.6"
+            },
+            "serum_potassium": {
+                "value": 3.6,
+                "unit": "mmol/L",
+                "reference": "3.5 - 5.1"
+            },
+            "serum_sodium": {
+                "value": 138,
+                "unit": "mmol/L",
+                "reference": "136 - 146"
+            },
+            "serum_uric_acid": {
+                "value": 4,
+                "unit": "mg/dl",
+                "reference": "2.6 - 6"
+            },
+            "urea_creatinine_ratio": {
+                "value": 21.78,
+                "unit": "",
+                "reference": ""
+            },
+            "bun_creatinine_ratio": {
+                "value": 10.17,
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "lipid_profile": {
+            "total_cholesterol": {
+                "value": 180,
+                "unit": "mg/dl",
+                "reference": "125 - 200"
+            },
+            "triglycerides": {
+                "value": 172,
+                "unit": "mg/dl",
+                "reference": "25 - 200"
+            },
+            "hdl_cholesterol": {
+                "value": 55,
+                "unit": "mg/dl",
+                "reference": "35 - 80"
+            },
+            "ldl_cholesterol": {
+                "value": 90.60,
+                "unit": "mg/dl",
+                "reference": "85 - 130"
+            },
+            "vldl_cholesterol": {
+                "value": 34.40,
+                "unit": "mg/dl",
+                "reference": "5 - 40"
+            },
+            "ldl_hdl_ratio": {
+                "value": 1.65,
+                "unit": "",
+                "reference": "1.5 - 3.5"
+            },
+            "total_cholesterol_hdl_ratio": {
+                "value": 3.27,
+                "unit": "",
+                "reference": "3.5 - 5",
+                "flag": "L"
+            },
+            "tg_hdl_ratio": {
+                "value": 3.13,
+                "unit": "",
+                "reference": ""
+            },
+            "non_hdl_cholesterol": {
+                "value": 125.00,
+                "unit": "mg/dl",
+                "reference": ""
+            }
+        },
+        "liver_function_test": {
+            "serum_bilirubin_total": {
+                "value": 0.9,
+                "unit": "mg/dl",
+                "reference": "0.2 - 1.2"
+            },
+            "serum_bilirubin_direct": {
+                "value": 0.2,
+                "unit": "mg/dl",
+                "reference": "0 - 0.3"
+            },
+            "serum_bilirubin_indirect": {
+                "value": 0.70,
+                "unit": "mg/dl",
+                "reference": "0.2 - 1"
+            },
+            "sgpt_alt": {
+                "value": 36,
+                "unit": "U/l",
+                "reference": "13 - 40"
+            },
+            "sgot_ast": {
+                "value": 32,
+                "unit": "U/l",
+                "reference": "0 - 37"
+            },
+            "serum_alkaline_phosphatase": {
+                "value": 111,
+                "unit": "U/l",
+                "reference": ""
+            },
+            "serum_protein": {
+                "value": 7.2,
+                "unit": "g/dl",
+                "reference": "6.4 - 8.3"
+            },
+            "serum_albumin": {
+                "value": 4.7,
+                "unit": "g/dl",
+                "reference": "3.5 - 5.2"
+            },
+            "globulin": {
+                "value": 2.50,
+                "unit": "g/dl",
+                "reference": "1.8 - 3.6"
+            },
+            "a_g_ratio": {
+                "value": 1.88,
+                "unit": "",
+                "reference": "1.1 - 2.1"
+            }
+        },
+        "thyroid_function_test_tft": {
+            "serum_triiodothyronine_t3": {
+                "value": 1.86,
+                "unit": "ng/mL",
+                "reference": "0.69 - 2.15"
+            },
+            "serum_thyroxine_t4": {
+                "value": 98,
+                "unit": "ng/mL",
+                "reference": "52 - 127"
+            },
+            "thyroid_stimulating_hormone_tsh": {
+                "value": 3.3,
+                "unit": "µIU/mL",
+                "reference": "0.3 - 4.5"
+            }
+        },
+        "viral_markers": {
+            "hiv_card_test_hiv_1": {
+                "value": "NEGATIVE",
+                "unit": "",
+                "reference": ""
+            },
+            "hiv_card_test_hiv_2": {
+                "value": "NEGATIVE",
+                "unit": "",
+                "reference": ""
+            },
+            "vdrl": {
+                "value": "NON-REACTIVE",
+                "unit": "",
+                "reference": ""
+            },
+            "hepatitis_c_virus_hcv": {
+                "value": "NEGATIVE",
+                "unit": "",
+                "reference": ""
+            },
+            "hbsag": {
+                "value": "NEGATIVE",
+                "unit": "",
+                "reference": ""
+            }
+        }
+    },
+    "interpretations": {
+        "bilirubin": "Bilirubin is the orange-yellow pigment derived from the breakdown of hemoglobin (heme). Increased in: Acute or chronic hepatitis, cirrhosis, biliary tract obstruction, toxic hepatitis, neonatal jaundice, congenital liver enzyme abnormalities (Dubin-Johnson, Rotor, Gilbert, Crigler-Najjar syndromes), fasting, hemolytic disorders, Hepatotoxic drugs.",
+        "blood_sugar": "Fasting ≤100: Normal, 100-125: Pre-Diabetes, ≥126: Diabetes. PP ≤140: Normal, 140-199: Pre-Diabetes, ≥200: Diabetes (confirmed on another day). IGT (2 hrs Post meal) 140-199 indicates increased risk.",
+        "bt_ct": "Bleeding time assesses primary hemostasis. Prolonged in: Thrombocytopenia, Disorders of platelet function, Von Willebrand disease, Disorders of blood vessels. Clotting time prolonged in severe deficiency of a clotting factor (recommended Prothrombin Time (PT) and Activated Partial Thromboplastin Time (APTT)).",
+        "iron_studies": "Increased Iron: Hemochromatosis, multiple transfusions, etc. Decreased Iron: Iron deficiency, chronic infections, etc. Increased TIBC: Iron deficiency, pregnancy. Decreased TIBC: Hypoproteinemic states, chronic infections. Increased % Transferrin Saturation: Iron overload, hemolytic anemia. Decreased: Iron deficiency (<16%).",
+        "kidney_function": "Creatinine is a nitrogenous waste product from muscle. Increased: Pre-renal/renal/post-renal azotemia, large amount of dietary meat, active acromegaly. Decreased: Pregnancy, increasing age (reduced muscle mass). GFR measures kidney function stages. BUN/Creatinine ratio discriminates pre-renal and post-renal azotemia.",
+        "lipid_profile": "Abnormalities of lipids associated with increased risk of coronary artery disease (CAD). Higher proportion of small, dense LDL particles in Type 2 DM elevates risk.",
+        "liver_function": "LFT gives insight into liver health and helps identify problems like hepatitis, cirrhosis, fatty liver disease. Increased in: Acute or chronic hepatitis, cirrhosis, biliary tract obstruction, toxic hepatitis, neonatal jaundice, congenital liver enzyme abnormalities, hemolytic disorders, Hepatotoxic drugs.",
+        "thyroid": "Patterns: Conventional hyperthyroidism - Raised T4/T3, Undetectable TSH. Subclinical hyperthyroidism - Normal T4/T3, Undetectable TSH. Primary hypothyroidism - Low T4/T3, Raised TSH. Subclinical hypothyroidism - Normal T4/T3, Raised TSH. Secondary hypothyroidism - Low T4/T3, Low/Not indicated TSH.",
+        "free_thyroid": "Increased FT4: Hyperthyroidism. Decreased FT4: Hypothyroidism. Elevated Free T3 and Free T4 with Low TSH: Hyperthyroidism. Normal Free T3 and Free T4 with Normal TSH: Normal thyroid function.",
+        "viral_markers": "Negative HIV-1 & HIV-2: No antibodies detected. Non-Reactive VDRL: Absence of IgM & IgG antibodies against non-treponemal antigens. Negative HCV/HBsAg: No active infection detected."
+    }
+}

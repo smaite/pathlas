@@ -22,7 +22,7 @@
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4">
                     <p class="font-medium">{{ $bt->booking->patient->name }}</p>
-                    <p class="text-sm text-gray-500">{{ $bt->booking->patient->age }} {{ ucfirst($bt->booking->patient->gender)[0] }}</p>
+                    <p class="text-sm text-gray-500">{{ $bt->booking->patient->age }} {{ $bt->booking->patient->gender ? ucfirst(substr($bt->booking->patient->gender, 0, 1)) : '' }}</p>
                 </td>
                 <td class="px-6 py-4 font-medium">{{ $bt->test->name }}</td>
                 <td class="px-6 py-4 text-sm text-gray-600">{{ $bt->test->category->name ?? '-' }}</td>

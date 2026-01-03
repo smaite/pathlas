@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function() {
 Route::get('verify', [ReportController::class, 'verify'])->name('reports.verify');
 Route::get('verify/{report}', [ReportController::class, 'verify']);
 Route::get('report-pdf/{report}', [ReportController::class, 'publicDownload'])->name('reports.public-download');
+Route::get('receipt-pdf/{booking_id}', [BookingController::class, 'publicReceipt'])->name('bookings.public-receipt');
 
 // Super Admin Routes (No subscription check)
 Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(function() {
@@ -136,6 +137,13 @@ Route::middleware(['auth', 'role', 'subscription'])->group(function() {
         // Lab Settings (for their own lab)
         Route::get('settings', [\App\Http\Controllers\LabController::class, 'settings'])->name('lab.settings');
         Route::put('settings', [\App\Http\Controllers\LabController::class, 'updateSettings'])->name('lab.settings.update');
+
+        // Lab Test Customization (per-lab pricing/settings)
+        Route::get('lab-tests', [\App\Http\Controllers\LabTestOverrideController::class, 'index'])->name('lab-tests.index');
+        Route::get('lab-tests/{test}/edit', [\App\Http\Controllers\LabTestOverrideController::class, 'edit'])->name('lab-tests.edit');
+        Route::put('lab-tests/{test}', [\App\Http\Controllers\LabTestOverrideController::class, 'update'])->name('lab-tests.update');
+        Route::delete('lab-tests/{test}/reset', [\App\Http\Controllers\LabTestOverrideController::class, 'reset'])->name('lab-tests.reset');
+        Route::post('lab-tests/bulk-prices', [\App\Http\Controllers\LabTestOverrideController::class, 'bulkUpdatePrices'])->name('lab-tests.bulk-prices');
     });
 
     // Report Customization (all lab users can access)

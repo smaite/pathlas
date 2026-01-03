@@ -23,6 +23,7 @@ class Patient extends Model
         'blood_group',
         'medical_history',
         'created_by',
+        'lab_id',
     ];
 
     protected $casts = [
@@ -32,7 +33,7 @@ class Patient extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($patient) {
             if (empty($patient->patient_id)) {
                 // Get the last patient_id number
@@ -65,11 +66,11 @@ class Patient extends Model
         if ($value !== null) {
             return $value;
         }
-        
+
         if ($this->date_of_birth) {
             return $this->date_of_birth->age;
         }
-        
+
         return null;
     }
 

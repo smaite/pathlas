@@ -17,6 +17,19 @@
 
         <form action="{{ route('results.store-parameters', $bookingTest) }}" method="POST">
             @csrf
+
+            {{-- Show saved interpretation from test catalog if exists --}}
+            @if($bookingTest->test->interpretation)
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-amber-600">📋</span>
+                    <div>
+                        <p class="font-medium text-amber-800 mb-2">Clinical Notes (Saved)</p>
+                        <div class="text-sm text-amber-700 prose prose-sm max-w-none">{!! $bookingTest->test->interpretation !!}</div>
+                    </div>
+                </div>
+            </div>
+            @endif
             
             @if($bookingTest->test->hasParameters())
             <!-- Test has sub-parameters -->

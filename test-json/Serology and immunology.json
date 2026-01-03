@@ -1,0 +1,237 @@
+{
+    "tests": {
+        "anti_cardiolipin_igm": {
+            "anti_cardiolipin_igm": {
+                "value": 11,
+                "unit": "MPL",
+                "reference": "",
+                "remarks": "<15: Negative, 15-20: Equivocal, 20-80: Low Positive, >80: High Positive"
+            }
+        },
+        "anti_nuclear_antibody_ana": {
+            "anti_nuclear_antibody_ana": {
+                "value": 18,
+                "unit": "Units",
+                "reference": ""
+            }
+        },
+        "anti_phospholipid_igm": {
+            "anti_phospholipid_igm": {
+                "value": 1,
+                "unit": "GPL U/mL",
+                "reference": ""
+            }
+        },
+        "antistreptolysin_o_aso_titer": {
+            "antistreptolysin_o_aso_titer": {
+                "value": 177,
+                "unit": "IU/mL",
+                "reference": "< 200"
+            }
+        },
+        "beta_2_glycoprotein_1_igg": {
+            "beta_2_glycoprotein_1_igg": {
+                "value": 3,
+                "unit": "SGU",
+                "reference": ""
+            }
+        },
+        "beta_human_chorionic_gonadotropin_hcg": {
+            "beta_human_chorionic_gonadotropin_hcg": {
+                "value": 2.87,
+                "unit": "mIU/mL",
+                "reference": ""
+            }
+        },
+        "c_reactive_protein_crp_quantitative": {
+            "c_reactive_protein_crp_quantitative": {
+                "value": 4.7,
+                "unit": "mg/L",
+                "reference": "< 6 mg/L"
+            }
+        },
+        "chikungunya": {
+            "chikungunya": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "dengue_ns1_antigen": {
+            "dengue_ns1_antigen": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "hbeag": {
+            "hbeag": {
+                "value": 13,
+                "unit": "Index/mL",
+                "reference": "< 1 Index/mL"
+            }
+        },
+        "hbsag": {
+            "hbsag": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "hepatitis_c_virus_hcv": {
+            "hepatitis_c_virus_hcv": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "hiv_card_test": {
+            "hiv_1": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            },
+            "hiv_2": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "insulin_random": {
+            "insulin_random": {
+                "value": 22,
+                "unit": "µIU/mL",
+                "reference": ""
+            }
+        },
+        "malaria_antigen": {
+            "igg": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            },
+            "igm": {
+                "value": "Negative",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "myoglobin": {
+            "myoglobin": {
+                "value": 0.57,
+                "unit": "ng/mL",
+                "reference": ""
+            }
+        },
+        "occult_blood_stool": {
+            "occult_blood_stool": {
+                "value": "Absent",
+                "unit": "",
+                "reference": "Absent"
+            }
+        },
+        "progesterone": {
+            "progesterone": {
+                "value": 0.8,
+                "unit": "ng/mL",
+                "reference": ""
+            }
+        },
+        "rheumatoid_factor_ra_quantitative": {
+            "rheumatoid_factor_ra_quantitative": {
+                "value": 18,
+                "unit": "IU/mL",
+                "reference": "0 - 20"
+            }
+        },
+        "rubella": {
+            "igg": {
+                "value": 4,
+                "unit": "U/mL",
+                "reference": "< 8.00"
+            },
+            "igm": {
+                "value": 6,
+                "unit": "U/mL",
+                "reference": "< 8.00"
+            }
+        },
+        "testosterone_free": {
+            "testosterone_free": {
+                "value": 22.9,
+                "unit": "pg/mL",
+                "reference": ""
+            }
+        },
+        "testosterone_total": {
+            "testosterone_total": {
+                "value": 222,
+                "unit": "ng/dl",
+                "reference": ""
+            }
+        },
+        "total_psa": {
+            "total_psa": {
+                "value": 3.7,
+                "unit": "ng/mL",
+                "reference": "< 4 ng/mL"
+            }
+        },
+        "vdrl": {
+            "vdrl": {
+                "value": "Non-Reactive",
+                "unit": "",
+                "reference": ""
+            }
+        },
+        "widal_test": {
+            "salmonella_typhi_o": {
+                "value": "1:40",
+                "unit": "",
+                "reference": ""
+            },
+            "salmonella_typhi_h": {
+                "value": "1:20",
+                "unit": "",
+                "reference": ""
+            },
+            "salmonella_paratyphi_ah": {
+                "value": "1:80",
+                "unit": "",
+                "reference": ""
+            },
+            "salmonella_paratyphi_bh": {
+                "value": "1:80",
+                "unit": "",
+                "reference": ""
+            }
+        }
+    },
+    "interpretations": {
+        "anti_cardiolipin_igm": "ACA is a type of antiphospholipid antibody. Diagnostic importance: ACA are significant in diagnosing - Venous or arterial thrombosis, Thrombocytopenia, Livedo Reticularis, Recurrent miscarriages, Neurological symptoms. Other Associations: Elevated ACA levels can also be linked to cardiovascular insufficiency and myocardial infarction.",
+        "anti_nuclear_antibody_ana": "Heterogeneous antibodies to nuclear antigens (DNA and RNA, histone, and nonhistone proteins). Nuclear antibody is measured in serum by layering the patient's serum over human epithelial cells and detecting the antibody with fluorescein conjugated polyvalent antihuman immunoglobulin. Enzyme-linked immunosorbent assay (ELISA) is also available for ANA detection, but has lower sensitivity for systemic lupus erythematosus (SLE) compared with immunofluorescence assay(IFA).",
+        "anti_phospholipid_igm": "A phospholipid antibody test measures the levels of autoantibodies against cardiolipin, phosphatidylserine, phosphatidylinositol, and phosphatidic acid. It helps diagnose an increased risk of blood clots in patients with systemic lupus erythematosus (20-35% of cases) and other similar disorders.",
+        "antistreptolysin_o_aso_titer": "Detects the presence of an antibody to the antigen streptolysin O produced by group A streptococci. Streptococcal antibodies appear about 2 weeks after infection. Titre rises to a peak at 4–6 weeks and may remain elevated for 6 months to 1 year.",
+        "beta_2_glycoprotein_1_igg": "This test checks for IgG antibodies to Beta-2 glycoprotein. Finding these antibodies can indicate a risk of blood clots in arteries and veins, as well as a higher chance of repeated miscarriages.",
+        "beta_human_chorionic_gonadotropin_hcg": "Human chorionic gonadotropin (hCG) is a glycoprotein made up of two subunits (α and β). Serum hCG can be detected as early as 24 hours after implantation at a concentration of 5 mIU/mL.",
+        "c_reactive_protein_crp_quantitative": "Produced in the liver and migrates in γ region, where it can produce a small pseudo paraprotein. A marker of systemic inflammation.",
+        "chikungunya": "Positive results in serum indicate ongoing or recent infection by Chikungunya virus.",
+        "dengue_ns1_antigen": "Dengue virus, transmitted by Aedes mosquitoes, belongs to the Flavivirus genus and has four serotypes: DEN-1, DEN-2, DEN-3, and DEN-4.",
+        "hbeag": "HBeAg is a soluble protein secreted by HBV, related to HbcAg, indicating viral replication and infectivity.",
+        "hbsag": "Presence of Hepatitis B antigen indicates reactive result which monitors HBsAg levels during the disease.",
+        "hepatitis_c_virus_hcv": "Reactive result indicates the presence of Hepatitis C virus infection.",
+        "hiv_card_test": "A negative result implies that no Anti HIV-1 & HIV-2 antibodies have been detected in the sample by this method.",
+        "insulin_random": "A single random blood sample for insulin may not be sufficient because insulin levels and blood glucose can vary widely over time.",
+        "malaria_antigen": "Malaria antigen detection—whole blood. Four species of the plasmodium parasites are responsible for human malaria infections.",
+        "myoglobin": "Myoglobin is a protein found in heart and skeletal muscle. It leaks into the blood when muscle cells are damaged.",
+        "occult_blood_stool": "Although fecal occult blood testing is an accepted screening test for colorectal cancer, the sensitivity and specificity of an individual test are low.",
+        "progesterone": "Menstrual Cycle Phase: Follicular Phase (Early): Serum progesterone levels are typically low (<1 ng/mL).",
+        "rheumatoid_factor_ra_quantitative": "Rheumatoid factor (RF) consists of heterogeneous autoantibodies usually of the IgM class that react against the Fc region of human IgG.",
+        "rubella": "Rubella (German measles) is a viral infection that causes fever, malaise, coryza, lymphadenopathy, fine maculopapular rash, and congenital birth defects when infection occurs in utero.",
+        "testosterone_free": "Testosterone circulates in the blood bound to three proteins: sex hormone-binding globulin (SHBG) (60-80%), albumin, and cortisol-binding globulin.",
+        "testosterone_total": "Testosterone is the principal male sex hormone, produced by the Leydig cells of the testes.",
+        "total_psa": "PSA is a glycoprotein produced by cells of the prostatic ductal epithelium and is present in the serum of all men.",
+        "vdrl": "Titres of ≥1:8 and rising titres are significant.",
+        "widal_test": "Titres ≥1:80 of 'O' antigen & ≥1:160 of 'H' antigen for Salmonella typhi and titres ≥1:80 of 'H' antigen for Salmonella paratyphi A & B are significant."
+    }
+}

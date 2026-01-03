@@ -1,0 +1,54 @@
+{
+    "tests": {
+        "serum_triiodothyronine_t3": {
+            "serum_triiodothyronine_t3": {
+                "value": 1.14,
+                "unit": "ng/mL",
+                "reference": "0.69 - 2.15"
+            }
+        },
+        "thyroid_stimulating_hormone_tsh": {
+            "thyroid_stimulating_hormone_tsh": {
+                "value": 0.37,
+                "unit": "µIU/mL",
+                "reference": "0.3 - 4.5"
+            }
+        },
+        "alpha_fetoprotein_afp": {
+            "alpha_fetoprotein_afp": {
+                "value": 8.64,
+                "unit": "ng/mL",
+                "reference": "< 10"
+            }
+        },
+        "prolactin": {
+            "prolactin": {
+                "value": 11.2,
+                "unit": "ng/mL",
+                "reference": "< 15 ng/mL"
+            }
+        },
+        "luteinising_hormone_lh": {
+            "luteinising_hormone_lh": {
+                "value": 4,
+                "unit": "mIU/mL",
+                "reference": ""
+            }
+        },
+        "folic_acid": {
+            "folic_acid": {
+                "value": 1,
+                "unit": "ng/mL",
+                "reference": ""
+            }
+        }
+    },
+    "interpretations": {
+        "serum_triiodothyronine_t3": "T3 is the primary active thyroid hormone. Approximately 80% of T3 is produced by extrathyroidal deiodination of T4 and the rest by thyroid gland. Total T3 is influenced by levels of thyroxine binding proteins. Increased in: Hyperthyroidism (some) Increased thyroid binding globulin. Decreased in: Hypothyroidism, nonthyroidal illness, decreased thyroid binding globulin. Drugs: Amiodarone. Comments: T3 may be increased in approximately 5% of hyperthyroid patients in whom free T4 is normal (T3 toxicosis). Therefore, the test is indicated when hyperthyroidism is suspected and free T4 value is normal. Test is of no value in the diagnosis and treatment of primary hypothyroidism.",
+        "thyroid_stimulating_hormone_tsh": "TSH is an anterior pituitary hormone that stimulates the thyroid gland to produce thyroid hormones. Secretion is stimulated by thyrotropin releasing hormone from the hypothalamus. There is negative feedback on TSH secretion by circulating thyroid hormone. Increased in: Hypothyroidism, mild increases in recovery phase of acute illness, subclinical hypothyroidism. Decreased in: Hyperthyroidism, subclinical hyperthyroidism, acute medical or surgical illness (euthyroid sick syndrome), pituitary hypothyroidism. Drugs: dopamine, high-dose corticosteroids.",
+        "alpha_fetoprotein_afp": "Alpha-fetoprotein (AFP) is a crucial protein found in fetal serum, serving a physiological role akin to that of albumin. It is primarily produced in the yolk sac, the fetal liver, and the fetal gastrointestinal tract. However, shortly after birth, AFP levels drop precipitously, becoming virtually undetectable. In healthy adults, AFP levels are typically below 5.4 ng/mL. While elevated AFP levels can occur in various benign conditions, a level exceeding 500 ng/mL is rarely associated with non-malignant issues. During a normal pregnancy, AFP levels may rise but generally do not exceed 100 ng/mL. Elevated AFP levels are also observed in chronic liver diseases such as cirrhosis and hepatitis. AFP plays a pivotal role in the detection of hepatocellular carcinoma and yolk sac tumors.",
+        "prolactin": "Prolactin is a polypeptide hormone secreted by the anterior pituitary. It functions in the initiation and maintenance of lactation in the postpartum period. PRL secretion is inhibited by hypothalamic secretion of dopamine. Increased in: Physiologic: Sleep, stress, postprandially, pain, coitus. Systemic disorders: Chest wall or thoracic spinal cord lesions, Primary / Secondary hypothyroidism, Adrenal insufficiency, Chronic renal failure, Cirrhosis. Medications: Psychiatric medications like Phenothiazine, Haloperidol, Risperidone, Domperidone, Fluoxetine, Amitriptyline, MAO inhibitors etc., Antihypertensives: Alpha Methyldopa, Reserpine, Verapamil. Opiates: Heroin, Methadone, Morphine, Apomorphine. Cimetidine / Ranitidine. Prolactin secreting pituitary tumors: Prolactinoma, Acromegaly. Miscellaneous: Epileptic seizures, Ectopic secretion of prolactin by non-pituitary tumors, pressure / transaction of pituitary stalk, macroprolactinemia. Decreased in: Pituitary deficiency: Pituitary necrosis / infarction, Pseudohypoparathyroidism, Bromocriptine administration, Drugs: Levodopa.",
+        "luteinising_hormone_lh": "LH is stimulated by the hypothalamic hormone gonadotropin-releasing hormone (GnRH). It is secreted from the anterior pituitary and acts on the gonads. LH is the principal regulator of steroid biosynthesis in the ovary and testis. Increased in: Primary hypogonadism, polycystic ovary syndrome, postmenopause, endometriosis, after depot leuprolide injection; immunoassay result may be falsely elevated in pregnancy. Decreased in: Pituitary or hypothalamic failure, anorexia nervosa, bulimia, advanced prostate cancer, severe stress, malnutrition, Kallman syndrome (gonadotropin deficiency associated with anosmia). Drugs: digoxin, oral contraceptives, phenothiazines.",
+        "folic_acid": "Folate is crucial for making DNA components and for red blood cell maturation. It comes mainly from plants and some organ meats, but cooking can destroy over half of it. Folate deficiency is common in people with alcoholic liver disease, pregnant women, and the elderly. It can result from poor absorption, inadequate diet, high demand (like in pregnancy or cancer), or certain drugs such as Methotrexate and anticonvulsants. Decreased Levels: Megaloblastic anemia, Infantile hyperthyroidism, Alcoholism, Malnutrition, Scurvy, Liver disease, B12 deficiency, dietary amino acid excess, adult Celiac disease, Tropical Sprue, Crohn's disease, Hemolytic anemias, Carcinomas, Myelofibrosis, vitamin B6 deficiency, pregnancy, Whipple's disease, extensive intestinal resection and severe exfoliative dermatitis."
+    }
+}

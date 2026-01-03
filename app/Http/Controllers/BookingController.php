@@ -18,15 +18,15 @@ class BookingController extends Controller
     private function labQuery()
     {
         $user = auth()->user();
-        
+
         if ($user->isSuperAdmin()) {
             return Booking::query();
         }
-        
+
         // Include bookings for user's lab OR bookings without a lab (legacy data)
-        return Booking::where(function($q) use ($user) {
+        return Booking::where(function ($q) use ($user) {
             $q->where('lab_id', $user->lab_id)
-              ->orWhereNull('lab_id');
+                ->orWhereNull('lab_id');
         });
     }
 
@@ -48,12 +48,12 @@ class BookingController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('booking_id', 'like', "%{$search}%")
-                  ->orWhereHas('patient', function($pq) use ($search) {
-                      $pq->where('name', 'like', "%{$search}%")
-                        ->orWhere('phone', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('patient', function ($pq) use ($search) {
+                        $pq->where('name', 'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -100,7 +100,7 @@ class BookingController extends Controller
 
         $booking = Booking::create([
             'patient_id' => $validated['patient_id'],
-            'lab_id' => auth()->user()->lab_id,
+            'lab_id' => auth()->user()->lab_id ?? 1,
             'created_by' => auth()->id(),
             'discount' => $validated['discount'] ?? 0,
             'notes' => $validated['notes'] ?? null,
@@ -186,7 +186,7 @@ class BookingController extends Controller
     public function invoicePdf(Booking $booking)
     {
         $booking->load(['patient', 'bookingTests.test', 'payments']);
-        
+
         $pdf = Pdf::loadView('bookings.invoice-pdf', compact('booking'));
         return $pdf->download("invoice-{$booking->booking_id}.pdf");
     }
@@ -200,8 +200,10 @@ class BookingController extends Controller
         $oldStatus = $booking->status;
         $booking->update($validated);
 
-        ActivityLog::log('booking_status_updated', $booking, 
-            ['status' => $oldStatus], 
+        ActivityLog::log(
+            'booking_status_updated',
+            $booking,
+            ['status' => $oldStatus],
             ['status' => $validated['status']]
         );
 
@@ -252,10 +254,40 @@ class BookingController extends Controller
         $booking->load(['patient', 'bookingTests.test', 'payments', 'report']);
         $lab = auth()->user()->lab ?? $booking->lab ?? new \App\Models\Lab(['name' => 'PathLAS Lab']);
 
-        $pdf = Pdf::loadView('receipts.pdf', compact('booking', 'lab'));
+        $template = request('template', 'default');
+        $view = match($template) {
+            'modern1' => 'receipts.pdf_modern1',
+            'modern2' => 'receipts.pdf_modern2',
+            default => 'receipts.pdf'
+        };
+
+        $pdf = Pdf::loadView($view, compact('booking', 'lab'));
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('receipt-' . $booking->booking_id . '.pdf');
+    }
+
+    /**
+     * Public Receipt Download (No Auth)
+     */
+    public function publicReceipt(string $bookingId)
+    {
+        $booking = Booking::where('booking_id', $bookingId)->firstOrFail();
+
+        $booking->load(['patient', 'bookingTests.test', 'payments', 'report']);
+        // Use booking's lab
+        $lab = $booking->lab ?? \App\Models\Lab::first() ?? new \App\Models\Lab(['name' => 'PathLAS Lab']);
+
+        $template = request('template', 'default');
+        $view = match($template) {
+            'modern1' => 'receipts.pdf_modern1',
+            'modern2' => 'receipts.pdf_modern2',
+            default => 'receipts.pdf'
+        };
+
+        $pdf = Pdf::loadView($view, compact('booking', 'lab'));
         $pdf->setPaper('A4', 'portrait');
 
         return $pdf->stream('receipt-' . $booking->booking_id . '.pdf');
     }
 }
-

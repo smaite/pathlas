@@ -25,6 +25,7 @@ class Test extends Model
         'sample_type',
         'method',
         'instructions',
+        'interpretation',
         'turnaround_time',
         'is_active',
     ];
@@ -89,5 +90,63 @@ class Test extends Model
         }
 
         return 'normal';
+    }
+
+    /**
+     * Lab-specific overrides relationship
+     */
+    public function labOverrides(): HasMany
+    {
+        return $this->hasMany(LabTestOverride::class);
+    }
+
+    /**
+     * Get override for a specific lab
+     */
+    public function getLabOverride($labId)
+    {
+        return $this->labOverrides()->where('lab_id', $labId)->first();
+    }
+
+    /**
+     * Get test data merged with lab-specific overrides
+     * Returns array with lab's customized values
+     */
+    public function getForLab($labId): array
+    {
+        $data = $this->toArray();
+        $override = $this->getLabOverride($labId);
+        
+        if ($override) {
+            // Merge JSON overrides into test data
+            if ($override->overrides) {
+                $data = array_merge($data, $override->overrides);
+            }
+            $data['_is_active'] = $override->is_active;
+            $data['_has_override'] = true;
+        } else {
+            $data['_is_active'] = $this->is_active;
+            $data['_has_override'] = false;
+        }
+        
+        return $data;
+    }
+
+    /**
+     * Get price for a specific lab (with override if exists)
+     */
+    public function getPriceForLab($labId): float
+    {
+        $override = $this->getLabOverride($labId);
+        return $override?->overrides['price'] ?? $this->price;
+    }
+
+    /**
+     * Check if test is active for a specific lab
+     */
+    public function isActiveForLab($labId): bool
+    {
+        $override = $this->getLabOverride($labId);
+        return $override?->is_active ?? $this->is_active;
     }
 }

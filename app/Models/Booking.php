@@ -14,6 +14,7 @@ class Booking extends Model
 
     protected $fillable = [
         'booking_id',
+        'lab_id',
         'patient_id',
         'created_by',
         'referring_doctor',
