@@ -103,9 +103,10 @@ class TestsFromJsonSeeder extends Seeder
             $this->command->info("Processing: {$filename} -> Category: {$categoryName}");
 
             // Create or get category
+            $categoryCode = strtoupper(Str::slug($categoryName, '_'));
             $category = TestCategory::firstOrCreate(
                 ['name' => $categoryName],
-                ['is_active' => true, 'sort_order' => 1]
+                ['code' => $categoryCode, 'is_active' => true, 'sort_order' => 1]
             );
 
             // Parse JSON
