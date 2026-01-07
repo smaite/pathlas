@@ -5,19 +5,30 @@
     <title>Medical Report</title>
     <style>
         @if($showHeader ?? true)
-        @page { margin: 0; size: A4; }
+            @page {
+                margin: 0;
+                size: A4;
+            }
         @else
-        @php
-            $marginTop = $lab->headerless_margin_top ?? 40;
-            $marginBottom = $lab->headerless_margin_bottom ?? 30;
-        @endphp
-        @page { margin: {{ $marginTop }}mm 15mm {{ $marginBottom }}mm 15mm; size: A4; }
+            @php
+                $mt = $lab->headerless_margin_top;
+                $mb = $lab->headerless_margin_bottom;
+                $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+                $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
+            @endphp
+            @page {
+                margin: {{ $marginTop }}mm 15mm {{ $marginBottom }}mm 15mm;
+                size: A4;
+            }
         @endif
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10px; color: #334155; line-height: 1.5; }
 
-        .page { page-break-after: always; min-height: {{ ($showHeader ?? true) ? '297mm' : 'auto' }}; position: relative; }
+        /* Container for continuous flow */
+        .report-container {
+            width: 100%;
+        }
 
         /* Modern V2 - Teal/Blue Corporate */
         .header-bar { background: #0f766e; height: 15px; width: 100%; }
@@ -41,7 +52,7 @@
         /* Content Area */
         .content { padding: 30px 40px; }
 
-        .test-box { margin-bottom: 30px; }
+        .test-box { margin-bottom: 30px; page-break-inside: avoid; }
         .test-header {
             background: linear-gradient(90deg, #0f766e 0%, #14b8a6 100%);
             color: white; padding: 8px 15px; border-radius: 6px 6px 0 0;
@@ -59,7 +70,11 @@
         .flag-norm { color: #059669; font-weight: 600; }
 
         /* Footer */
-        .footer { position: absolute; bottom: 0; width: 100%; height: 120px; }
+        .footer {
+            width: 100%;
+            margin-top: 50px;
+            page-break-inside: avoid;
+        }
         .footer-content { margin: 0 40px; border-top: 1px solid #cbd5e1; padding-top: 15px; }
 
         .sig-row { display: table; width: 100%; }
@@ -68,7 +83,7 @@
         .sig-name { font-weight: 700; font-size: 10px; color: #0f766e; }
         .sig-role { font-size: 9px; color: #64748b; }
 
-        .footer-bar { position: absolute; bottom: 0; width: 100%; background: #0f766e; color: white; padding: 8px 40px; font-size: 9px; }
+        .footer-bar { width: 100%; background: #0f766e; color: white; padding: 8px 40px; font-size: 9px; margin-top: 20px; }
         .fb-tbl { width: 100%; }
         .fb-l { text-align: left; }
         .fb-r { text-align: right; }
@@ -76,9 +91,6 @@
 </head>
 <body>
 @php
-    $pageNum = 0;
-    $totalPages = $booking->bookingTests->count();
-
     // Logo processing
     $logoBase64 = null;
     if ($lab->logo) {
@@ -96,12 +108,16 @@
         $w = new \Endroid\QrCode\Writer\PngWriter();
         $qrBase64 = 'data:image/png;base64,' . base64_encode($w->write($q)->getString());
     } catch(\Exception $e) {}
+
+    // Filter valid tests
+    $validTests = $booking->bookingTests->filter(function($bt) {
+        if ($bt->test->hasParameters() && $bt->parameterResults->where('value', '!=', null)->count() > 0) return true;
+        if ($bt->result && $bt->result->value && $bt->result->status === 'approved') return true;
+        return false;
+    });
 @endphp
 
-@foreach($booking->bookingTests as $bookingTest)
-@php $pageNum++; @endphp
-@if(($bookingTest->test->hasParameters() && $bookingTest->parameterResults->where('value', '!=', null)->count() > 0) || ($bookingTest->result && $bookingTest->result->value && $bookingTest->result->status === 'approved'))
-<div class="page">
+<div class="report-container">
     @if($showHeader ?? true)
     <div class="header-bar"></div>
     <div class="header-main">
@@ -159,6 +175,7 @@
     </div>
 
     <div class="content">
+        @foreach($validTests as $bookingTest)
         <div class="test-box">
             <div class="test-header">
                 {{ $bookingTest->test->name }}
@@ -212,14 +229,15 @@
                 @endif
                 </tbody>
             </table>
-        </div>
 
-        @if($bookingTest->test->interpretation)
-        <div style="border-left: 3px solid #0f766e; padding-left: 15px; margin-top: 20px;">
-            <div style="font-weight:700; color:#0f766e; font-size:10px; text-transform:uppercase;">Clinical Interpretation</div>
-            <div style="color:#475569; font-size:9px; margin-top:5px;">{!! $bookingTest->test->interpretation !!}</div>
+            @if($bookingTest->test->interpretation)
+            <div style="border-left: 3px solid #0f766e; padding-left: 15px; margin-top: 20px;">
+                <div style="font-weight:700; color:#0f766e; font-size:10px; text-transform:uppercase;">Clinical Interpretation</div>
+                <div style="color:#475569; font-size:9px; margin-top:5px;">{!! $bookingTest->test->interpretation !!}</div>
+            </div>
+            @endif
         </div>
-        @endif
+        @endforeach
     </div>
 
     <div class="footer">
@@ -245,13 +263,11 @@
             <table class="fb-tbl">
                 <tr>
                     <td class="fb-l">Report ID: {{ $booking->booking_id }}</td>
-                    <td class="fb-r">Page {{ $pageNum }} of {{ $totalPages }}</td>
+                    <td class="fb-r">Generated on {{ now()->format('d M Y, h:i A') }}</td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
-@endif
-@endforeach
 </body>
 </html>
