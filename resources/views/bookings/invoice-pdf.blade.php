@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td><strong>Phone:</strong> {{ $booking->patient->phone }}</td>
-            <td class="text-right"><strong>Age/Gender:</strong> {{ $booking->patient->age }} / {{ ucfirst($booking->patient->gender) }}</td>
+            <td class="text-right"><strong>Age/Gender:</strong> {{ $booking->patient->age }} / {{ ucfirst($booking->patient->gender ?? '') }}</td>
         </tr>
     </table>
 

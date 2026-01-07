@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LabTestOverrides\UpdateLabTestOverrideRequest;
+use App\Http\Requests\LabTestOverrides\BulkUpdateTestPricesRequest;
 use App\Models\Test;
 use App\Models\LabTestOverride;
 use Illuminate\Http\Request;
@@ -43,21 +45,11 @@ class LabTestOverrideController extends Controller
     /**
      * Save lab-specific override for a test
      */
-    public function update(Request $request, Test $test)
+    public function update(UpdateLabTestOverrideRequest $request, Test $test)
     {
         $labId = auth()->user()->lab_id;
 
-        $validated = $request->validate([
-            'price' => 'nullable|numeric|min:0',
-            'name' => 'nullable|string|max:255',
-            'short_name' => 'nullable|string|max:100',
-            'unit' => 'nullable|string|max:50',
-            'normal_range' => 'nullable|string|max:100',
-            'sample_type' => 'nullable|string|max:100',
-            'method' => 'nullable|string|max:255',
-            'turnaround_time' => 'nullable|integer|min:1',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         // Build overrides JSON - only include non-null values
         $overrides = [];
@@ -104,15 +96,11 @@ class LabTestOverrideController extends Controller
     /**
      * Bulk update prices for multiple tests
      */
-    public function bulkUpdatePrices(Request $request)
+    public function bulkUpdatePrices(BulkUpdateTestPricesRequest $request)
     {
         $labId = auth()->user()->lab_id;
-        
-        $validated = $request->validate([
-            'prices' => 'required|array',
-            'prices.*.test_id' => 'required|exists:tests,id',
-            'prices.*.price' => 'required|numeric|min:0',
-        ]);
+
+        $validated = $request->validated();
 
         foreach ($validated['prices'] as $item) {
             $test = Test::find($item['test_id']);

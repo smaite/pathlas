@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SuperAdmin\RejectLabRequest;
+use App\Http\Requests\SuperAdmin\ExtendSubscriptionRequest;
 use App\Models\Lab;
 use App\Models\User;
 use App\Models\Booking;
@@ -77,11 +79,9 @@ class SuperAdminController extends Controller
         return back()->with('success', "Lab '{$lab->name}' has been verified.");
     }
 
-    public function rejectLab(Request $request, Lab $lab)
+    public function rejectLab(RejectLabRequest $request, Lab $lab)
     {
-        $validated = $request->validate([
-            'rejection_reason' => 'required|string|max:500',
-        ]);
+        $validated = $request->validated();
 
         $lab->update([
             'is_verified' => false,
@@ -93,14 +93,9 @@ class SuperAdminController extends Controller
         return back()->with('success', "Lab '{$lab->name}' has been rejected.");
     }
 
-    public function extendSubscription(Request $request, Lab $lab)
+    public function extendSubscription(ExtendSubscriptionRequest $request, Lab $lab)
     {
-        $validated = $request->validate([
-            'subscription_plan' => 'required|in:free_trial,monthly,yearly,lifetime,custom',
-            'expires_at' => 'required_unless:subscription_plan,lifetime|date|after:today',
-            'amount' => 'nullable|numeric|min:0',
-            'notes' => 'nullable|string|max:500',
-        ]);
+        $validated = $request->validated();
 
         $lab->update([
             'subscription_plan' => $validated['subscription_plan'],

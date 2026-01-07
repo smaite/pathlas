@@ -31,7 +31,7 @@
                 <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                 <div class="p-4 bg-primary-50 border border-primary-200 rounded-xl">
                     <p class="font-semibold text-primary-800">{{ $patient->name }}</p>
-                    <p class="text-sm text-primary-600">{{ $patient->patient_id }} • {{ $patient->age }}{{ $patient->gender[0] }} • {{ $patient->phone }}</p>
+                    <p class="text-sm text-primary-600">{{ $patient->patient_id }} • {{ $patient->age }}{{ $patient->gender ? substr($patient->gender, 0, 1) : '' }} • {{ $patient->phone }}</p>
                 </div>
                 @else
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

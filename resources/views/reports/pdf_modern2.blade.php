@@ -109,7 +109,7 @@
             @if($logoBase64)
             <img src="{{ $logoBase64 }}" style="max-width: 60px; max-height: 60px; border-radius: 6px;">
             @else
-            <div style="width:50px;height:50px;background:#0f766e;color:white;text-align:center;line-height:50px;font-weight:bold;font-size:20px;border-radius:6px;">{{ substr($lab->name,0,1) }}</div>
+            <div style="width:50px;height:50px;background:#0f766e;color:white;text-align:center;line-height:50px;font-weight:bold;font-size:20px;border-radius:6px;">{{ substr($lab->name ?? '', 0, 1) }}</div>
             @endif
         </div>
         <div class="h-content">
@@ -139,7 +139,7 @@
             </div>
             <div class="p-block">
                 <div class="p-lbl">Age / Sex</div>
-                <div class="p-val">{{ $booking->patient->age }} Y / {{ ucfirst(substr($booking->patient->gender,0,1)) }}</div>
+                <div class="p-val">{{ $booking->patient->age }} Y / {{ ucfirst(substr($booking->patient->gender ?? '', 0, 1)) }}</div>
                 <div class="p-lbl">Contact</div>
                 <div class="p-val" style="color:#64748b;">{{ $booking->patient->phone ?? '-' }}</div>
             </div>

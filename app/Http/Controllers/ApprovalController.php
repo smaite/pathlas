@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Approvals\ApproveResultRequest;
+use App\Http\Requests\Approvals\RejectResultRequest;
+use App\Http\Requests\Approvals\BulkApproveRequest;
 use App\Models\Result;
 use App\Models\Booking;
 use App\Models\Report;
@@ -40,11 +43,9 @@ class ApprovalController extends Controller
         return view('approvals.show', compact('booking', 'hasEnteredResults'));
     }
 
-    public function approve(Request $request, Result $result)
+    public function approve(ApproveResultRequest $request, Result $result)
     {
-        $validated = $request->validate([
-            'remarks' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $result->update([
             'approved_by' => auth()->id(),
@@ -63,11 +64,9 @@ class ApprovalController extends Controller
         return back()->with('success', 'Result approved successfully.');
     }
 
-    public function reject(Request $request, Result $result)
+    public function reject(RejectResultRequest $request, Result $result)
     {
-        $validated = $request->validate([
-            'remarks' => 'required|string|min:10',
-        ]);
+        $validated = $request->validated();
 
         $result->update([
             'status' => 'rejected',
@@ -81,12 +80,9 @@ class ApprovalController extends Controller
         return back()->with('success', 'Result rejected. Technician will re-enter.');
     }
 
-    public function bulkApprove(Request $request)
+    public function bulkApprove(BulkApproveRequest $request)
     {
-        $validated = $request->validate([
-            'result_ids' => 'required|array',
-            'result_ids.*' => 'exists:results,id',
-        ]);
+        $validated = $request->validated();
 
         $bookingIds = [];
 

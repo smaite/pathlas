@@ -175,7 +175,7 @@
                     <div class="value">
                         {{ $booking->patient->name }}<br>
                         <span style="font-weight: 400; font-size: 11px; color: #4b5563;">
-                            {{ $booking->patient->age }} Y / {{ ucfirst($booking->patient->gender) }}<br>
+                            {{ $booking->patient->age }} Y / {{ ucfirst($booking->patient->gender ?? '') }}<br>
                             {{ $booking->patient->phone ?? '' }}
                         </span>
                     </div>

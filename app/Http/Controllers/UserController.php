@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\ActivityLog;
@@ -65,16 +67,9 @@ class UserController extends Controller
         return view('users.create', compact('roles'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role_id' => 'required|exists:roles,id',
-            'phone' => 'nullable|string|max:20',
-            'status' => 'required|in:active,inactive',
-        ]);
+        $validated = $request->validated();
 
         // Assign user to same lab as current user
         $user = User::create([
@@ -101,18 +96,11 @@ class UserController extends Controller
         return view('users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $this->authorizeLabAccess($user);
-        
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => ['nullable', 'confirmed', Password::defaults()],
-            'role_id' => 'required|exists:roles,id',
-            'phone' => 'nullable|string|max:20',
-            'status' => 'required|in:active,inactive',
-        ]);
+
+        $validated = $request->validated();
 
         $oldValues = $user->only(['name', 'email', 'role_id', 'status']);
 

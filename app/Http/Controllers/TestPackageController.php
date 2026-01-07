@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TestPackages\StoreTestPackageRequest;
+use App\Http\Requests\TestPackages\UpdateTestPackageRequest;
 use App\Models\TestPackage;
 use App\Models\Test;
 use App\Models\ActivityLog;
@@ -30,17 +32,9 @@ class TestPackageController extends Controller
         return view('packages.create', compact('tests'));
     }
 
-    public function store(Request $request)
+    public function store(StoreTestPackageRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:test_packages',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'mrp' => 'nullable|numeric|min:0',
-            'tests' => 'required|array|min:1',
-            'tests.*' => 'exists:tests,id',
-        ]);
+        $validated = $request->validated();
 
         $package = TestPackage::create([
             'lab_id' => auth()->user()->lab_id,
@@ -72,18 +66,9 @@ class TestPackageController extends Controller
         return view('packages.edit', compact('package', 'tests'));
     }
 
-    public function update(Request $request, TestPackage $package)
+    public function update(UpdateTestPackageRequest $request, TestPackage $package)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:test_packages,code,' . $package->id,
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'mrp' => 'nullable|numeric|min:0',
-            'tests' => 'required|array|min:1',
-            'tests.*' => 'exists:tests,id',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $package->update([
             'name' => $validated['name'],
@@ -91,7 +76,7 @@ class TestPackageController extends Controller
             'description' => $validated['description'] ?? null,
             'price' => $validated['price'],
             'mrp' => $validated['mrp'] ?? null,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active', true), // Safe to keep using helper or validated value if present
         ]);
 
         $package->tests()->sync($validated['tests']);

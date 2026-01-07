@@ -15,7 +15,7 @@
                     <p class="text-xs">
                         Subscription: 
                         <span class="px-2 py-0.5 rounded-full {{ $lab->subscription_badge }}">
-                            {{ ucfirst($lab->subscription_status) }}
+                            {{ ucfirst($lab->subscription_status ?? '') }}
                         </span>
                         @if($lab->days_remaining !== null)
                         ({{ $lab->days_remaining }} days left)

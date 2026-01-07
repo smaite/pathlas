@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\RegisterLabRequest;
 use App\Models\Lab;
 use App\Models\User;
 use App\Models\Role;
@@ -17,18 +18,9 @@ class LabRegistrationController extends Controller
         return view('auth.register-lab');
     }
 
-    public function register(Request $request)
+    public function register(RegisterLabRequest $request)
     {
-        $validated = $request->validate([
-            'lab_name' => 'required|string|max:255',
-            'owner_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'phone' => 'required|string|max:20',
-            'address' => 'nullable|string|max:500',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
-        ]);
+        $validated = $request->validated();
 
         // Generate unique lab code
         $labCode = strtoupper(Str::slug(substr($validated['lab_name'], 0, 3))) . '-' . strtoupper(Str::random(4));

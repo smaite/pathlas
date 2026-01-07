@@ -29,7 +29,7 @@
                 <p class="text-sm text-gray-500">Parameters</p>
             </div>
             <div class="text-center p-4 bg-gray-50 rounded-xl">
-                <p class="text-lg font-medium">{{ ucfirst($test->sample_type) }}</p>
+                <p class="text-lg font-medium">{{ ucfirst($test->sample_type ?? '') }}</p>
                 <p class="text-sm text-gray-500">Sample Type</p>
             </div>
             <div class="text-center p-4 bg-gray-50 rounded-xl">
@@ -551,9 +551,9 @@
         .then(editor => {
             interpretationEditor = editor;
             // Load existing content
-            @if($test - > interpretation)
-            editor.setData(@json($test - > interpretation));
-            originalContent = @json($test - > interpretation);
+            @if($test->interpretation)
+            editor.setData(@json($test->interpretation));
+            originalContent = @json($test->interpretation);
             @endif
 
             // Show save button when content changes
@@ -575,8 +575,7 @@
         btn.disabled = true;
         btn.textContent = 'Saving...';
 
-        fetch('{{ route('
-                tests.update ', $test) }}', {
+        fetch('{{ route('tests.update', $test) }}', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -587,16 +586,8 @@
                         interpretation: content,
                         name: '{{ $test->name }}',
                         code: '{{ $test->code }}',
-                        category_id: {
-                            {
-                                $test - > category_id
-                            }
-                        },
-                        price: {
-                            {
-                                $test - > price
-                            }
-                        }
+                        category_id: {{ $test->category_id ?? 'null' }},
+                        price: {{ $test->price ?? 0 }}
                     })
                 })
             .then(response => response.json())

@@ -44,7 +44,7 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold" style="background: {{ $lab->header_color }}">
-                                {{ substr($lab->name, 0, 1) }}
+                                {{ substr($lab->name ?? '', 0, 1) }}
                             </div>
                             <div>
                                 <a href="{{ route('superadmin.lab-details', $lab) }}" class="font-medium text-gray-900 hover:text-primary-600">{{ $lab->name }}</a>
@@ -67,7 +67,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 text-xs {{ $lab->subscription_badge }} rounded-full">
-                            {{ ucfirst(str_replace('_', ' ', $lab->subscription_plan)) }}
+                            {{ ucfirst(str_replace('_', ' ', $lab->subscription_plan ?? '')) }}
                         </span>
                         @if($lab->subscription_expires_at)
                         <p class="text-xs text-gray-500 mt-1">

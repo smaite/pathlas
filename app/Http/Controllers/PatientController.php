@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Patients\StorePatientRequest;
+use App\Http\Requests\Patients\UpdatePatientRequest;
 use App\Models\Patient;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
@@ -48,19 +50,9 @@ class PatientController extends Controller
         return view('patients.create');
     }
 
-    public function store(Request $request)
+    public function store(StorePatientRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'age' => 'nullable|integer|min:0|max:150',
-            'gender' => 'nullable|in:male,female,other',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'address' => 'nullable|string',
-            'date_of_birth' => 'nullable|date',
-            'blood_group' => 'nullable|string|max:5',
-            'medical_history' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         // Set default name if not provided
         if (empty($validated['name'])) {
@@ -98,21 +90,11 @@ class PatientController extends Controller
         return view('patients.edit', compact('patient'));
     }
 
-    public function update(Request $request, Patient $patient)
+    public function update(UpdatePatientRequest $request, Patient $patient)
     {
         $this->authorizeLabAccess($patient);
 
-        $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'age' => 'nullable|integer|min:0|max:150',
-            'gender' => 'nullable|in:male,female,other',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'address' => 'nullable|string',
-            'date_of_birth' => 'nullable|date',
-            'blood_group' => 'nullable|string|max:5',
-            'medical_history' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $oldValues = $patient->toArray();
         $patient->update($validated);

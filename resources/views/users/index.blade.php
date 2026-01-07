@@ -32,7 +32,7 @@
                 <td class="px-6 py-4 font-medium">{{ $user->name }}</td>
                 <td class="px-6 py-4">{{ $user->email }}</td>
                 <td class="px-6 py-4"><span class="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full">{{ $user->role?->display_name ?? 'N/A' }}</span></td>
-                <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs {{ $user->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">{{ ucfirst($user->status) }}</span></td>
+                <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs {{ $user->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">{{ ucfirst($user->status ?? '') }}</span></td>
                 <td class="px-6 py-4">
                     <div class="flex gap-2">
                         <a href="{{ route('users.edit', $user) }}" class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200">Edit</a>

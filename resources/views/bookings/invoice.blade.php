@@ -24,7 +24,7 @@
             </div>
             <div class="text-right">
                 <p><span class="text-gray-500">Patient ID:</span> {{ $booking->patient->patient_id }}</p>
-                <p><span class="text-gray-500">Age/Gender:</span> {{ $booking->patient->age }} / {{ ucfirst($booking->patient->gender) }}</p>
+                <p><span class="text-gray-500">Age/Gender:</span> {{ $booking->patient->age }} / {{ ucfirst($booking->patient->gender ?? '') }}</p>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
 
         <div class="flex justify-between items-center pt-4 border-t">
             <div>
-                <span class="px-3 py-1 rounded-full text-sm font-medium {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">{{ ucfirst($booking->payment_status) }}</span>
+                <span class="px-3 py-1 rounded-full text-sm font-medium {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">{{ ucfirst($booking->payment_status ?? '') }}</span>
             </div>
             <div class="space-x-3">
                 <a href="{{ route('bookings.invoice.pdf', $booking) }}" class="px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700">Download PDF</a>

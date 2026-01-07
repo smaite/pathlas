@@ -11,7 +11,7 @@
             <div class="text-right">
                 <p class="font-mono text-sm text-gray-500">{{ $bookingTest->booking->booking_id }}</p>
                 <p class="font-medium">{{ $bookingTest->booking->patient->name }}</p>
-                <p class="text-sm text-gray-600">{{ $bookingTest->booking->patient->age }} {{ ucfirst($bookingTest->booking->patient->gender) }}</p>
+                <p class="text-sm text-gray-600">{{ $bookingTest->booking->patient->age }} {{ ucfirst($bookingTest->booking->patient->gender ?? '') }}</p>
             </div>
         </div>
 

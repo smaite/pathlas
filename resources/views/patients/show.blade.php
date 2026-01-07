@@ -6,7 +6,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <div class="text-center mb-6">
                 <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-indigo-600 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold">
-                    {{ substr($patient->name, 0, 1) }}
+                    {{ substr($patient->name ?? '', 0, 1) }}
                 </div>
                 <h2 class="text-xl font-bold mt-4">{{ $patient->name }}</h2>
                 <p class="text-gray-500">{{ $patient->patient_id }}</p>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ $booking->status_badge }}">{{ ucfirst(str_replace('_', ' ', $booking->status)) }}</span>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ $booking->status_badge }}">{{ ucfirst(str_replace('_', ' ', $booking->status ?? '')) }}</span>
                             <p class="mt-2 font-semibold">₹{{ number_format($booking->total_amount, 2) }}</p>
                         </div>
                     </div>

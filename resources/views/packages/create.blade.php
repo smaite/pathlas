@@ -65,7 +65,7 @@
             
             <div id="test-list" class="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-80 overflow-y-auto">
                 @foreach($tests as $test)
-                <label class="test-item flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer" data-name="{{ strtolower($test->name) }}">
+                <label class="test-item flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer" data-name="{{ strtolower($test->name ?? '') }}">
                     <input type="checkbox" name="tests[]" value="{{ $test->id }}" 
                         class="rounded text-primary-600"
                         {{ in_array($test->id, old('tests', [])) ? 'checked' : '' }}>

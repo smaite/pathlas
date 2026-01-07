@@ -23,3 +23,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Block access to sensitive files
+<FilesMatch "\.(env|sql|zip)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

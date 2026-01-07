@@ -2,30 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TestParameters\StoreTestParameterRequest;
+use App\Http\Requests\TestParameters\UpdateTestParameterRequest;
+use App\Http\Requests\TestParameters\ReorderTestParametersRequest;
 use App\Models\Test;
 use App\Models\TestParameter;
 use Illuminate\Http\Request;
 
 class TestParameterController extends Controller
 {
-    public function store(Request $request, Test $test)
+    public function store(StoreTestParameterRequest $request, Test $test)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-            'unit' => 'nullable|string|max:50',
-            'normal_min' => 'nullable|numeric',
-            'normal_max' => 'nullable|numeric',
-            'normal_min_male' => 'nullable|numeric',
-            'normal_max_male' => 'nullable|numeric',
-            'normal_min_female' => 'nullable|numeric',
-            'normal_max_female' => 'nullable|numeric',
-            'critical_low' => 'nullable|numeric',
-            'critical_high' => 'nullable|numeric',
-            'formula' => 'nullable|string|max:255',
-            'group_name' => 'nullable|string|max:100',
-            'sort_order' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
 
         // If formula is provided, mark as calculated
         $validated['is_calculated'] = !empty($validated['formula']);
@@ -43,24 +31,9 @@ class TestParameterController extends Controller
             ->with('success', 'Parameter added successfully.');
     }
 
-    public function update(Request $request, Test $test, TestParameter $parameter)
+    public function update(UpdateTestParameterRequest $request, Test $test, TestParameter $parameter)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-            'unit' => 'nullable|string|max:50',
-            'normal_min' => 'nullable|numeric',
-            'normal_max' => 'nullable|numeric',
-            'normal_min_male' => 'nullable|numeric',
-            'normal_max_male' => 'nullable|numeric',
-            'normal_min_female' => 'nullable|numeric',
-            'normal_max_female' => 'nullable|numeric',
-            'critical_low' => 'nullable|numeric',
-            'critical_high' => 'nullable|numeric',
-            'formula' => 'nullable|string|max:255',
-            'group_name' => 'nullable|string|max:100',
-            'sort_order' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
 
         // If formula is provided, mark as calculated
         $validated['is_calculated'] = !empty($validated['formula']);
@@ -81,10 +54,11 @@ class TestParameterController extends Controller
             ->with('success', 'Parameter deleted successfully.');
     }
 
-    public function reorder(Request $request, Test $test)
+    public function reorder(ReorderTestParametersRequest $request, Test $test)
     {
-        $parameters = $request->input('parameters', []);
-        
+        $validated = $request->validated();
+        $parameters = $validated['parameters'];
+
         foreach ($parameters as $param) {
             TestParameter::where('id', $param['id'])
                 ->where('test_id', $test->id)

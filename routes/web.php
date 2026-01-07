@@ -18,13 +18,17 @@ Route::get('/', function() {
     return redirect()->route('login');
 });
 
-Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
+Route::middleware(['throttle:login'])->group(function() {
+    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
+});
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Lab Registration (Public)
-Route::get('register-lab', [LabRegistrationController::class, 'showRegistrationForm'])->name('register-lab');
-Route::post('register-lab', [LabRegistrationController::class, 'register'])->name('register-lab.store');
+Route::middleware(['throttle:6,1'])->group(function () {
+    Route::get('register-lab', [LabRegistrationController::class, 'showRegistrationForm'])->name('register-lab');
+    Route::post('register-lab', [LabRegistrationController::class, 'register'])->name('register-lab.store');
+});
 
 // Subscription Status Pages
 Route::middleware('auth')->group(function() {
@@ -38,10 +42,12 @@ Route::middleware('auth')->group(function() {
 });
 
 // Public report verification
-Route::get('verify', [ReportController::class, 'verify'])->name('reports.verify');
-Route::get('verify/{report}', [ReportController::class, 'verify']);
-Route::get('report-pdf/{report}', [ReportController::class, 'publicDownload'])->name('reports.public-download');
-Route::get('receipt-pdf/{booking_id}', [BookingController::class, 'publicReceipt'])->name('bookings.public-receipt');
+Route::middleware(['throttle:public_downloads'])->group(function() {
+    Route::get('verify', [ReportController::class, 'verify'])->name('reports.verify');
+    Route::get('verify/{report}', [ReportController::class, 'verify']);
+    Route::get('report-pdf/{report}', [ReportController::class, 'publicDownload'])->name('reports.public-download');
+    Route::get('receipt-pdf/{booking_id}', [BookingController::class, 'publicReceipt'])->name('bookings.public-receipt');
+});
 
 // Super Admin Routes (No subscription check)
 Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(function() {

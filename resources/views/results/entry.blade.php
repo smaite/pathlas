@@ -10,7 +10,7 @@
 
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div><p class="text-sm text-gray-500">Patient</p><p class="font-medium">{{ $result->bookingTest->booking->patient->name }}</p></div>
-            <div><p class="text-sm text-gray-500">Age/Gender</p><p class="font-medium">{{ $result->bookingTest->booking->patient->age }} / {{ ucfirst($result->bookingTest->booking->patient->gender) }}</p></div>
+            <div><p class="text-sm text-gray-500">Age/Gender</p><p class="font-medium">{{ $result->bookingTest->booking->patient->age }} / {{ ucfirst($result->bookingTest->booking->patient->gender ?? '') }}</p></div>
             <div><p class="text-sm text-gray-500">Booking ID</p><p class="font-mono">{{ $result->bookingTest->booking->booking_id }}</p></div>
             <div><p class="text-sm text-gray-500">Normal Range</p><p class="font-medium">{{ $result->bookingTest->test->normal_range }} {{ $result->bookingTest->test->unit }}</p></div>
         </div>
@@ -56,7 +56,7 @@ document.getElementById('numericValue').addEventListener('input', async function
         body: JSON.stringify({
             test_id: {{ $result->bookingTest->test->id }},
             value: val,
-            gender: '{{ $result->bookingTest->booking->patient->gender }}'
+            gender: '{{ $result->bookingTest->booking->patient->gender ?? '' }}'
         })
     });
     const data = await resp.json();

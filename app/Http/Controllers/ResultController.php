@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Results\StoreResultRequest;
+use App\Http\Requests\Results\StoreParameterResultRequest;
+use App\Http\Requests\Results\BulkResultRequest;
+use App\Http\Requests\Results\UpdateResultRequest;
+use App\Http\Requests\Results\CheckFlagRequest;
 use App\Models\Result;
 use App\Models\BookingTest;
 use App\Models\ParameterResult;
@@ -55,17 +60,9 @@ class ResultController extends Controller
     }
 
     // New: Store parameter results
-    public function storeParameters(Request $request, BookingTest $bookingTest)
+    public function storeParameters(StoreParameterResultRequest $request, BookingTest $bookingTest)
     {
-        $validated = $request->validate([
-            'parameters' => 'array',
-            'parameters.*.value' => 'nullable|string',
-            'parameters.*.numeric_value' => 'nullable|numeric',
-            'remarks' => 'nullable|string',
-            // For simple tests
-            'value' => 'nullable|string',
-            'numeric_value' => 'nullable|numeric',
-        ]);
+        $validated = $request->validated();
 
         $bookingTest->load('test.parameters', 'booking.patient');
         $gender = $bookingTest->booking->patient->gender;
@@ -148,13 +145,9 @@ class ResultController extends Controller
             ->with('success', 'All results completed! Report has been auto-generated.');
     }
 
-    public function store(Request $request, Result $result)
+    public function store(StoreResultRequest $request, Result $result)
     {
-        $validated = $request->validate([
-            'value' => 'required|string',
-            'numeric_value' => 'nullable|numeric',
-            'remarks' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $result->update([
             'value' => $validated['value'],
@@ -176,14 +169,9 @@ class ResultController extends Controller
             ->with('success', 'Result entered successfully.');
     }
 
-    public function bulkEntry(Request $request)
+    public function bulkEntry(BulkResultRequest $request)
     {
-        $validated = $request->validate([
-            'results' => 'required|array',
-            'results.*.id' => 'required|exists:results,id',
-            'results.*.value' => 'required|string',
-            'results.*.numeric_value' => 'nullable|numeric',
-        ]);
+        $validated = $request->validated();
 
         foreach ($validated['results'] as $data) {
             $result = Result::findOrFail($data['id']);
@@ -209,13 +197,9 @@ class ResultController extends Controller
             ->with('success', count($validated['results']) . ' results entered successfully.');
     }
 
-    public function checkFlag(Request $request)
+    public function checkFlag(CheckFlagRequest $request)
     {
-        $validated = $request->validate([
-            'test_id' => 'required|exists:tests,id',
-            'value' => 'required|numeric',
-            'gender' => 'required|in:male,female,other',
-        ]);
+        $validated = $request->validated();
 
         $test = \App\Models\Test::findOrFail($validated['test_id']);
         $flag = $test->checkValueInRange($validated['value'], $validated['gender']);
@@ -261,19 +245,15 @@ class ResultController extends Controller
     /**
      * Update an existing result with edit tracking
      */
-    public function updateEdit(Request $request, BookingTest $bookingTest)
+    public function updateEdit(UpdateResultRequest $request, BookingTest $bookingTest)
     {
         $result = $bookingTest->result;
-        
+
         if (!$result) {
             return back()->with('error', 'No result found to edit.');
         }
 
-        $validated = $request->validate([
-            'value' => 'nullable|string',
-            'edit_reason' => 'required|string|max:255',
-            'parameters' => 'nullable|array',
-        ]);
+        $validated = $request->validated();
 
         // Track previous value
         $previousValue = $result->value;

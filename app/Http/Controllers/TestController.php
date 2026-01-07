@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tests\StoreTestRequest;
+use App\Http\Requests\Tests\UpdateTestRequest;
+use App\Http\Requests\Tests\StoreCategoryRequest;
+use App\Http\Requests\Tests\UpdateCategoryRequest;
 use App\Models\Test;
 use App\Models\TestCategory;
 use App\Models\ActivityLog;
@@ -37,24 +41,9 @@ class TestController extends Controller
         return view('tests.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(StoreTestRequest $request)
     {
-        $validated = $request->validate([
-            'category_id' => 'required|exists:test_categories,id',
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:tests,code',
-            'short_name' => 'nullable|string|max:50',
-            'unit' => 'nullable|string|max:50',
-            'normal_range_male' => 'nullable|string',
-            'normal_range_female' => 'nullable|string',
-            'normal_min' => 'nullable|numeric',
-            'normal_max' => 'nullable|numeric',
-            'price' => 'required|numeric|min:0',
-            'sample_type' => 'required|in:blood,urine,stool,swab,other',
-            'method' => 'nullable|string',
-            'instructions' => 'nullable|string',
-            'turnaround_time' => 'integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         $test = Test::create($validated);
         ActivityLog::log('test_created', $test, [], $validated);
@@ -76,26 +65,9 @@ class TestController extends Controller
         return view('tests.show', compact('test'));
     }
 
-    public function update(Request $request, Test $test)
+    public function update(UpdateTestRequest $request, Test $test)
     {
-        $validated = $request->validate([
-            'category_id' => 'required|exists:test_categories,id',
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:tests,code,' . $test->id,
-            'short_name' => 'nullable|string|max:50',
-            'unit' => 'nullable|string|max:50',
-            'normal_range_male' => 'nullable|string',
-            'normal_range_female' => 'nullable|string',
-            'normal_min' => 'nullable|numeric',
-            'normal_max' => 'nullable|numeric',
-            'price' => 'required|numeric|min:0',
-            'sample_type' => 'nullable|in:blood,urine,stool,swab,other',
-            'method' => 'nullable|string',
-            'instructions' => 'nullable|string',
-            'interpretation' => 'nullable|string',
-            'turnaround_time' => 'nullable|integer|min:1',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $oldValues = $test->toArray();
         $test->update($validated);
@@ -142,13 +114,9 @@ class TestController extends Controller
         return view('tests.categories', compact('categories'));
     }
 
-    public function storeCategory(Request $request)
+    public function storeCategory(StoreCategoryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:test_categories,code',
-            'description' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         TestCategory::create($validated);
 
@@ -156,14 +124,9 @@ class TestController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
-    public function updateCategory(Request $request, TestCategory $category)
+    public function updateCategory(UpdateCategoryRequest $request, TestCategory $category)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:test_categories,code,' . $category->id,
-            'description' => 'nullable|string',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $category->update($validated);
 

@@ -27,3 +27,6 @@ dist-ssr
 /vendor
 /vendor/composer
 /vendor
+
+*.sql
+*.zip

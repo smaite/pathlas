@@ -190,7 +190,7 @@
                 <td class="patient-col">
                     <table style="width: 100%">
                         <tr><td class="patient-label">Name</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->patient->name }}</td></tr>
-                        <tr><td class="patient-label">Age/Gender</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->patient->age }}/{{ ucfirst(substr($booking->patient->gender, 0, 1)) }}</td></tr>
+                        <tr><td class="patient-label">Age/Gender</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->patient->age }}/{{ ucfirst(substr($booking->patient->gender ?? '', 0, 1)) }}</td></tr>
                         <tr><td class="patient-label">Referred By</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->referring_doctor_name ?? 'Self' }}</td></tr>
                         @if($booking->patient->phone)
                         <tr><td class="patient-label">Phone No.</td><td class="patient-value">:</td><td class="patient-value">{{ $booking->patient->phone }}</td></tr>

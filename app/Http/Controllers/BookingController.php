@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Bookings\StoreBookingRequest;
+use App\Http\Requests\Bookings\AddPaymentRequest;
+use App\Http\Requests\Bookings\UpdateBookingStatusRequest;
 use App\Models\Booking;
 use App\Models\BookingTest;
 use App\Models\Patient;
@@ -77,26 +80,9 @@ class BookingController extends Controller
         return view('bookings.create', compact('patient', 'tests', 'packages'));
     }
 
-    public function store(Request $request)
+    public function store(StoreBookingRequest $request)
     {
-        $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'tests' => 'required|array|min:1',
-            'tests.*' => 'exists:tests,id',
-            'discount' => 'nullable|numeric|min:0',
-            'notes' => 'nullable|string',
-            'is_urgent' => 'boolean',
-            'referring_doctor' => 'nullable|string|max:255',
-            'patient_type' => 'nullable|string|max:50',
-            'collection_centre' => 'nullable|string|max:255',
-            'collection_date' => 'nullable|date',
-            'received_date' => 'nullable|date',
-            'reporting_date' => 'nullable|date',
-            'sample_collected_by' => 'nullable|string|max:255',
-            'sample_collected_at' => 'nullable|string|max:500',
-            'paid_amount' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|in:cash,card,upi,bank_transfer,other',
-        ]);
+        $validated = $request->validated();
 
         $booking = Booking::create([
             'patient_id' => $validated['patient_id'],
@@ -191,11 +177,9 @@ class BookingController extends Controller
         return $pdf->download("invoice-{$booking->booking_id}.pdf");
     }
 
-    public function updateStatus(Request $request, Booking $booking)
+    public function updateStatus(UpdateBookingStatusRequest $request, Booking $booking)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,sample_collected,in_progress,completed,cancelled',
-        ]);
+        $validated = $request->validated();
 
         $oldStatus = $booking->status;
         $booking->update($validated);
@@ -210,14 +194,9 @@ class BookingController extends Controller
         return back()->with('success', 'Status updated successfully.');
     }
 
-    public function addPayment(Request $request, Booking $booking)
+    public function addPayment(AddPaymentRequest $request, Booking $booking)
     {
-        $validated = $request->validate([
-            'amount' => 'required|numeric|min:0.01|max:' . $booking->due_amount,
-            'method' => 'required|in:cash,card,upi,bank_transfer,other',
-            'transaction_id' => 'nullable|string',
-            'notes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $payment = Payment::create([
             'booking_id' => $booking->id,

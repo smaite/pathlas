@@ -32,7 +32,7 @@
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 font-mono text-sm">{{ $patient->patient_id }}</td>
                 <td class="px-6 py-4 font-medium">{{ $patient->name }}</td>
-                <td class="px-6 py-4">{{ $patient->age }} / {{ ucfirst($patient->gender) }}</td>
+                <td class="px-6 py-4">{{ $patient->age }} / {{ ucfirst($patient->gender ?? '') }}</td>
                 <td class="px-6 py-4">{{ $patient->phone }}</td>
                 <td class="px-6 py-4 text-sm text-gray-500">{{ $patient->created_at->format('M d, Y') }}</td>
                 <td class="px-6 py-4">
