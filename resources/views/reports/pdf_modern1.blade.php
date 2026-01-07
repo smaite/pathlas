@@ -5,35 +5,32 @@
     <meta charset="UTF-8">
     <title>Lab Report - {{ $booking->booking_id }}</title>
     <style>
-        @if($showHeader ?? true) @page {
-            margin: 0;
-            size: A4;
-        }
-
-        @else @php $marginTop =$lab->headerless_margin_top ?? 40;
-        $marginBottom =$lab->headerless_margin_bottom ?? 30;
-
-        @endphp @page {
-            margin: {
-                    {
-                    $marginTop
-                }
+        @if($showHeader ?? true)
+            @page {
+                margin: 0;
+                size: A4;
             }
-
-            mm 15mm {
-                    {
-                    $marginBottom
-                }
+        @else
+            @php
+                $mt = $lab->headerless_margin_top;
+                $mb = $lab->headerless_margin_bottom;
+                $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+                $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
+            @endphp
+            @page {
+                margin: {{ $marginTop }}mm 15mm {{ $marginBottom }}mm 15mm;
+                size: A4;
             }
+        @endif
 
-            mm 15mm;
-            size: A4;
-        }
-
-        @endif * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
         }
 
         body {
@@ -42,6 +39,7 @@
             color: #1f2937;
             line-height: 1.4;
             background: #fff;
+            position: relative;
         }
 
         /* Modern Header V1 - Clean & Minimal */

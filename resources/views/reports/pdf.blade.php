@@ -12,8 +12,10 @@
             }
         @else
             @php
-                $marginTop = intval($lab->headerless_margin_top ?? 40);
-                $marginBottom = intval($lab->headerless_margin_bottom ?? 30);
+                $mt = $lab->headerless_margin_top;
+                $mb = $lab->headerless_margin_bottom;
+                $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+                $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
             @endphp
             @page {
                 margin-top: {{ $marginTop }}mm;
@@ -24,7 +26,8 @@
             }
         @endif
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; font-size: 10px; color: #333; line-height: 1.3; position: relative; min-height: 100%; }
+        html, body { height: 100%; }
+        body { font-family: Arial, sans-serif; font-size: 10px; color: #333; line-height: 1.3; position: relative; }
 
         /* Container for continuous flow */
         .report-container {

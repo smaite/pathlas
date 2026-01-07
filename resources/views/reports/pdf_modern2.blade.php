@@ -23,7 +23,8 @@
         @endif
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10px; color: #334155; line-height: 1.5; }
+        html, body { height: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10px; color: #334155; line-height: 1.5; position: relative; }
 
         /* Container for continuous flow */
         .report-container {
@@ -72,7 +73,9 @@
         /* Footer */
         .footer {
             width: 100%;
-            margin-top: 50px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
             page-break-inside: avoid;
         }
         .footer-content { margin: 0 40px; border-top: 1px solid #cbd5e1; padding-top: 15px; }
