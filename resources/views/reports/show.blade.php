@@ -16,6 +16,12 @@
                     <option value="modern2">Modern 2 (Clean)</option>
                 </select>
 
+                <!-- Header Option -->
+                <select id="headerOption" onchange="updateReportLinks()" class="h-10 pl-3 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="yes">With Header</option>
+                    <option value="no">No Header</option>
+                </select>
+
                 <!-- View Button -->
                 <a href="{{ route('reports.download', ['report' => $report, 'stream' => 'true']) }}" id="viewReportBtn" target="_blank"
                     class="h-10 px-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 flex items-center gap-2 font-medium transition-colors" title="View in Browser">
@@ -129,12 +135,14 @@
 <script>
     function updateReportLinks() {
         const template = document.getElementById('reportTemplate').value;
+        const headerOption = document.getElementById('headerOption').value;
 
         // Update View Button
         const viewBtn = document.getElementById('viewReportBtn');
         if (viewBtn) {
             let viewUrl = new URL(viewBtn.href);
             viewUrl.searchParams.set('template', template);
+            viewUrl.searchParams.set('header', headerOption);
             viewBtn.href = viewUrl.toString();
         }
 
@@ -142,6 +150,10 @@
         document.querySelectorAll('.download-link').forEach(link => {
             let url = new URL(link.href);
             url.searchParams.set('template', template);
+            // Download links in dropdown are explicit, so we might not want to override header param
+            // But if user selected "No Header" globally, maybe they expect it?
+            // The dropdown has explicit "With Header" and "Without Header" options.
+            // Let's NOT override header param for download links as they are explicit.
             link.href = url.toString();
         });
 
@@ -157,6 +169,7 @@
             if (template !== 'default') {
                 linkUrl.searchParams.set('template', template);
             }
+            linkUrl.searchParams.set('header', headerOption);
 
             const finalLink = linkUrl.toString();
             const fullMessage = msgPart1 + finalLink + msgPart2;

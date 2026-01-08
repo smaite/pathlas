@@ -5,31 +5,27 @@
     <meta charset="UTF-8">
     <title>Lab Report - {{ $booking->booking_id }}</title>
     <style>
-        @if($showHeader ?? true)
-            @page {
-                margin: 0;
-                size: A4;
-            }
-        @else
-            @php
-                $mt = $lab->headerless_margin_top;
-                $mb = $lab->headerless_margin_bottom;
-                $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
-                $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
-            @endphp
-            @page {
-                margin: {{ $marginTop }}mm 15mm {{ $marginBottom }}mm 15mm;
-                size: A4;
-            }
-        @endif
+        @if($showHeader ?? true) @page {
+            margin: 0;
+            size: A4;
+        }
 
-        * {
+        @else @page {
+            margin-top: 10mm;
+            margin-bottom: 30mm;
+            margin-left: 15mm;
+            margin-right: 15mm;
+            size: A4;
+        }
+
+        @endif * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -344,6 +340,12 @@
     @endphp
 
     {{-- HEADER - Only once at the top --}}
+    @php
+    // Calculate margins for headerless mode
+    $mt = $lab->headerless_margin_top;
+    $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+    @endphp
+
     @if($showHeader ?? true)
     <div class="header">
         <div class="header-top">
@@ -371,6 +373,8 @@
             </div>
         </div>
     </div>
+    @else
+    <div style="height: {{ $marginTop }}mm;"></div>
     @endif
 
     {{-- PATIENT INFO - Only once --}}
