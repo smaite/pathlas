@@ -33,23 +33,29 @@
             
             @if($bookingTest->test->hasParameters())
             <!-- Test has sub-parameters -->
-            <div class="space-y-6">
+            <div class="space-y-2">
                 @php $currentGroup = null; @endphp
                 @foreach($bookingTest->test->parameters()->active()->ordered()->get() as $param)
                     @if($param->group_name && $param->group_name !== $currentGroup)
                     @php $currentGroup = $param->group_name; @endphp
-                    <div class="bg-blue-50 px-4 py-2 rounded-lg font-semibold text-blue-800 mt-4">
+                    <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-3 rounded-lg font-semibold text-white mt-6 mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
                         {{ $param->group_name }}
                     </div>
+                    @elseif(!$param->group_name && $currentGroup)
+                    @php $currentGroup = null; @endphp
                     @endif
                     
                     @php
                         $existingResult = $bookingTest->parameterResults->where('test_parameter_id', $param->id)->first();
+                        $isGrouped = $param->group_name && $param->group_name === $currentGroup;
                     @endphp
                     
-                    <div class="grid grid-cols-12 gap-4 items-center py-3 border-b border-gray-100">
+                    <div class="grid grid-cols-12 gap-4 items-center py-3 border-b border-gray-100 {{ $isGrouped ? 'ml-6 bg-gray-50/50' : '' }}">
                         <div class="col-span-4">
-                            <p class="font-medium">{{ $param->name }}</p>
+                            <p class="font-medium {{ $isGrouped ? 'text-sm' : '' }}">{{ $param->name }}</p>
                             @if($param->method)
                             <p class="text-xs text-gray-400">{{ $param->method }}</p>
                             @endif
@@ -58,6 +64,33 @@
                             @endif
                         </div>
                         <div class="col-span-3">
+                            @php
+                                // Calculate effective min/max using the same logic as TestParameter model
+                                $gender = strtolower(trim($bookingTest->booking->patient->gender ?? ''));
+                                $effectiveMin = null;
+                                $effectiveMax = null;
+
+                                if (($gender === 'female' || $gender === 'f') && ($param->normal_min_female || $param->normal_max_female)) {
+                                    $effectiveMin = $param->normal_min_female;
+                                    $effectiveMax = $param->normal_max_female;
+                                } elseif (($gender === 'male' || $gender === 'm') && ($param->normal_min_male || $param->normal_max_male)) {
+                                    $effectiveMin = $param->normal_min_male;
+                                    $effectiveMax = $param->normal_max_male;
+                                } else {
+                                    $effectiveMin = $param->normal_min;
+                                    $effectiveMax = $param->normal_max;
+
+                                    if ($effectiveMin === null && $effectiveMax === null) {
+                                        if ($param->normal_min_male || $param->normal_max_male) {
+                                            $effectiveMin = $param->normal_min_male;
+                                            $effectiveMax = $param->normal_max_male;
+                                        } elseif ($param->normal_min_female || $param->normal_max_female) {
+                                            $effectiveMin = $param->normal_min_female;
+                                            $effectiveMax = $param->normal_max_female;
+                                        }
+                                    }
+                                }
+                            @endphp
                             <input type="text" 
                                 name="parameters[{{ $param->id }}][value]" 
                                 value="{{ old('parameters.' . $param->id . '.value', $existingResult?->value) }}"
@@ -66,8 +99,8 @@
                                 data-param-id="{{ $param->id }}"
                                 data-code="{{ $param->code }}"
                                 data-formula="{{ $param->formula }}"
-                                data-min="{{ $param->normal_min }}"
-                                data-max="{{ $param->normal_max }}"
+                                data-min="{{ $effectiveMin }}"
+                                data-max="{{ $effectiveMax }}"
                                 data-gender="{{ $bookingTest->booking->patient->gender }}"
                                 {{ $param->is_calculated ? 'readonly' : '' }}>
                             <input type="hidden" name="parameters[{{ $param->id }}][numeric_value]" class="numeric-value">

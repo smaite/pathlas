@@ -4,15 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Medical Report</title>
+    @php
+        $mt = $lab->headerless_margin_top;
+        $mb = $lab->headerless_margin_bottom;
+        $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+        $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
+        $footerBottom = ($showHeader ?? true) ? '0' : ($marginBottom . 'mm');
+    @endphp
     <style>
         @if($showHeader ?? true) @page {
             margin: 0;
             size: A4;
         }
 
-        @else @page {
-            margin-top: 10mm;
-            margin-bottom: 30mm;
+        @else 
+        @page {
+            margin-top: {{ $marginTop }}mm;
+            margin-bottom: {{ $marginBottom }}mm;
             margin-left: 15mm;
             margin-right: 15mm;
             size: A4;
@@ -208,7 +216,7 @@
         .footer {
             width: 100%;
             position: absolute;
-            bottom: 0;
+            bottom: {{ $footerBottom }};
             left: 0;
             page-break-inside: avoid;
         }

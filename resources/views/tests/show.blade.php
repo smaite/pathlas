@@ -93,6 +93,9 @@
             <div class="group-section mb-4 bg-gray-50 rounded-xl overflow-hidden" data-group="{{ $groupName }}">
                 <div class="group-header flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white cursor-pointer" onclick="toggleGroup(this)">
                     <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 group-drag-handle cursor-move" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                        </svg>
                         <svg class="w-5 h-5 transform transition-transform group-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
@@ -115,10 +118,12 @@
 
             <!-- Parameters without group (display flat) -->
             @if($ungrouped->count() > 0)
-            <div class="space-y-2 mb-4" data-group="">
+            <div class="group-section mb-4" data-group="">
+                <div class="sortable-list space-y-2">
                 @foreach($ungrouped->sortBy('sort_order') as $param)
                 @include('tests.partials.param-block', ['param' => $param, 'test' => $test])
                 @endforeach
+            </div>
             </div>
             @endif
 
@@ -361,6 +366,20 @@
         const arrow = header.querySelector('.group-arrow');
         content.classList.toggle('hidden');
         arrow.classList.toggle('rotate-180');
+    }
+
+    // Initialize Sortable for group sections (drag entire groups)
+    const paramsContainer = document.getElementById('params-container');
+    if (paramsContainer) {
+        new Sortable(paramsContainer, {
+            animation: 150,
+            handle: '.group-drag-handle',
+            ghostClass: 'opacity-50',
+            draggable: '.group-section',
+            onEnd: function(evt) {
+                updateParamOrder();
+            }
+        });
     }
 
     // Initialize Sortable on each group

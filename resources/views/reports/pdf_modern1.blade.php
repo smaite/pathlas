@@ -4,15 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Lab Report - {{ $booking->booking_id }}</title>
+    @php
+        $mt = $lab->headerless_margin_top;
+        $mb = $lab->headerless_margin_bottom;
+        $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+        $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
+        $footerBottom = ($showHeader ?? true) ? '0' : ($marginBottom . 'mm');
+    @endphp
     <style>
         @if($showHeader ?? true) @page {
             margin: 0;
             size: A4;
         }
 
-        @else @page {
-            margin-top: 10mm;
-            margin-bottom: 30mm;
+        @else 
+        @page {
+            margin-top: {{ $marginTop }}mm;
+            margin-bottom: {{ $marginBottom }}mm;
             margin-left: 15mm;
             margin-right: 15mm;
             size: A4;
@@ -232,7 +240,7 @@
             width: 100%;
             padding: 20px 40px 30px;
             position: absolute;
-            bottom: 0;
+            bottom: {{ $footerBottom }};
             left: 0;
         }
 

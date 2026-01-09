@@ -4,6 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Lab Report - {{ $booking->booking_id }}</title>
+    @php
+        $mt = $lab->headerless_margin_top;
+        $mb = $lab->headerless_margin_bottom;
+        $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
+        $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
+        $footerBottom = ($showHeader ?? true) ? '0' : ($marginBottom . 'mm');
+    @endphp
     <style>
         /* Conditional margins: if no header, add space for pre-printed paper */
         @if($showHeader ?? true)
@@ -12,12 +19,6 @@
                 size: A4;
             }
         @else
-            @php
-                $mt = $lab->headerless_margin_top;
-                $mb = $lab->headerless_margin_bottom;
-                $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
-                $marginBottom = ($mb !== null && $mb !== '') ? intval($mb) : 30;
-            @endphp
             @page {
                 margin-top: {{ $marginTop }}mm;
                 margin-bottom: {{ $marginBottom }}mm;
@@ -183,15 +184,20 @@
         }
 
         .group-row { 
-            background: #e8f4fc !important; 
+            background: transparent !important; 
         }
 
         .group-row td { 
             font-weight: bold; 
-            color: {{ $lab->header_color ?? '#0066cc' }}; 
+            color: #000; 
             font-size: 10px; 
-            padding: 6px 12px; 
-            border-bottom: 1px solid #cce0f0; 
+            padding: 8px 12px 4px 12px; 
+            border: none;
+            text-transform: uppercase;
+        }
+
+        .grouped-param td:first-child {
+            padding-left: 24px;
         }
 
         .param-name { 
@@ -282,7 +288,7 @@
         .footer {
             width: 100%;
             position: absolute;
-            bottom: 0;
+            bottom: {{ $footerBottom }};
             left: 0;
             page-break-inside: avoid;
         }
@@ -388,10 +394,6 @@
         if ($bt->result && $bt->result->value && $bt->result->status === 'approved') return true;
         return false;
     });
-
-    // Calculate margins for headerless mode
-    $mt = $lab->headerless_margin_top;
-    $marginTop = ($mt !== null && $mt !== '') ? intval($mt) : 40;
     @endphp
 
     <div class="report-container">
@@ -501,6 +503,8 @@
                     <tr class="group-row">
                         <td colspan="4">{{ $currentGroup }}</td>
                     </tr>
+                    @elseif(!$param->group_name && $currentGroup)
+                    @php $currentGroup = null; @endphp
                     @endif
                     @php
                     $flag = $paramResult?->flag ?? $param->checkFlag($value, $booking->patient->gender);
@@ -510,8 +514,9 @@
                         'critical_low', 'critical_high' => 'value-critical',
                         default => 'value-normal'
                     };
+                    $isGrouped = $param->group_name && $param->group_name === $currentGroup;
                     @endphp
-                    <tr>
+                    <tr class="{{ $isGrouped ? 'grouped-param' : '' }}">
                         <td>
                             <span class="param-name">{{ $param->name }}</span>
                             @if($param->method)<br><span class="param-subtext">{{ $param->method }}</span>@endif
