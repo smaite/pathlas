@@ -208,14 +208,14 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Top Margin (mm)</label>
                             <input type="number" name="headerless_margin_top" id="headerless_margin_top" 
-                                value="{{ $lab->headerless_margin_top ?? 40 }}" min="10" max="100"
+                                value="{{ $lab->headerless_margin_top ?? 40 }}" min="10" max="60"
                                 class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                             <p class="text-xs text-gray-400 mt-1">Space for pre-printed header</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Bottom Margin (mm)</label>
                             <input type="number" name="headerless_margin_bottom" id="headerless_margin_bottom" 
-                                value="{{ $lab->headerless_margin_bottom ?? 30 }}" min="10" max="80"
+                                value="{{ $lab->headerless_margin_bottom ?? 30 }}" min="10" max="50"
                                 class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                             <p class="text-xs text-gray-400 mt-1">Space for pre-printed footer</p>
                         </div>
